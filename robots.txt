@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Allow Google AdSense crawler
+User-agent: Mediapartners-Google
+Allow: /
+
+Sitemap: https://makecv.org/sitemap.xml
