@@ -384,6 +384,13 @@ select.inp {
 ::-webkit-scrollbar-track { background:transparent; }
 ::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:3px; }
 
+/* ── Print / ATS PDF ── */
+@media print {
+  body > *                 { display:none !important; }
+  #ats-print-layer         { display:block !important; position:fixed; top:0; left:0; width:100%; }
+  @page                    { size:A4 portrait; margin:0; }
+}
+
 /* ── How it works ── */
 .hiw-step { display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px; }
 .hiw-icon { width:56px; height:56px; border-radius:16px; background:#eff6ff; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; border:1.5px solid #dbeafe; }
@@ -964,7 +971,7 @@ select.inp {
           <div style="margin-bottom:5px;"><div style="background:#1a56db;height:2.5px;width:35px;border-radius:2px;margin-bottom:4px;"></div><div style="background:#e2e8f0;height:2px;width:100%;margin-bottom:2px;border-radius:1px;"></div><div style="background:#e2e8f0;height:2px;width:80%;border-radius:1px;"></div></div>
           <div><div style="background:#1a56db;height:2.5px;width:40px;border-radius:2px;margin-bottom:4px;"></div><div style="background:#e2e8f0;height:2px;width:100%;margin-bottom:2px;border-radius:1px;"></div><div style="background:#e2e8f0;height:2px;width:65%;border-radius:1px;"></div></div>
         </div>
-        <div class="p-3"><div class="font-bold text-sm text-slate-800">Classic</div><div class="text-xs text-slate-500 mt-0.5">Professional — accountant, lawyer, teacher</div></div>
+        <div class="p-3"><div class="flex items-center gap-1.5 flex-wrap"><div class="font-bold text-sm text-slate-800">Classic</div><span class="text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 px-1.5 py-0.5 rounded font-semibold">ATS Safe</span></div><div class="text-xs text-slate-500 mt-0.5">Professional — accountant, lawyer, teacher</div></div>
       </div>
 
       <!-- Modern -->
@@ -1000,7 +1007,7 @@ select.inp {
           <div style="display:flex;justify-content:center;gap:5px;margin-bottom:8px;"><div style="background:#ccc;height:2px;width:35px;"></div><div style="background:#ccc;height:2px;width:35px;"></div><div style="background:#ccc;height:2px;width:28px;"></div></div>
           <div style="text-align:left;"><div style="display:flex;gap:8px;margin-bottom:4px;"><div style="background:#999;height:2px;width:55px;margin-top:2px;flex-shrink:0;"></div><div><div style="background:#333;height:3px;width:80px;border-radius:1px;margin-bottom:2px;"></div><div style="background:#e2e8f0;height:2px;width:100%;border-radius:1px;"></div></div></div></div>
         </div>
-        <div class="p-3"><div class="font-bold text-sm text-slate-800">Minimalist</div><div class="text-xs text-slate-500 mt-0.5">Editorial — consultant, manager, finance</div></div>
+        <div class="p-3"><div class="flex items-center gap-1.5 flex-wrap"><div class="font-bold text-sm text-slate-800">Minimalist</div><span class="text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 px-1.5 py-0.5 rounded font-semibold">ATS Safe</span></div><div class="text-xs text-slate-500 mt-0.5">Editorial — consultant, manager, finance</div></div>
       </div>
 
       <!-- Creativ -->
@@ -1030,7 +1037,7 @@ select.inp {
             <div><div style="background:#c9a96e;height:2px;width:25px;border-radius:2px;margin-bottom:5px;"></div><div style="background:#e2e8f0;height:2px;width:100%;margin-bottom:2px;border-radius:1px;"></div><div style="background:#e2e8f0;height:2px;width:60%;border-radius:1px;"></div></div>
           </div>
         </div>
-        <div class="p-3"><div class="font-bold text-sm text-slate-800">Executive</div><div class="text-xs text-slate-500 mt-0.5">Premium serif — C-level, director, attorney</div></div>
+        <div class="p-3"><div class="flex items-center gap-1.5 flex-wrap"><div class="font-bold text-sm text-slate-800">Executive</div><span class="text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 px-1.5 py-0.5 rounded font-semibold">ATS Safe</span></div><div class="text-xs text-slate-500 mt-0.5">Premium serif — C-level, director, attorney</div></div>
       </div>
 
       <!-- Tech Dark -->
@@ -1190,8 +1197,12 @@ select.inp {
               <div class="w-2.5 h-2.5 rounded-full bg-emerald-400"></div>
               <span class="text-xs text-slate-400 ml-2 font-medium">Format A4 · <span id="tpl-label">Modern</span></span>
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2 flex-wrap justify-end">
               <span id="valid-msg" class="text-xs text-amber-600 hidden max-w-48 text-right leading-tight" role="alert">Add Name, Email + at least one Experience or Education</span>
+              <button id="ats-btn" class="btn-ghost text-sm py-2 px-3" onclick="printATS()" disabled aria-label="Download ATS-friendly PDF via print" title="Text-based PDF — readable by ATS systems">
+                <i class="fa-solid fa-robot text-emerald-500" aria-hidden="true"></i>
+                <span>ATS PDF</span>
+              </button>
               <button id="dl-btn" class="btn-blue text-sm py-2 px-4" onclick="downloadPDF()" disabled aria-label="Download resume as PDF">
                 <i id="dl-ico" class="fa-solid fa-download" aria-hidden="true"></i>
                 <i id="dl-spin" class="fa-solid fa-circle-notch spin-icon hidden" aria-hidden="true"></i>
@@ -1457,7 +1468,7 @@ function charCount(el) {
 // ════════════════════════════════
 //  MONTHS / YEARS
 // ════════════════════════════════
-const MO=['Ian','Feb','Mar','Apr','Mai','Iun','Iul','Aug','Sep','Oct','Nov','Dec'];
+const MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const moOpts = MO.map((m,i)=>`<option value="${i+1}">${m}</option>`).join('');
 const yrOpts = Array.from({length:30},(_,i)=>2026-i).map(y=>`<option value="${y}">${y}</option>`).join('');
 
@@ -1637,10 +1648,10 @@ function isValid() {
     (cv.experience.length>0 || cv.education.length>0);
 }
 function updateDlBtn() {
-  const btn=document.getElementById('dl-btn');
-  const msg=document.getElementById('valid-msg');
-  btn.disabled=!isValid();
-  msg.classList.toggle('hidden',isValid());
+  const v=isValid();
+  document.getElementById('dl-btn').disabled=!v;
+  document.getElementById('ats-btn').disabled=!v;
+  document.getElementById('valid-msg').classList.toggle('hidden',v);
 }
 
 // ════════════════════════════════
@@ -1671,7 +1682,7 @@ function e(s) {
 }
 function period(sm,sy,em,ey,cur) {
   const s=[sm?MO[sm-1]:'',sy].filter(Boolean).join(' ');
-  const end=cur?'Prezent':[em?MO[em-1]:'',ey].filter(Boolean).join(' ');
+  const end=cur?'Present':[em?MO[em-1]:'',ey].filter(Boolean).join(' ');
   return [s,end].filter(Boolean).join(' – ');
 }
 function barW(lvl) { return lvl==='Avansat'?92:lvl==='Mediu'?62:32; }
@@ -1707,13 +1718,13 @@ const TPLS = {
           </div>
         </div>
       </div>
-      ${d.summary?`<div class="sec"><div class="sec-title">Profil profesional</div><div class="summary-text">${e(d.summary)}</div></div>`:''}
-      ${d.experience.length?`<div class="sec"><div class="sec-title">Experiență profesională</div>${d.experience.map(x=>`<div class="entry"><div class="e-title">${e(x.title)}</div><div class="e-sub">${e(x.company)}${x.location?' · '+e(x.location):''}</div><div class="e-date">${period(x.startMonth,x.startYear,x.endMonth,x.endYear,x.current)}</div>${x.description?`<div class="e-desc">${e(x.description)}</div>`:''}</div>`).join('')}</div>`:''}
-      ${d.education.length?`<div class="sec"><div class="sec-title">Educație</div>${d.education.map(x=>`<div class="entry"><div class="e-title">${e(x.degree)}</div><div class="e-sub">${e(x.institution)}</div><div class="e-date">${[x.startYear,x.current?'Prezent':x.endYear].filter(Boolean).join(' – ')}${x.notes?' · '+e(x.notes):''}</div></div>`).join('')}</div>`:''}
-      ${d.projects.length?`<div class="sec"><div class="sec-title">Proiecte</div>${d.projects.map(x=>`<div class="entry"><div class="e-title">${e(x.name)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''} ${x.description?`<div class="e-desc">${e(x.description)}</div>`:''}</div>`).join('')}</div>`:''}
-      ${d.skills.length?`<div class="sec"><div class="sec-title">Abilități</div><div class="skills-wrap">${d.skills.map(s=>`<span class="skill-tag">${e(s.name)}</span>`).join('')}</div></div>`:''}
-      ${d.languages.length?`<div class="sec"><div class="sec-title">Limbi străine</div>${d.languages.map(l=>`<div class="lang-row"><span>${e(l.name)}</span><span style="color:#1a56db;font-weight:700">${e(l.level)}</span></div>`).join('')}</div>`:''}
-      ${d.certifications.length?`<div class="sec"><div class="sec-title">Certificări</div>${d.certifications.map(c=>`<div class="entry"><div class="e-title">${e(c.name)}</div><div class="e-sub">${e(c.org)}${c.year?' · '+e(c.year):''}</div></div>`).join('')}</div>`:''}
+      ${d.summary?`<div class="sec"><div class="sec-title">Professional Summary</div><div class="summary-text">${e(d.summary)}</div></div>`:''}
+      ${d.experience.length?`<div class="sec"><div class="sec-title">Work Experience</div>${d.experience.map(x=>`<div class="entry"><div class="e-title">${e(x.title)}</div><div class="e-sub">${e(x.company)}${x.location?' · '+e(x.location):''}</div><div class="e-date">${period(x.startMonth,x.startYear,x.endMonth,x.endYear,x.current)}</div>${x.description?`<div class="e-desc">${e(x.description)}</div>`:''}</div>`).join('')}</div>`:''}
+      ${d.education.length?`<div class="sec"><div class="sec-title">Education</div>${d.education.map(x=>`<div class="entry"><div class="e-title">${e(x.degree)}</div><div class="e-sub">${e(x.institution)}</div><div class="e-date">${[x.startYear,x.current?'Present':x.endYear].filter(Boolean).join(' – ')}${x.notes?' · '+e(x.notes):''}</div></div>`).join('')}</div>`:''}
+      ${d.projects.length?`<div class="sec"><div class="sec-title">Projects</div>${d.projects.map(x=>`<div class="entry"><div class="e-title">${e(x.name)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''} ${x.description?`<div class="e-desc">${e(x.description)}</div>`:''}</div>`).join('')}</div>`:''}
+      ${d.skills.length?`<div class="sec"><div class="sec-title">Skills</div><div class="skills-wrap">${d.skills.map(s=>`<span class="skill-tag">${e(s.name)}</span>`).join('')}</div></div>`:''}
+      ${d.languages.length?`<div class="sec"><div class="sec-title">Languages</div>${d.languages.map(l=>`<div class="lang-row"><span>${e(l.name)}</span><span style="color:#1a56db;font-weight:700">${e(l.level)}</span></div>`).join('')}</div>`:''}
+      ${d.certifications.length?`<div class="sec"><div class="sec-title">Certifications</div>${d.certifications.map(c=>`<div class="entry"><div class="e-title">${e(c.name)}</div><div class="e-sub">${e(c.org)}${c.year?' · '+e(c.year):''}</div></div>`).join('')}</div>`:''}
     </div>`;
   },
 
@@ -1733,15 +1744,15 @@ const TPLS = {
           ${p.linkedin?`<div class="s-contact"><i class="fa-brands fa-linkedin"></i>${e(p.linkedin)}</div>`:''}
           ${p.website?`<div class="s-contact"><i class="fa-solid fa-globe"></i>${e(p.website)}</div>`:''}
         </div>
-        ${d.skills.length?`<div><div class="s-sec-title">Abilități</div>${d.skills.map(s=>`<div class="bar-wrap"><div class="bar-name">${e(s.name)}</div><div class="bar-bg"><div class="bar-fill" style="width:${barW(s.level)}%"></div></div></div>`).join('')}</div>`:''}
-        ${d.languages.length?`<div><div class="s-sec-title">Limbi</div>${d.languages.map(l=>`<div class="lang-item"><span>${e(l.name)}</span><span class="lang-level">${e(l.level)}</span></div>`).join('')}</div>`:''}
-        ${d.certifications.length?`<div><div class="s-sec-title">Certificări</div>${d.certifications.map(c=>`<div style="font-size:8pt;color:#94a3b8;margin-bottom:5px;"><div style="color:#cbd5e1;font-weight:600">${e(c.name)}</div><div>${e(c.org)}${c.year?' · '+e(c.year):''}</div></div>`).join('')}</div>`:''}
+        ${d.skills.length?`<div><div class="s-sec-title">Skills</div>${d.skills.map(s=>`<div class="bar-wrap"><div class="bar-name">${e(s.name)}</div><div class="bar-bg"><div class="bar-fill" style="width:${barW(s.level)}%"></div></div></div>`).join('')}</div>`:''}
+        ${d.languages.length?`<div><div class="s-sec-title">Languages</div>${d.languages.map(l=>`<div class="lang-item"><span>${e(l.name)}</span><span class="lang-level">${e(l.level)}</span></div>`).join('')}</div>`:''}
+        ${d.certifications.length?`<div><div class="s-sec-title">Certifications</div>${d.certifications.map(c=>`<div style="font-size:8pt;color:#94a3b8;margin-bottom:5px;"><div style="color:#cbd5e1;font-weight:600">${e(c.name)}</div><div>${e(c.org)}${c.year?' · '+e(c.year):''}</div></div>`).join('')}</div>`:''}
       </div>
       <div class="main">
         ${d.summary?`<div class="summary-text" style="margin-bottom:14px;">${e(d.summary)}</div>`:''}
-        ${d.experience.length?`<div style="margin-bottom:14px;"><div class="m-sec-title">Experiență profesională</div>${d.experience.map(x=>`<div class="entry"><div class="e-title">${e(x.title)}</div><div class="e-sub">${e(x.company)}${x.location?' · '+e(x.location):''}</div><div class="e-date">${period(x.startMonth,x.startYear,x.endMonth,x.endYear,x.current)}</div>${x.description?`<div class="e-desc">${e(x.description)}</div>`:''}</div>`).join('')}</div>`:''}
-        ${d.education.length?`<div style="margin-bottom:14px;"><div class="m-sec-title">Educație</div>${d.education.map(x=>`<div class="entry"><div class="e-title">${e(x.degree)}</div><div class="e-sub">${e(x.institution)}</div><div class="e-date">${[x.startYear,x.current?'Prezent':x.endYear].filter(Boolean).join(' – ')}${x.notes?' · '+e(x.notes):''}</div></div>`).join('')}</div>`:''}
-        ${d.projects.length?`<div><div class="m-sec-title">Proiecte</div>${d.projects.map(x=>`<div class="entry"><div class="e-title">${e(x.name)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''} ${x.description?`<div class="e-desc">${e(x.description)}</div>`:''}</div>`).join('')}</div>`:''}
+        ${d.experience.length?`<div style="margin-bottom:14px;"><div class="m-sec-title">Work Experience</div>${d.experience.map(x=>`<div class="entry"><div class="e-title">${e(x.title)}</div><div class="e-sub">${e(x.company)}${x.location?' · '+e(x.location):''}</div><div class="e-date">${period(x.startMonth,x.startYear,x.endMonth,x.endYear,x.current)}</div>${x.description?`<div class="e-desc">${e(x.description)}</div>`:''}</div>`).join('')}</div>`:''}
+        ${d.education.length?`<div style="margin-bottom:14px;"><div class="m-sec-title">Education</div>${d.education.map(x=>`<div class="entry"><div class="e-title">${e(x.degree)}</div><div class="e-sub">${e(x.institution)}</div><div class="e-date">${[x.startYear,x.current?'Present':x.endYear].filter(Boolean).join(' – ')}${x.notes?' · '+e(x.notes):''}</div></div>`).join('')}</div>`:''}
+        ${d.projects.length?`<div><div class="m-sec-title">Projects</div>${d.projects.map(x=>`<div class="entry"><div class="e-title">${e(x.name)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''} ${x.description?`<div class="e-desc">${e(x.description)}</div>`:''}</div>`).join('')}</div>`:''}
       </div>
     </div>`;
   },
@@ -1755,13 +1766,13 @@ const TPLS = {
       ${p.title?`<div class="jobtitle">${e(p.title)}</div>`:''}
       <div class="divider"></div>
       ${contacts.length?`<div class="contacts">${contacts.map(c=>`<span>${e(c)}</span>`).join('')}</div>`:''}
-      ${d.summary?`<div class="sec"><div class="sec-title">Profil</div><div class="summary-text">${e(d.summary)}</div></div>`:''}
-      ${d.experience.length?`<div class="sec"><div class="sec-title">Experiență</div>${d.experience.map(x=>`<div class="entry"><div class="date-col">${period(x.startMonth,x.startYear,x.endMonth,x.endYear,x.current)}</div><div class="e-content"><div class="e-title">${e(x.title)}</div><div class="e-sub">${e(x.company)}${x.location?', '+e(x.location):''}</div>${x.description?`<div class="e-desc">${e(x.description)}</div>`:''}</div></div>`).join('')}</div>`:''}
-      ${d.education.length?`<div class="sec"><div class="sec-title">Educație</div>${d.education.map(x=>`<div class="entry"><div class="date-col">${[x.startYear,x.current?'Prezent':x.endYear].filter(Boolean).join('–')}</div><div class="e-content"><div class="e-title">${e(x.degree)}</div><div class="e-sub">${e(x.institution)}${x.notes?' — '+e(x.notes):''}</div></div></div>`).join('')}</div>`:''}
-      ${d.projects.length?`<div class="sec"><div class="sec-title">Proiecte</div>${d.projects.map(x=>`<div class="entry"><div class="date-col" style="font-size:7.5pt">${e(x.tech)}</div><div class="e-content"><div class="e-title">${e(x.name)}</div>${x.description?`<div class="e-desc">${e(x.description)}</div>`:''}</div></div>`).join('')}</div>`:''}
-      ${d.skills.length?`<div class="sec"><div class="sec-title">Abilități</div><div class="skills-inline">${d.skills.map(s=>`<span class="skill-i">${e(s.name)}</span>`).join('')}</div></div>`:''}
-      ${d.languages.length?`<div class="sec"><div class="sec-title">Limbi</div><div class="langs-inline">${d.languages.map(l=>`<span>${e(l.name)} <em style="color:#888">(${e(l.level)})</em></span>`).join('<span style="color:#ccc;margin:0 4px">·</span>')}</div></div>`:''}
-      ${d.certifications.length?`<div class="sec"><div class="sec-title">Certificări</div>${d.certifications.map(c=>`<div class="entry"><div class="date-col">${e(c.year)}</div><div class="e-content"><div class="e-title">${e(c.name)}</div><div class="e-sub">${e(c.org)}</div></div></div>`).join('')}</div>`:''}
+      ${d.summary?`<div class="sec"><div class="sec-title">Profile</div><div class="summary-text">${e(d.summary)}</div></div>`:''}
+      ${d.experience.length?`<div class="sec"><div class="sec-title">Experience</div>${d.experience.map(x=>`<div class="entry"><div class="date-col">${period(x.startMonth,x.startYear,x.endMonth,x.endYear,x.current)}</div><div class="e-content"><div class="e-title">${e(x.title)}</div><div class="e-sub">${e(x.company)}${x.location?', '+e(x.location):''}</div>${x.description?`<div class="e-desc">${e(x.description)}</div>`:''}</div></div>`).join('')}</div>`:''}
+      ${d.education.length?`<div class="sec"><div class="sec-title">Education</div>${d.education.map(x=>`<div class="entry"><div class="date-col">${[x.startYear,x.current?'Present':x.endYear].filter(Boolean).join('–')}</div><div class="e-content"><div class="e-title">${e(x.degree)}</div><div class="e-sub">${e(x.institution)}${x.notes?' — '+e(x.notes):''}</div></div></div>`).join('')}</div>`:''}
+      ${d.projects.length?`<div class="sec"><div class="sec-title">Projects</div>${d.projects.map(x=>`<div class="entry"><div class="date-col" style="font-size:7.5pt">${e(x.tech)}</div><div class="e-content"><div class="e-title">${e(x.name)}</div>${x.description?`<div class="e-desc">${e(x.description)}</div>`:''}</div></div>`).join('')}</div>`:''}
+      ${d.skills.length?`<div class="sec"><div class="sec-title">Skills</div><div class="skills-inline">${d.skills.map(s=>`<span class="skill-i">${e(s.name)}</span>`).join('')}</div></div>`:''}
+      ${d.languages.length?`<div class="sec"><div class="sec-title">Languages</div><div class="langs-inline">${d.languages.map(l=>`<span>${e(l.name)} <em style="color:#888">(${e(l.level)})</em></span>`).join('<span style="color:#ccc;margin:0 4px">·</span>')}</div></div>`:''}
+      ${d.certifications.length?`<div class="sec"><div class="sec-title">Certifications</div>${d.certifications.map(c=>`<div class="entry"><div class="date-col">${e(c.year)}</div><div class="e-content"><div class="e-title">${e(c.name)}</div><div class="e-sub">${e(c.org)}</div></div></div>`).join('')}</div>`:''}
     </div>`;
   },
 
@@ -1787,13 +1798,13 @@ const TPLS = {
         ${cItems.length?`<div class="contacts">${cItems.join('')}</div>`:''}
       </div>
       <div class="body">
-        ${d.summary?`<div class="sec full"><div class="sec-title">Profil</div><div class="summary-text">${e(d.summary)}</div></div>`:''}
-        ${d.experience.length?`<div class="sec full"><div class="sec-title">Experiență profesională</div>${d.experience.map(x=>`<div class="entry"><div class="e-title">${e(x.title)}</div><div class="e-sub">${e(x.company)}${x.location?' · '+e(x.location):''}</div><div class="e-date">${period(x.startMonth,x.startYear,x.endMonth,x.endYear,x.current)}</div>${x.description?`<div class="e-desc">${e(x.description)}</div>`:''}</div>`).join('')}</div>`:''}
-        ${d.education.length?`<div class="sec"><div class="sec-title">Educație</div>${d.education.map(x=>`<div class="entry"><div class="e-title">${e(x.degree)}</div><div class="e-sub">${e(x.institution)}</div><div class="e-date">${[x.startYear,x.current?'Prezent':x.endYear].filter(Boolean).join('–')}${x.notes?' · '+e(x.notes):''}</div></div>`).join('')}</div>`:''}
-        ${d.skills.length?`<div class="sec"><div class="sec-title">Abilități</div><div class="skills-wrap">${d.skills.map(s=>`<span class="skill-tag">${e(s.name)}</span>`).join('')}</div></div>`:''}
-        ${d.languages.length?`<div class="sec"><div class="sec-title">Limbi</div>${d.languages.map(l=>`<div class="lang-item"><span>${e(l.name)}</span><span class="lang-level">${e(l.level)}</span></div>`).join('')}</div>`:''}
-        ${d.projects.length?`<div class="sec"><div class="sec-title">Proiecte</div>${d.projects.map(x=>`<div class="entry"><div class="e-title">${e(x.name)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${x.description?`<div class="e-desc">${e(x.description)}</div>`:''}</div>`).join('')}</div>`:''}
-        ${d.certifications.length?`<div class="sec"><div class="sec-title">Certificări</div>${d.certifications.map(c=>`<div class="entry"><div class="e-title">${e(c.name)}</div><div class="e-sub">${e(c.org)}${c.year?' · '+e(c.year):''}</div></div>`).join('')}</div>`:''}
+        ${d.summary?`<div class="sec full"><div class="sec-title">Profile</div><div class="summary-text">${e(d.summary)}</div></div>`:''}
+        ${d.experience.length?`<div class="sec full"><div class="sec-title">Work Experience</div>${d.experience.map(x=>`<div class="entry"><div class="e-title">${e(x.title)}</div><div class="e-sub">${e(x.company)}${x.location?' · '+e(x.location):''}</div><div class="e-date">${period(x.startMonth,x.startYear,x.endMonth,x.endYear,x.current)}</div>${x.description?`<div class="e-desc">${e(x.description)}</div>`:''}</div>`).join('')}</div>`:''}
+        ${d.education.length?`<div class="sec"><div class="sec-title">Education</div>${d.education.map(x=>`<div class="entry"><div class="e-title">${e(x.degree)}</div><div class="e-sub">${e(x.institution)}</div><div class="e-date">${[x.startYear,x.current?'Present':x.endYear].filter(Boolean).join('–')}${x.notes?' · '+e(x.notes):''}</div></div>`).join('')}</div>`:''}
+        ${d.skills.length?`<div class="sec"><div class="sec-title">Skills</div><div class="skills-wrap">${d.skills.map(s=>`<span class="skill-tag">${e(s.name)}</span>`).join('')}</div></div>`:''}
+        ${d.languages.length?`<div class="sec"><div class="sec-title">Languages</div>${d.languages.map(l=>`<div class="lang-item"><span>${e(l.name)}</span><span class="lang-level">${e(l.level)}</span></div>`).join('')}</div>`:''}
+        ${d.projects.length?`<div class="sec"><div class="sec-title">Projects</div>${d.projects.map(x=>`<div class="entry"><div class="e-title">${e(x.name)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${x.description?`<div class="e-desc">${e(x.description)}</div>`:''}</div>`).join('')}</div>`:''}
+        ${d.certifications.length?`<div class="sec"><div class="sec-title">Certifications</div>${d.certifications.map(c=>`<div class="entry"><div class="e-title">${e(c.name)}</div><div class="e-sub">${e(c.org)}${c.year?' · '+e(c.year):''}</div></div>`).join('')}</div>`:''}
       </div>
     </div>`;
   },
@@ -1846,13 +1857,13 @@ const TPLS = {
       </div>
       <div class="body">
         <div class="main">
-          ${d.summary?`<div class="sec"><div class="sec-title">// about</div><div class="summary-text">${e(d.summary)}</div></div>`:''}
-          ${d.experience.length?`<div class="sec"><div class="sec-title">// experience</div>${d.experience.map(x=>`<div class="entry"><div class="e-title">${e(x.title)}</div><div class="e-sub">${e(x.company)}${x.location?' @ '+e(x.location):''}</div><div class="e-date">${period(x.startMonth,x.startYear,x.endMonth,x.endYear,x.current)}</div>${x.description?`<div class="e-desc">${e(x.description)}</div>`:''}</div>`).join('')}</div>`:''}
-          ${d.education.length?`<div class="sec"><div class="sec-title">// education</div>${d.education.map(x=>`<div class="entry"><div class="e-title">${e(x.degree)}</div><div class="e-sub">${e(x.institution)}</div><div class="e-date">${[x.startYear,x.current?'Prezent':x.endYear].filter(Boolean).join('–')}${x.notes?' · '+e(x.notes):''}</div></div>`).join('')}</div>`:''}
-          ${d.projects.length?`<div class="sec"><div class="sec-title">// projects</div>${d.projects.map(x=>`<div class="entry"><div class="e-title">${e(x.name)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${x.description?`<div class="e-desc">${e(x.description)}</div>`:''}</div>`).join('')}</div>`:''}
+          ${d.summary?`<div class="sec"><div class="sec-title">About</div><div class="summary-text">${e(d.summary)}</div></div>`:''}
+          ${d.experience.length?`<div class="sec"><div class="sec-title">Experience</div>${d.experience.map(x=>`<div class="entry"><div class="e-title">${e(x.title)}</div><div class="e-sub">${e(x.company)}${x.location?' @ '+e(x.location):''}</div><div class="e-date">${period(x.startMonth,x.startYear,x.endMonth,x.endYear,x.current)}</div>${x.description?`<div class="e-desc">${e(x.description)}</div>`:''}</div>`).join('')}</div>`:''}
+          ${d.education.length?`<div class="sec"><div class="sec-title">Education</div>${d.education.map(x=>`<div class="entry"><div class="e-title">${e(x.degree)}</div><div class="e-sub">${e(x.institution)}</div><div class="e-date">${[x.startYear,x.current?'Present':x.endYear].filter(Boolean).join('–')}${x.notes?' · '+e(x.notes):''}</div></div>`).join('')}</div>`:''}
+          ${d.projects.length?`<div class="sec"><div class="sec-title">Projects</div>${d.projects.map(x=>`<div class="entry"><div class="e-title">${e(x.name)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${x.description?`<div class="e-desc">${e(x.description)}</div>`:''}</div>`).join('')}</div>`:''}
         </div>
         <div class="aside">
-          ${d.skills.length?`<div class="sec"><div class="a-sec-title">// skills</div><div>${d.skills.map(s=>`<span class="skill-tag">${e(s.name)}</span>`).join('')}</div></div>`:''}
+          ${d.skills.length?`<div class="sec"><div class="a-sec-title">Skills</div><div>${d.skills.map(s=>`<span class="skill-tag">${e(s.name)}</span>`).join('')}</div></div>`:''}
           ${d.languages.length?`<div class="sec" style="margin-top:12px;"><div class="a-sec-title">// languages</div>${d.languages.map(l=>`<div class="lang-row"><span>${e(l.name)}</span><span class="lang-level">${e(l.level)}</span></div>`).join('')}</div>`:''}
           ${d.certifications.length?`<div class="sec" style="margin-top:12px;"><div class="a-sec-title">// certs</div>${d.certifications.map(c=>`<div class="cert-item"><div class="cert-name">${e(c.name)}</div><div>${e(c.org)}${c.year?' · '+e(c.year):''}</div></div>`).join('')}</div>`:''}
         </div>
@@ -1995,7 +2006,7 @@ const TPLS = {
       </div>
       <div class="body">
         <div>
-          ${d.summary?`<div class="sec"><div class="sec-title">Profile</div><div class="summary-text">${e(d.summary)}</div></div>`:''}
+          ${d.summary?`<div class="sec"><div class="sec-title">Profilee</div><div class="summary-text">${e(d.summary)}</div></div>`:''}
           ${d.experience.length?`<div class="sec"><div class="sec-title">Experience</div>${d.experience.map(x=>`<div class="entry"><div class="e-date-col">${period(x.startMonth,x.startYear,x.endMonth,x.endYear,x.current)}</div><div class="e-content"><div class="e-title">${e(x.title)}</div><div class="e-sub">${e(x.company)}${x.location?', '+e(x.location):''}</div>${x.description?`<div class="e-desc">${e(x.description)}</div>`:''}</div></div>`).join('')}</div>`:''}
           ${d.education.length?`<div class="sec"><div class="sec-title">Education</div>${d.education.map(x=>`<div class="entry"><div class="e-date-col">${[x.startYear,x.current?'Present':x.endYear].filter(Boolean).join('–')}</div><div class="e-content"><div class="e-title">${e(x.degree)}</div><div class="e-sub">${e(x.institution)}${x.notes?' — '+e(x.notes):''}</div></div></div>`).join('')}</div>`:''}
           ${d.projects.length?`<div class="sec"><div class="sec-title">Projects</div>${d.projects.map(x=>`<div class="entry"><div class="e-date-col" style="font-size:7pt">${e(x.tech)}</div><div class="e-content"><div class="e-title">${e(x.name)}</div>${x.description?`<div class="e-desc">${e(x.description)}</div>`:''}</div></div>`).join('')}</div>`:''}
@@ -2046,6 +2057,17 @@ async function downloadPDF() {
   preview.style.marginBottom=origM;
   btn.disabled=false; ico.classList.remove('hidden'); spin.classList.add('hidden'); txt.textContent='Download PDF';
   updateDlBtn();
+}
+
+// ════════════════════════════════
+//  ATS PRINT PDF
+// ════════════════════════════════
+function printATS() {
+  if(!isValid()) return;
+  const layer = document.getElementById('ats-print-layer');
+  layer.innerHTML = document.getElementById('cv-preview').innerHTML;
+  window.print();
+  setTimeout(()=>{ layer.innerHTML=''; }, 1000);
 }
 
 // ════════════════════════════════
@@ -2124,6 +2146,9 @@ document.getElementById('privacy-modal').addEventListener('click', function(e) {
   if (e.target === this) closePrivacy();
 });
 </script>
+
+<!-- ══════════════ ATS PRINT LAYER (hidden, shown only on print) ══════════════ -->
+<div id="ats-print-layer" style="display:none"></div>
 
 <!-- ══════════════ COOKIE CONSENT BANNER ══════════════ -->
 <div id="cookie-banner" class="hidden" role="dialog" aria-live="polite" aria-label="Cookie consent">
