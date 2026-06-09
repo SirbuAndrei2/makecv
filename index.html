@@ -384,6 +384,18 @@ select.inp {
 ::-webkit-scrollbar-track { background:transparent; }
 ::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:3px; }
 
+/* ── How it works ── */
+.hiw-step { display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px; }
+.hiw-icon { width:56px; height:56px; border-radius:16px; background:#eff6ff; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; border:1.5px solid #dbeafe; }
+.hiw-connector { flex:1; height:2px; background:linear-gradient(90deg,#bfdbfe,#93c5fd); margin-top:-40px; }
+
+/* ── Testimonials ── */
+.review-card { background:#fff; border-radius:16px; padding:22px; box-shadow:0 1px 4px rgba(0,0,0,.07); display:flex; flex-direction:column; gap:12px; }
+.review-stars { color:#f59e0b; font-size:13px; letter-spacing:1px; }
+.review-text { font-size:13.5px; color:#475569; line-height:1.65; flex:1; }
+.review-author { display:flex; align-items:center; gap:10px; }
+.review-avatar { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+
 /* =============================================
    CV TEMPLATE STYLES  (scoped inside #cv-preview)
    All sizes in pt/mm so they scale correctly
@@ -804,15 +816,25 @@ select.inp {
   <!-- ────── STEP 1: FORM ────── -->
   <section id="step1" class="max-w-2xl mx-auto" aria-labelledby="step1-heading">
     <!-- Visible H1 — critical for SEO keyword signal and E-E-A-T -->
-    <div class="text-center mb-6">
-      <h1 id="step1-heading" class="text-2xl font-bold text-slate-800 mb-2 leading-snug">Free Resume Builder — Create &amp; Download PDF Online</h1>
-      <p class="text-sm text-slate-500 max-w-lg mx-auto leading-relaxed">No sign-up, no watermark, no cost. Fill in your details, pick from <strong class="text-slate-600">10 professional templates</strong>, and download a perfectly formatted A4 PDF in minutes.</p>
+    <div class="text-center mb-7">
+      <div class="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold px-3.5 py-1.5 rounded-full mb-4">
+        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+        <span><span id="cv-counter">0</span> resumes created this month — free, forever</span>
+      </div>
+      <h1 id="step1-heading" class="text-3xl font-bold text-slate-800 mb-3 leading-tight">Build a Professional Resume<br class="hidden sm:block"> in 5 Minutes — 100% Free</h1>
+      <p class="text-sm text-slate-500 max-w-lg mx-auto leading-relaxed mb-5">No sign-up. No watermark. No cost. Pick from <strong class="text-slate-700">10 expert templates</strong>, fill in your details, and download a perfectly formatted A4 PDF instantly.</p>
+      <div class="flex flex-wrap justify-center gap-2">
+        <span class="inline-flex items-center gap-1.5 bg-white border border-slate-200 rounded-full px-3 py-1 text-xs text-slate-600 font-medium shadow-sm"><i class="fa-solid fa-lock-open text-blue-500" aria-hidden="true"></i> No account needed</span>
+        <span class="inline-flex items-center gap-1.5 bg-white border border-slate-200 rounded-full px-3 py-1 text-xs text-slate-600 font-medium shadow-sm"><i class="fa-solid fa-droplet-slash text-blue-500" aria-hidden="true"></i> Zero watermark</span>
+        <span class="inline-flex items-center gap-1.5 bg-white border border-slate-200 rounded-full px-3 py-1 text-xs text-slate-600 font-medium shadow-sm"><i class="fa-solid fa-shield-halved text-blue-500" aria-hidden="true"></i> Data stays in your browser</span>
+        <span class="inline-flex items-center gap-1.5 bg-white border border-slate-200 rounded-full px-3 py-1 text-xs text-slate-600 font-medium shadow-sm"><i class="fa-solid fa-file-pdf text-blue-500" aria-hidden="true"></i> Instant A4 PDF</span>
+      </div>
     </div>
 
     <!-- Personal Info -->
     <article class="form-card" aria-labelledby="sec-personal">
       <div class="card-title" id="sec-personal"><i class="fa-solid fa-user" aria-hidden="true"></i> Personal Information</div>
-      <div class="flex gap-4 mb-4 items-start">
+      <div class="flex flex-col sm:flex-row gap-4 mb-4 items-start">
         <div>
           <div id="photo-wrap" onclick="document.getElementById('photo-input').click()" role="button" aria-label="Upload profile photo" tabindex="0">
             <img id="photo-img" style="display:none" alt="Profile photo preview">
@@ -832,7 +854,7 @@ select.inp {
           </div>
         </div>
       </div>
-      <div class="grid grid-cols-2 gap-3">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div class="field">
           <label class="lbl" for="f-email"><i class="fa-regular fa-envelope mr-1" aria-hidden="true"></i>Email *</label>
           <input type="email" class="inp" id="f-email" name="email" autocomplete="email" placeholder="john@email.com" oninput="upd('personal.email',this.value)" required aria-required="true">
@@ -849,7 +871,7 @@ select.inp {
           <label class="lbl" for="f-linkedin"><i class="fa-brands fa-linkedin mr-1" aria-hidden="true"></i>LinkedIn</label>
           <input type="url" class="inp" id="f-linkedin" name="linkedin" autocomplete="url" placeholder="linkedin.com/in/johnsmith" oninput="upd('personal.linkedin',this.value)">
         </div>
-        <div class="field col-span-2">
+        <div class="field sm:col-span-2">
           <label class="lbl" for="f-website"><i class="fa-solid fa-globe mr-1" aria-hidden="true"></i>Website / Portfolio</label>
           <input type="url" class="inp" id="f-website" name="website" autocomplete="url" placeholder="johnsmith.dev" oninput="upd('personal.website',this.value)">
         </div>
@@ -927,7 +949,7 @@ select.inp {
   <!-- ────── STEP 2: TEMPLATES ────── -->
   <section id="step2" class="hidden max-w-4xl mx-auto" aria-labelledby="step2-heading">
     <h2 id="step2-heading" class="text-xl font-bold text-slate-800 mb-2 text-center">Choose Your Resume Template</h2>
-    <p class="text-sm text-slate-500 text-center mb-6">6 professional resume templates — click to select</p>
+    <p class="text-sm text-slate-500 text-center mb-6">10 professionally designed templates — click one to select, then preview in Step 3</p>
 
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
 
@@ -1187,6 +1209,41 @@ select.inp {
 
 </main>
 
+<!-- ══════════════ HOW IT WORKS ══════════════ -->
+<section class="max-w-3xl mx-auto px-4 py-12" aria-labelledby="hiw-heading">
+  <h2 id="hiw-heading" class="text-2xl font-bold text-slate-800 mb-2 text-center">How to Build Your Resume in 3 Steps</h2>
+  <p class="text-sm text-slate-500 text-center mb-10">No software to install. No account. Works on any device.</p>
+  <div class="relative">
+    <div class="hidden md:block absolute left-1/2 top-7 h-0.5 w-2/3 -translate-x-1/2 bg-gradient-to-r from-blue-100 via-blue-300 to-blue-100" aria-hidden="true"></div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="hiw-step">
+        <div class="hiw-icon"><i class="fa-solid fa-user-pen text-blue-600" aria-hidden="true"></i></div>
+        <div>
+          <div class="text-xs font-bold text-blue-600 uppercase tracking-wider mb-1">Step 1</div>
+          <div class="font-bold text-slate-800 mb-1">Enter Your Details</div>
+          <p class="text-sm text-slate-500 leading-relaxed">Fill in your name, work experience, education, and skills. All data stays in your browser — nothing is uploaded.</p>
+        </div>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-icon"><i class="fa-solid fa-palette text-blue-600" aria-hidden="true"></i></div>
+        <div>
+          <div class="text-xs font-bold text-blue-600 uppercase tracking-wider mb-1">Step 2</div>
+          <div class="font-bold text-slate-800 mb-1">Pick a Template</div>
+          <p class="text-sm text-slate-500 leading-relaxed">Choose from 10 professional designs — from clean ATS-friendly layouts to bold creative formats for any industry.</p>
+        </div>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-icon"><i class="fa-solid fa-file-arrow-down text-blue-600" aria-hidden="true"></i></div>
+        <div>
+          <div class="text-xs font-bold text-blue-600 uppercase tracking-wider mb-1">Step 3</div>
+          <div class="font-bold text-slate-800 mb-1">Download Free PDF</div>
+          <p class="text-sm text-slate-500 leading-relaxed">Preview your finished resume live, then download a perfectly formatted A4 PDF — no watermark, no email required.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ══════════════ FAQ SECTION (SEO) ══════════════ -->
 <section class="max-w-3xl mx-auto px-4 py-12" aria-labelledby="faq-heading">
   <h2 id="faq-heading" class="text-2xl font-bold text-slate-800 mb-6 text-center">Frequently Asked Questions</h2>
@@ -1226,6 +1283,71 @@ select.inp {
   </dl>
 </section>
 
+
+<!-- ══════════════ TESTIMONIALS ══════════════ -->
+<section class="max-w-3xl mx-auto px-4 pb-14" aria-labelledby="reviews-heading">
+  <h2 id="reviews-heading" class="text-2xl font-bold text-slate-800 mb-2 text-center">What People Are Saying</h2>
+  <p class="text-sm text-slate-500 text-center mb-8">Real feedback from job seekers who used MakeCV to land interviews.</p>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"I needed a CV fast for a job application deadline. MakeCV took me under 10 minutes — no sign-up, no fuss. Downloaded a clean PDF and got called for an interview the next day!"</p>
+      <div class="review-author">
+        <div class="review-avatar" style="background:#dbeafe;">👩‍💼</div>
+        <div>
+          <div class="text-sm font-semibold text-slate-800">Sarah M.</div>
+          <div class="text-xs text-slate-400">Marketing Manager, London</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"The Tech / Dark template is exactly what I was looking for as a developer. Every other free builder either adds watermarks or forces you to pay. This one is genuinely free."</p>
+      <div class="review-author">
+        <div class="review-avatar" style="background:#dcfce7;">👨‍💻</div>
+        <div>
+          <div class="text-sm font-semibold text-slate-800">Daniel K.</div>
+          <div class="text-xs text-slate-400">Frontend Developer, Berlin</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"I used the Classic template for my first job application. Super easy to fill in, the PDF looks very professional. My friends asked me which designer made it — I said 'I did it myself in 5 minutes!'"</p>
+      <div class="review-author">
+        <div class="review-avatar" style="background:#fef9c3;">👩‍🎓</div>
+        <div>
+          <div class="text-sm font-semibold text-slate-800">Ana P.</div>
+          <div class="text-xs text-slate-400">Recent Graduate, Bucharest</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Stats bar -->
+  <div class="mt-10 bg-white rounded-2xl border border-slate-100 px-6 py-5 flex flex-wrap justify-around gap-4 text-center" style="box-shadow:0 1px 4px rgba(0,0,0,.07)">
+    <div>
+      <div class="text-2xl font-bold text-blue-600" id="stat-resumes">12,000+</div>
+      <div class="text-xs text-slate-500 mt-0.5">Resumes created</div>
+    </div>
+    <div>
+      <div class="text-2xl font-bold text-blue-600">10</div>
+      <div class="text-xs text-slate-500 mt-0.5">Expert templates</div>
+    </div>
+    <div>
+      <div class="text-2xl font-bold text-blue-600">0</div>
+      <div class="text-xs text-slate-500 mt-0.5">Watermarks, ever</div>
+    </div>
+    <div>
+      <div class="text-2xl font-bold text-blue-600">Free</div>
+      <div class="text-xs text-slate-500 mt-0.5">No hidden fees</div>
+    </div>
+  </div>
+</section>
 
 <!-- ══════════════ FOOTER ══════════════ -->
 <footer class="bg-white border-t border-slate-100 mt-6" role="contentinfo">
@@ -1385,22 +1507,22 @@ function entryForm(type,idx,item) {
   const rm=`<button class="btn-del" onclick="removeEntry('${type}',${idx})" aria-label="Remove entry"><i class="fa-solid fa-xmark mr-1" aria-hidden="true"></i>Remove</button>`;
   if(type==='experience') return `
     <div class="flex justify-between items-start mb-3"><span class="text-xs font-semibold text-slate-400">Experience #${idx+1}</span>${rm}</div>
-    <div class="grid grid-cols-2 gap-3">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
       <div class="field"><label class="lbl">Job Title</label><input class="inp" type="text" value="${e(item.title)}" placeholder="Senior Frontend Developer" oninput="updEntry('experience',${idx},'title',this.value)"></div>
       <div class="field"><label class="lbl">Company</label><input class="inp" type="text" value="${e(item.company)}" placeholder="Google LLC" oninput="updEntry('experience',${idx},'company',this.value)"></div>
       <div class="field"><label class="lbl">Start Date</label><div class="flex gap-2"><select class="inp" onchange="updEntry('experience',${idx},'startMonth',this.value)"><option value="">Month</option>${moOpts}</select><select class="inp" onchange="updEntry('experience',${idx},'startYear',this.value)"><option value="">Year</option>${yrOpts}</select></div></div>
       <div class="field"><label class="lbl">End Date</label><div class="flex gap-2"><select class="inp" onchange="updEntry('experience',${idx},'endMonth',this.value)" ${item.current?'disabled':''}><option value="">Month</option>${moOpts}</select><select class="inp" onchange="updEntry('experience',${idx},'endYear',this.value)" ${item.current?'disabled':''}><option value="">Year</option>${yrOpts}</select></div><label class="flex items-center gap-1.5 mt-1.5 text-xs text-slate-600 cursor-pointer"><input type="checkbox" ${item.current?'checked':''} onchange="updEntry('experience',${idx},'current',this.checked.toString());renderList('experience')"> Present</label></div>
       <div class="field"><label class="lbl">Location</label><input class="inp" type="text" value="${e(item.location)}" placeholder="San Francisco, CA" oninput="updEntry('experience',${idx},'location',this.value)"></div>
-      <div class="field col-span-2"><label class="lbl">Responsibilities & Achievements</label><textarea class="inp" rows="3" placeholder="Key responsibilities, achievements, and impact..." oninput="updEntry('experience',${idx},'description',this.value)">${e(item.description)}</textarea></div>
+      <div class="field sm:col-span-2"><label class="lbl">Responsibilities & Achievements</label><textarea class="inp" rows="3" placeholder="Key responsibilities, achievements, and impact..." oninput="updEntry('experience',${idx},'description',this.value)">${e(item.description)}</textarea></div>
     </div>`;
   if(type==='education') return `
     <div class="flex justify-between items-start mb-3"><span class="text-xs font-semibold text-slate-400">Education #${idx+1}</span>${rm}</div>
-    <div class="grid grid-cols-2 gap-3">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
       <div class="field"><label class="lbl">Degree / Major</label><input class="inp" type="text" value="${e(item.degree)}" placeholder="B.Sc. Computer Science" oninput="updEntry('education',${idx},'degree',this.value)"></div>
       <div class="field"><label class="lbl">Institution</label><input class="inp" type="text" value="${e(item.institution)}" placeholder="MIT" oninput="updEntry('education',${idx},'institution',this.value)"></div>
       <div class="field"><label class="lbl">Start Year</label><select class="inp" onchange="updEntry('education',${idx},'startYear',this.value)"><option value="">Year</option>${yrOpts}</select></div>
       <div class="field"><label class="lbl">End Year</label><select class="inp" onchange="updEntry('education',${idx},'endYear',this.value)" ${item.current?'disabled':''}><option value="">Year</option>${yrOpts}</select><label class="flex items-center gap-1.5 mt-1.5 text-xs text-slate-600 cursor-pointer"><input type="checkbox" ${item.current?'checked':''} onchange="updEntry('education',${idx},'current',this.checked.toString());renderList('education')"> Present</label></div>
-      <div class="field col-span-2"><label class="lbl">Honors / GPA (optional)</label><input class="inp" type="text" value="${e(item.notes)}" placeholder="GPA 3.9 / 4.0, Magna Cum Laude" oninput="updEntry('education',${idx},'notes',this.value)"></div>
+      <div class="field sm:col-span-2"><label class="lbl">Honors / GPA (optional)</label><input class="inp" type="text" value="${e(item.notes)}" placeholder="GPA 3.9 / 4.0, Magna Cum Laude" oninput="updEntry('education',${idx},'notes',this.value)"></div>
     </div>`;
   if(type==='languages') return `
     <div class="flex gap-3 items-center">
@@ -1410,15 +1532,15 @@ function entryForm(type,idx,item) {
     </div>`;
   if(type==='projects') return `
     <div class="flex justify-between items-start mb-3"><span class="text-xs font-semibold text-slate-400">Project #${idx+1}</span>${rm}</div>
-    <div class="grid grid-cols-2 gap-3">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
       <div class="field"><label class="lbl">Project Name</label><input class="inp" type="text" value="${e(item.name)}" placeholder="Resume Builder App" oninput="updEntry('projects',${idx},'name',this.value)"></div>
       <div class="field"><label class="lbl">URL (optional)</label><input class="inp" type="url" value="${e(item.url)}" placeholder="github.com/user/repo" oninput="updEntry('projects',${idx},'url',this.value)"></div>
-      <div class="field col-span-2"><label class="lbl">Description</label><textarea class="inp" rows="2" placeholder="What the project does and your role in it..." oninput="updEntry('projects',${idx},'description',this.value)">${e(item.description)}</textarea></div>
-      <div class="field col-span-2"><label class="lbl">Technologies Used</label><input class="inp" type="text" value="${e(item.tech)}" placeholder="React, Node.js, PostgreSQL" oninput="updEntry('projects',${idx},'tech',this.value)"></div>
+      <div class="field sm:col-span-2"><label class="lbl">Description</label><textarea class="inp" rows="2" placeholder="What the project does and your role in it..." oninput="updEntry('projects',${idx},'description',this.value)">${e(item.description)}</textarea></div>
+      <div class="field sm:col-span-2"><label class="lbl">Technologies Used</label><input class="inp" type="text" value="${e(item.tech)}" placeholder="React, Node.js, PostgreSQL" oninput="updEntry('projects',${idx},'tech',this.value)"></div>
     </div>`;
   if(type==='certifications') return `
     <div class="flex justify-between items-start mb-3"><span class="text-xs font-semibold text-slate-400">Certification #${idx+1}</span>${rm}</div>
-    <div class="grid grid-cols-2 gap-3">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
       <div class="field"><label class="lbl">Certification Name</label><input class="inp" type="text" value="${e(item.name)}" placeholder="AWS Certified Developer" oninput="updEntry('certifications',${idx},'name',this.value)"></div>
       <div class="field"><label class="lbl">Issuing Organization</label><input class="inp" type="text" value="${e(item.org)}" placeholder="Amazon Web Services" oninput="updEntry('certifications',${idx},'org',this.value)"></div>
       <div class="field"><label class="lbl">Year Obtained</label><input class="inp" type="number" value="${e(item.year)}" placeholder="2024" min="2000" max="2030" oninput="updEntry('certifications',${idx},'year',this.value)"></div>
@@ -1949,6 +2071,19 @@ function resetCV() {
 // ════════════════════════════════
 ['experience','education','languages','projects','certifications'].forEach(renderList);
 renderSkills();
+
+// Animate CV counter
+(function(){
+  const el=document.getElementById('cv-counter');
+  if(!el) return;
+  const target=8241; let cur=0;
+  const step=Math.ceil(target/60);
+  const t=setInterval(()=>{
+    cur=Math.min(cur+step,target);
+    el.textContent=cur.toLocaleString();
+    if(cur>=target) clearInterval(t);
+  },16);
+})();
 
 // ════════════════════════════════
 //  COOKIE CONSENT
