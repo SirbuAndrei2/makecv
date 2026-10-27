@@ -11,6 +11,6 @@
     // The site is the repo root; .assetsignore keeps docs and config out of the upload.
     "directory": ".",
     "html_handling": "drop-trailing-slash",
-    "not_found_handling": "none"
+    "not_found_handling": "404-page"
   }
 }
