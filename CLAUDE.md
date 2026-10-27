@@ -14,7 +14,7 @@ Open `index.html` directly in a browser, or serve it locally:
 npx serve .          # or: python3 -m http.server 8080
 ```
 
-Hosted on Cloudflare Workers (static assets only, `wrangler.jsonc`; the repo root is the asset directory and `.assetsignore` excludes docs/config). Security and cache headers live in `_headers`. **Every push to `main` deploys automatically** via Cloudflare Workers Builds; `npx wrangler deploy` deploys manually. `www.makecv.org` → apex is a separate Worker in `www-redirect/` (`npx wrangler deploy -c www-redirect/wrangler.jsonc`).
+Hosted on Cloudflare Workers (static assets only, `wrangler.jsonc`; the repo root is the asset directory and `.assetsignore` excludes docs/config). Security and cache headers live in `_headers`. Deploy with `npx wrangler deploy` (or `./sw deploy makecv` from the workspace root): **Workers Builds is not connected** to this Worker, so a push to `main` does not deploy (verified 2026-10-27). `makecv.org` is a Workers custom domain since 2026-10-27; the old Vercel CNAME and `_vercel` TXT records were deleted. `www.makecv.org` → apex is a separate Worker in `www-redirect/` (`npx wrangler deploy -c www-redirect/wrangler.jsonc`).
 
 ## Architecture
 
