@@ -24,10 +24,9 @@ Hosted on Cloudflare Workers (static assets only, `wrangler.jsonc`; the repo roo
 |---|---|---|
 | `<head>` | 1–230 | Meta, SEO, JSON-LD schemas, ads scripts |
 | `<style>` | ~230–760 | All CSS — Tailwind via CDN + custom per-template styles |
-| Ad tags | ~753–760 | Monetag push/vignette zones |
 | `<body>` HTML | ~766–1268 | Header, 3-step wizard UI, footer |
 | `<script>` | ~1270–1991 | All app logic |
-| Cookie / Privacy | ~1993–2070 | Cookie consent banner, privacy modal |
+| Cookie / Privacy | end of file | Cookie consent banner, privacy modal (its script waits for DOMContentLoaded: the markup comes after it) |
 
 ### External dependencies (CDN only — no npm)
 - **Tailwind CSS** — utility classes in the HTML
@@ -78,11 +77,24 @@ Each template function renders directly from the `cv` state object. Templates co
 
 ### Ads
 
-- **Google AdSense** — placeholder `ca-pub-XXXXXXXXXXXXXXXX` in head; replace with real publisher ID
-- **Adsterra** — placeholder `YOUR_ADSTERRA_POPUNDER_KEY` in head
-- **Monetag** — zones 11090465 (push, via sw.js) and 11090485 (vignette)
-- `sw.js` — Monetag push notification service worker; references zone 11090465
-- `ads.txt` — contains placeholder AdSense publisher ID; update when activating AdSense
+**Adsterra only** (Monetag removed 2026-10-27; there is no AdSense). Slots are `<aside class="ad-slot" data-ad="…">` placeholders in the HTML; the ADS script at the end of `<body>` fills each one when it first comes within 300px of the viewport (IntersectionObserver), so slots in hidden steps or `lg:hidden` variants never request an ad. Keys and zones live in that script's `BANNERS` / constants.
+
+| `data-ad` | Size | Where |
+|---|---|---|
+| `leaderboard` | 728×90, 320×50 below 768px | Step 1, under the hero |
+| `inline` | 468×60, 320×50 below 768px | Step 1, before Languages |
+| `native` | /21/ native banner (`#container-<zone>`, one per page) | Step 2, under the template grid |
+| `300x250` | 300×250 | Step 3: left panel from 1024px (panel widens to `lg:w-80`), under the preview below 1024px |
+| `responsive` | 728×90, 300×250 below 768px | Between How it works and the FAQ |
+| `rail-left` / `rail-right` | 160×600 / 160×300 | Fixed beside the active step, only when they fit (`placeRails`, re-run on `goStep` and resize) |
+
+- Iframe banners (/22/) each render in their own `srcdoc` iframe: the invoke script reads the global `atOptions` and uses `document.write`.
+- **Social Bar** (/14/) loads 1.5 s after `load`, every page view.
+- **Popunder** (/1/, afders.org) loads only after the visitor gets a PDF (`makecv:downloaded`, fired by `downloadPDF()` and `printATS()`), once per session (`sessionStorage.makecv_pu`). It binds a page-wide click handler, so loading it earlier hijacks clicks in the form.
+- **Direct link** (arwf.org): the `a[data-ad-link]` "Sponsored" cards in step 3 (`rel="sponsored"`, new tab).
+- `@media print` hides `body > *`, so no ad reaches the ATS print.
+- `sw.js` is a self-unregistering kill switch for the old Monetag push worker; keep it (served `no-cache`) so past subscribers stop getting pushes.
+- The cookie banner and privacy policy (modal) describe Adsterra; `ads.txt` lists no sellers (no AdSense).
 
 ### SEO / Structured data
 

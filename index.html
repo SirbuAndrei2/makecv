@@ -188,7 +188,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.tailwindcss.com">
 <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-<link rel="dns-prefetch" href="https://pagead2.googlesyndication.com">
+<link rel="dns-prefetch" href="https://bicea.org">
 
 <!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=DM+Sans:wght@300;400;500;700&family=Nunito:wght@400;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Space+Grotesk:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
@@ -541,17 +541,30 @@ select.inp {
 }
 
 /* ═══════════════════════════════════
-   ADSENSE AD UNITS
+   ADSTERRA AD SLOTS (filled by the ADS script at the end of <body>)
    ═══════════════════════════════════ */
-.ad-unit-wrap {
+.ad-slot {
   background:#f8fafc; border:1px dashed #e2e8f0; border-radius:12px;
-  padding:10px 16px 8px; margin:16px 0; text-align:center; overflow:hidden;
+  padding:6px 4px 8px; margin:16px auto; text-align:center; overflow:hidden; max-width:100%;
 }
-.ad-unit-label {
+.ad-slot-label {
   font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.08em;
-  color:#94a3b8; display:block; margin-bottom:6px;
+  color:#94a3b8; display:block; margin-bottom:4px;
 }
-.adsbygoogle { display:block; }
+.ad-slot-body { display:flex; align-items:center; justify-content:center; }
+/* 728×90 is wider than the 672px step-1 column: let wide slots overhang their column, centred, never past the viewport */
+.ad-wide { width:746px; max-width:calc(100vw - 32px); margin-left:50% !important; transform:translateX(-50%); }
+.ad-slot iframe { border:0; display:block; max-width:100%; }
+.ad-rail { position:fixed; top:96px; z-index:30; display:none; }
+.ad-rail .ad-slot { margin:0; }
+/* display comes from Tailwind classes on the element (flex / hidden lg:flex) */
+.sponsored-card {
+  align-items:center; gap:10px; background:#fff; border:1px solid #e2e8f0; border-radius:14px;
+  padding:12px 14px; text-decoration:none; color:#1e293b; box-shadow:0 1px 3px rgba(0,0,0,.06);
+  transition:border-color .15s, box-shadow .15s;
+}
+.sponsored-card:hover { border-color:#93c5fd; box-shadow:0 4px 14px rgba(37,99,235,.12); }
+.sponsored-card .sp-tag { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#94a3b8; }
 
 /* ── Cookie Consent Banner ── */
 #cookie-banner {
@@ -741,14 +754,6 @@ select.inp {
 .tpl-swiss .cert-item { font-size:8pt; color:#444; padding:3px 0; border-bottom:1px solid #eee; }
 .tpl-swiss .cert-name { font-weight:700; color:#111; }
 </style>
-<!-- ═══ MONETAG — Push Notifications & Popunder ══════════════════════
-     Zone ID: 11090465 | Service worker registered at /sw.js
-     ═══════════════════════════════════════════════════════════════ -->
-<script>(function(d,z,s){s.src='https://'+d+'/401/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('5gvci.com',11090465,document.createElement('script'))</script>
-
-<!-- Monetag Vignette — zone 11090485 -->
-<script>(function(s){s.dataset.zone='11090485',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-
 </head>
 <body>
 
@@ -808,6 +813,8 @@ select.inp {
         <span class="inline-flex items-center gap-1.5 bg-white border border-slate-200 rounded-full px-3 py-1 text-xs text-slate-600 font-medium shadow-sm"><i class="fa-solid fa-file-pdf text-blue-500" aria-hidden="true"></i> Instant A4 PDF</span>
       </div>
     </div>
+
+    <aside class="ad-slot ad-wide" data-ad="leaderboard" aria-label="Advertisement"></aside>
 
     <!-- Personal Info -->
     <article class="form-card" aria-labelledby="sec-personal">
@@ -891,6 +898,8 @@ select.inp {
       </div>
       <div id="skills-wrap" class="flex flex-wrap gap-2 mt-1" role="list" aria-label="Added skills"></div>
     </article>
+
+    <aside class="ad-slot ad-wide" data-ad="inline" aria-label="Advertisement"></aside>
 
     <!-- Languages -->
     <article class="form-card" aria-labelledby="sec-lang">
@@ -1119,6 +1128,8 @@ select.inp {
 
     </div>
 
+    <aside class="ad-slot" data-ad="native" aria-label="Advertisement" style="max-width:none"></aside>
+
     <div class="flex justify-between items-center mt-4 mb-8">
       <button class="btn-ghost" onclick="goStep(1)"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back</button>
       <button class="btn-blue px-7 py-3 text-base" onclick="goStep(3)">Preview Resume <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
@@ -1138,7 +1149,7 @@ select.inp {
     <div class="flex gap-5 items-start">
 
       <!-- Left panel -->
-      <aside class="hidden md:flex flex-col w-72 flex-shrink-0 gap-3" id="left-panel" aria-label="Resume summary">
+      <aside class="hidden md:flex flex-col w-72 lg:w-80 flex-shrink-0 gap-3" id="left-panel" aria-label="Resume summary">
         <div class="bg-white rounded-2xl p-4" style="box-shadow:0 1px 3px rgba(0,0,0,.06)">
           <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Resume Summary</div>
           <div id="data-sum" class="text-xs text-slate-600 space-y-1.5 leading-relaxed" aria-live="polite"></div>
@@ -1148,6 +1159,14 @@ select.inp {
         <button class="text-xs text-slate-400 hover:text-red-400 transition-colors py-2 text-center" onclick="resetCV()">
           <i class="fa-solid fa-rotate-left mr-1" aria-hidden="true"></i>Start Over
         </button>
+
+        <!-- 300×250 needs ≥1024px here: the panel is 288px wide, so it is widened to 320px from lg up -->
+        <aside class="ad-slot hidden lg:block" data-ad="300x250" aria-label="Advertisement" style="margin:0"></aside>
+        <a class="sponsored-card hidden lg:flex" data-ad-link href="#" target="_blank" rel="sponsored noopener">
+          <i class="fa-solid fa-gift text-blue-500 text-lg" aria-hidden="true"></i>
+          <span class="flex-1"><span class="sp-tag block">Sponsored</span><span class="text-sm font-semibold">Today's recommended offers</span></span>
+          <i class="fa-solid fa-arrow-up-right-from-square text-slate-300 text-xs" aria-hidden="true"></i>
+        </a>
 
       </aside>
 
@@ -1184,6 +1203,15 @@ select.inp {
           <div id="preview-outer">
             <div id="cv-preview"></div>
           </div>
+        </div>
+        <!-- Below 1024px the left-panel ad is hidden, so the 300×250 and the sponsored link sit under the preview -->
+        <div class="lg:hidden">
+          <aside class="ad-slot" data-ad="300x250" aria-label="Advertisement"></aside>
+          <a class="sponsored-card flex" data-ad-link href="#" target="_blank" rel="sponsored noopener">
+            <i class="fa-solid fa-gift text-blue-500 text-lg" aria-hidden="true"></i>
+            <span class="flex-1"><span class="sp-tag block">Sponsored</span><span class="text-sm font-semibold">Today's recommended offers</span></span>
+            <i class="fa-solid fa-arrow-up-right-from-square text-slate-300 text-xs" aria-hidden="true"></i>
+          </a>
         </div>
       </div>
     </div>
@@ -1225,6 +1253,10 @@ select.inp {
     </div>
   </div>
 </section>
+
+<div class="max-w-3xl mx-auto px-4">
+  <aside class="ad-slot ad-wide" data-ad="responsive" aria-label="Advertisement"></aside>
+</div>
 
 <!-- ══════════════ FAQ SECTION (SEO) ══════════════ -->
 <section class="max-w-3xl mx-auto px-4 py-12" aria-labelledby="faq-heading">
@@ -2019,6 +2051,7 @@ async function downloadPDF() {
       html2canvas:{scale:2,useCORS:true,logging:false},
       jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
     }).from(preview).save();
+    window.dispatchEvent(new Event('makecv:downloaded'));
   } catch(err) {
     alert('PDF generation failed. Please try again.');
   }
@@ -2039,6 +2072,7 @@ function printATS() {
   layer.innerHTML = document.getElementById('cv-preview').innerHTML;
   window.print();
   setTimeout(()=>{ layer.innerHTML=''; }, 1000);
+  window.dispatchEvent(new Event('makecv:downloaded'));
 }
 
 // ════════════════════════════════
@@ -2081,20 +2115,17 @@ renderSkills();
 // ════════════════════════════════
 //  COOKIE CONSENT
 // ════════════════════════════════
-(function() {
+// The banner and the privacy modal come after this script in the HTML, so wait for the DOM.
+document.addEventListener('DOMContentLoaded', function() {
   const consent = localStorage.getItem('makecv_cookie_consent');
   if (!consent) {
     document.getElementById('cookie-banner').classList.remove('hidden');
   }
-})();
+});
 
 function acceptCookies() {
   localStorage.setItem('makecv_cookie_consent', 'accepted');
   document.getElementById('cookie-banner').classList.add('hidden');
-  // Enable personalized ads
-  if (typeof adsbygoogle !== 'undefined') {
-    (adsbygoogle = window.adsbygoogle || []).push({});
-  }
 }
 
 function declineCookies() {
@@ -2113,9 +2144,127 @@ function closePrivacy() {
 }
 
 // Close modal on backdrop click
-document.getElementById('privacy-modal').addEventListener('click', function(e) {
-  if (e.target === this) closePrivacy();
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('privacy-modal').addEventListener('click', function(e) {
+    if (e.target === this) closePrivacy();
+  });
 });
+</script>
+
+<!-- ══════════════ ADS (Adsterra only) ══════════════ -->
+<div class="ad-rail" id="rail-left"><aside class="ad-slot" data-ad="rail-left" aria-label="Advertisement"></aside></div>
+<div class="ad-rail" id="rail-right"><aside class="ad-slot" data-ad="rail-right" aria-label="Advertisement"></aside></div>
+<script>
+// Every <aside data-ad> slot is filled when it first scrolls near the viewport, so hidden steps and
+// off-screen slots never request an ad. Iframe banners each get their own srcdoc iframe: the /22/
+// invoke script reads the global atOptions and uses document.write, so two on one page would collide.
+(function () {
+  const AD_HOST = 'https://bicea.org';
+  const BANNERS = {
+    '728x90':     { key: '0e7f300ebc75925f1b35d2404c7f5b04', w: 728, h: 90 },
+    '468x60':     { key: '845c66a709906190beb01d412e64c360', w: 468, h: 60 },
+    '320x50':     { key: '6781a48e206d1b0596f934094437638c', w: 320, h: 50 },
+    '300x250':    { key: '14546d762f4609577c45abcfd23ed569', w: 300, h: 250 },
+    'rail-left':  { key: 'ff62aaaeae2b53cfb9fb364edf04d0e3', w: 160, h: 600 },
+    'rail-right': { key: '995d5d42f717af247254c01c79a0bea8', w: 160, h: 300 },
+  };
+  const NATIVE_ZONE = '13fcf1ba31fd65898d6d2bc2bda8c0da';
+  const SOCIAL_BAR_SRC = AD_HOST + '/14/28c8299487b6237d1081ed7ca5fa2774';
+  const POPUNDER_SRC = 'https://afders.org/1/21bd9a52d7daa10abf8c0913e9ea6ec2';
+  const DIRECT_LINK = 'https://arwf.org/4/4f24a1c370ddfc2053755feb8767abd9';
+
+  const wide = () => window.matchMedia('(min-width: 768px)').matches;
+  // Responsive slot types pick their size when they mount; each reserves its height up front (no layout shift).
+  const SIZES = {
+    leaderboard: () => (wide() ? '728x90' : '320x50'),
+    inline:      () => (wide() ? '468x60' : '320x50'),
+    responsive:  () => (wide() ? '728x90' : '300x250'),
+  };
+
+  function addScript(src, parent) {
+    const s = document.createElement('script');
+    s.src = src; s.async = true; s.setAttribute('data-cfasync', 'false');
+    (parent || document.body).appendChild(s);
+  }
+
+  function body(slot, minHeight) {
+    slot.innerHTML = '<span class="ad-slot-label" aria-hidden="true">Advertisement</span>';
+    const b = document.createElement('div');
+    b.className = 'ad-slot-body';
+    b.style.minHeight = minHeight + 'px';
+    slot.appendChild(b);
+    return b;
+  }
+
+  function mountBanner(slot, size) {
+    const z = BANNERS[size];
+    slot.style.maxWidth = (z.w + 18) + 'px';
+    const f = document.createElement('iframe');
+    f.title = 'Advertisement';
+    f.width = z.w; f.height = z.h; f.scrolling = 'no';
+    f.srcdoc = '<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;background:transparent;overflow:hidden}</style></head><body>'
+      + "<script>atOptions={key:'" + z.key + "',format:'iframe',height:" + z.h + ',width:' + z.w + ',params:{}}<\/script>'
+      + '<script src="' + AD_HOST + '/22/' + z.key + '"><\/script></body></html>';
+    body(slot, z.h).appendChild(f);
+  }
+
+  // The native invoke script looks for #container-<zone> when it runs, so the container goes in first. One per page.
+  function mountNative(slot) {
+    const c = document.createElement('div');
+    c.id = 'container-' + NATIVE_ZONE;
+    c.style.width = '100%';
+    const b = body(slot, 120);
+    b.appendChild(c);
+    addScript(AD_HOST + '/21/' + NATIVE_ZONE, b);
+  }
+
+  function mount(slot) {
+    const type = slot.dataset.ad;
+    if (type === 'native') mountNative(slot);
+    else mountBanner(slot, SIZES[type] ? SIZES[type]() : type);
+    slot.dataset.mounted = '1';
+  }
+
+  // display:none slots (inactive steps, lg:hidden variants) have no box, so they only intersect once shown.
+  const io = 'IntersectionObserver' in window
+    ? new IntersectionObserver(entries => entries.forEach(en => {
+        if (en.isIntersecting && !en.target.dataset.mounted) { mount(en.target); io.unobserve(en.target); }
+      }), { rootMargin: '300px 0px' })
+    : null;
+  document.querySelectorAll('aside[data-ad]').forEach(s => io ? io.observe(s) : mount(s));
+
+  // Side rails sit 16px outside the active step's content and show only where they fit without covering it.
+  const RAIL_W = 176, GAP = 16;
+  function placeRails() {
+    const sec = document.querySelector('main > section:not(.hidden)');
+    const l = document.getElementById('rail-left'), r = document.getElementById('rail-right');
+    if (!sec) return;
+    const box = sec.getBoundingClientRect();
+    const fits = box.left >= RAIL_W + GAP && document.documentElement.clientWidth - box.right >= RAIL_W + GAP;
+    l.style.display = r.style.display = fits ? 'block' : 'none';
+    if (fits) {
+      l.style.left = (box.left - RAIL_W - GAP) + 'px';
+      r.style.left = (box.right + GAP) + 'px';
+    }
+  }
+  const origGoStep = window.goStep;
+  window.goStep = function (n) { origGoStep(n); placeRails(); };
+  window.addEventListener('resize', placeRails);
+  placeRails();
+
+  // Sponsored direct-link cards (clearly labelled, open in a new tab).
+  document.querySelectorAll('a[data-ad-link]').forEach(a => { a.href = DIRECT_LINK; });
+
+  // Social Bar: once per page, after load so it never delays the form.
+  window.addEventListener('load', () => setTimeout(() => addScript(SOCIAL_BAR_SRC), 1500));
+
+  // Popunder: it binds a page-wide click handler, so it loads only after the visitor has their PDF,
+  // once per browser session. Loading it on page load would hijack the first click in the form.
+  window.addEventListener('makecv:downloaded', () => {
+    try { if (sessionStorage.getItem('makecv_pu') === '1') return; sessionStorage.setItem('makecv_pu', '1'); } catch (e) {}
+    if (!document.querySelector('script[src="' + POPUNDER_SRC + '"]')) addScript(POPUNDER_SRC);
+  });
+})();
 </script>
 
 <!-- ══════════════ ATS PRINT LAYER (hidden, shown only on print) ══════════════ -->
@@ -2124,11 +2273,9 @@ document.getElementById('privacy-modal').addEventListener('click', function(e) {
 <!-- ══════════════ COOKIE CONSENT BANNER ══════════════ -->
 <div id="cookie-banner" class="hidden" role="dialog" aria-live="polite" aria-label="Cookie consent">
   <p>
-    We use cookies to serve personalized ads via Google AdSense, analyze traffic, and improve your experience.
+    MakeCV is free because it shows ads. Our ad partner, Adsterra, may use cookies and similar technologies to serve them.
     By clicking <strong>Accept</strong>, you consent to our use of cookies.
     <a onclick="openPrivacy()" tabindex="0">Privacy Policy</a>
-    &nbsp;·&nbsp;
-    <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy</a>
   </p>
   <div class="cb-actions">
     <button class="cb-decline" onclick="declineCookies()">Decline</button>
@@ -2149,25 +2296,24 @@ document.getElementById('privacy-modal').addEventListener('click', function(e) {
     <h3>2. Data We Collect</h3>
     <ul>
       <li><strong>Resume data:</strong> All resume information you enter is processed entirely in your browser. We do not transmit or store it on any server.</li>
-      <li><strong>Usage data:</strong> Google Analytics and Google AdSense may collect anonymized data such as IP address, browser type, pages visited, and time on site.</li>
-      <li><strong>Cookies:</strong> Google AdSense uses cookies, web beacons, and similar technologies to serve relevant advertisements.</li>
+      <li><strong>Usage data:</strong> our advertising partner may collect data such as IP address, browser type, and pages visited in order to serve ads.</li>
+      <li><strong>Cookies:</strong> our advertising partner may use cookies, web beacons, and similar technologies to serve and measure advertisements.</li>
     </ul>
 
-    <h3>3. Google AdSense &amp; Advertising</h3>
-    <p>We use Google AdSense to display advertisements. Google may use cookies to serve ads based on your prior visits to this and other websites. You can opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google Ads Settings</a>.</p>
-    <p>Google's use of advertising cookies enables it and its partners to serve ads based on your visit to our site and/or other sites on the Internet. For more information, see <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">How Google uses data when you use our partners' sites or apps</a>.</p>
+    <h3>3. Advertising</h3>
+    <p>MakeCV is free because it displays ads served by <a href="https://adsterra.com" target="_blank" rel="noopener noreferrer">Adsterra</a>: banners, a native ad block, a social bar, sponsored links marked "Sponsored", and a pop-under that opens at most once per session after you download your resume. Ads never appear in the PDF you download.</p>
+    <p>Adsterra and its partners may use cookies or similar identifiers to choose and measure ads. See the <a href="https://adsterra.com/privacy-policy/" target="_blank" rel="noopener noreferrer">Adsterra Privacy Policy</a>. You can block or delete cookies in your browser settings at any time.</p>
 
     <h3>4. Cookies</h3>
     <ul>
       <li><strong>Essential cookies:</strong> Used to remember your cookie consent preference (stored in <code>localStorage</code>).</li>
-      <li><strong>Advertising cookies:</strong> Set by Google AdSense to serve personalized ads. Only active if you click "Accept".</li>
-      <li><strong>Analytics cookies:</strong> Used by Google Analytics to understand aggregate site usage.</li>
+      <li><strong>Advertising cookies:</strong> Set by our advertising partner (Adsterra) to serve and measure ads.</li>
     </ul>
 
     <h3>5. Third-Party Services</h3>
     <ul>
-      <li><a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a></li>
-      <li><a href="https://support.google.com/adsense/answer/1348695" target="_blank" rel="noopener noreferrer">Google AdSense Program Policies</a></li>
+      <li><a href="https://adsterra.com/privacy-policy/" target="_blank" rel="noopener noreferrer">Adsterra Privacy Policy</a></li>
+      <li><a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">Cloudflare Privacy Policy</a> (hosting)</li>
     </ul>
 
     <h3>6. Your Rights (GDPR / CCPA)</h3>
