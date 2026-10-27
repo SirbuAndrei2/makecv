@@ -38,35 +38,47 @@ HOME_LASTMOD = "2026-10-27"  # bump when index.html content changes
 
 # ── Templates shown on the content pages (keys match TPLS in index.html) ──
 TEMPLATES = {
+    "professional": {"key": "professional", "name": "Professional", "ats": "Good", "columns": "Main column + light right sidebar",
+                     "photo": "Optional, square, top right (nothing shown if you skip it)", "look": "Navy and blue, Source Sans, skill-level dots",
+                     "best": "Corporate roles in any industry: sales, operations, HR, finance, project management"},
+    "harvard": {"key": "harvard", "name": "Harvard", "ats": "Best", "columns": "One column, Education first",
+                "photo": "No photo area", "look": "Black only, Source Serif, centred headings with rules",
+                "best": "Students and graduates, finance, consulting, law, academia-adjacent roles"},
     "classic": {"key": "clasic", "name": "Classic", "ats": "Best", "columns": "One column",
-                "photo": "Round photo (placeholder icon if none)", "look": "Serif name, blue accents, white page",
+                "photo": "Optional, round (nothing shown if you skip it)", "look": "Serif name, blue accents, white page",
                 "best": "Accounting, law, teaching, public sector, first jobs"},
+    "student": {"key": "student", "name": "Student", "ats": "Best", "columns": "One column, Education and Projects first",
+                "photo": "Optional, round (nothing shown if you skip it)", "look": "DM Sans, teal accents, skill tags",
+                "best": "Students, graduates, internships, part-time and first jobs"},
+    "compact": {"key": "compact", "name": "Compact", "ats": "Best", "columns": "One column, section labels in a left margin",
+                "photo": "No photo area", "look": "Dense Inter type, thin rules, blue labels",
+                "best": "Experienced candidates who need everything on one page"},
     "minimalist": {"key": "minimalist", "name": "Minimalist", "ats": "Best", "columns": "One column, dates in a left margin",
                    "photo": "No photo area", "look": "Black and white, Playfair Display headings",
                    "best": "Consulting, finance, management, academia-adjacent roles"},
     "executive": {"key": "executive", "name": "Executive", "ats": "Good", "columns": "Main column + narrow right column",
-                  "photo": "Only if you upload one", "look": "Garamond serif, gold rules",
+                  "photo": "Optional, above the name (nothing shown if you skip it)", "look": "Garamond serif, gold rules",
                   "best": "Director, VP, C-level, senior legal and finance roles"},
     "swiss": {"key": "swiss", "name": "Swiss", "ats": "Good", "columns": "Main column + narrow right column",
-              "photo": "Square photo (placeholder icon if none)", "look": "Inter, black labels, red accents",
+              "photo": "Optional, square (nothing shown if you skip it)", "look": "Inter, black labels, red accents",
               "best": "Product, operations, architecture, design-minded corporate roles"},
     "modern": {"key": "modern", "name": "Modern", "ats": "Fair", "columns": "Dark left sidebar + main column",
-               "photo": "Round photo in sidebar (placeholder icon if none)", "look": "Navy sidebar, teal accents, skill bars",
+               "photo": "Optional, round, in the sidebar (nothing shown if you skip it)", "look": "Navy sidebar, teal accents, skill bars",
                "best": "IT, marketing, sales, startups"},
     "aurora": {"key": "aurora", "name": "Aurora", "ats": "Fair", "columns": "Header + two columns below",
-               "photo": "Round photo (placeholder icon if none)", "look": "Gradient edge stripe, colourful skill pills",
+               "photo": "Optional, round (nothing shown if you skip it)", "look": "Gradient edge stripe, colourful skill pills",
                "best": "Marketing, communications, customer success"},
     "creative": {"key": "creativ", "name": "Creative", "ats": "Fair", "columns": "Gradient header + card grid",
-                 "photo": "Round photo in header (placeholder icon if none)", "look": "Purple-to-cyan gradient, cards",
+                 "photo": "Optional, round, in the header (nothing shown if you skip it)", "look": "Purple-to-cyan gradient, cards",
                  "best": "Design, content, social media, events"},
     "bloom": {"key": "bloom", "name": "Bloom", "ats": "Fair", "columns": "Centred header + two columns",
-              "photo": "Round photo (flower placeholder if none)", "look": "Cream page, pink accents, emoji section icons",
+              "photo": "Optional, round (nothing shown if you skip it)", "look": "Cream page, pink accents, emoji section icons",
               "best": "Early-years education, beauty, hospitality, creative freelancers"},
     "tech": {"key": "tech", "name": "Tech / Dark", "ats": "Fair", "columns": "Main column + right column, dark page",
-             "photo": "Square photo (placeholder icon if none)", "look": "Dark navy page, Space Grotesk, blue accents",
+             "photo": "Optional, square (nothing shown if you skip it)", "look": "Dark navy page, Space Grotesk, blue accents",
              "best": "Software engineering, data, DevOps, game development"},
     "neon": {"key": "neon", "name": "Neon", "ats": "Fair", "columns": "Main column + right column, near-black page",
-             "photo": "Square photo (placeholder icon if none)", "look": "Near-black page, cyan and magenta, skill bars",
+             "photo": "Optional, square (nothing shown if you skip it)", "look": "Near-black page, cyan and magenta, skill bars",
              "best": "Gaming, creative tech, streaming, music"},
 }
 TPL_W, TPL_H = 640, 906
@@ -100,9 +112,9 @@ def tpl_card(slug):
 
 
 # style page for each template (the hub links each template to the style page that covers it)
-STYLE_OF = {"classic": "simple", "minimalist": "minimalist", "executive": "executive", "swiss": "minimalist",
-            "modern": "modern", "aurora": "modern", "creative": "creative", "bloom": "creative",
-            "tech": "tech", "neon": "tech"}
+STYLE_OF = {"classic": "simple", "compact": "simple", "minimalist": "minimalist", "executive": "executive",
+            "swiss": "minimalist", "modern": "modern", "aurora": "modern", "creative": "creative", "bloom": "creative",
+            "tech": "tech", "neon": "tech", "professional": "professional", "harvard": "harvard", "student": "student"}
 
 
 def slug_page(slug):
@@ -111,7 +123,7 @@ def slug_page(slug):
 
 CTA = '''<aside class="cta-box">
   <div><div class="cta-title">Build your resume now — free, no sign-up</div>
-  <p>Fill in your details once, switch between 10 templates, and download a PDF or a text-based ATS PDF. Nothing is uploaded: your resume stays in your browser.</p></div>
+  <p>Fill in your details once, switch between 14 templates, and download a PDF or a text-based ATS PDF. Nothing is uploaded: your resume stays in your browser.</p></div>
   <a class="btn-blue" href="/">Open the resume builder <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
 </aside>'''
 
