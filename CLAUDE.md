@@ -77,7 +77,7 @@ Each template function renders directly from the `cv` state object. Templates co
 
 ### Ads
 
-**Adsterra only** (Monetag removed 2026-10-27; there is no AdSense). Slots are `<aside class="ad-slot" data-ad="…">` placeholders in the HTML; the ADS script at the end of `<body>` fills each one when it first comes within 300px of the viewport (IntersectionObserver), so slots in hidden steps or `lg:hidden` variants never request an ad. Keys and zones live in that script's `BANNERS` / constants.
+**Adsterra only** (there is no AdSense). Slots are `<aside class="ad-slot" data-ad="…">` placeholders in the HTML; the ADS script at the end of `<body>` fills each one when it first comes within 300px of the viewport (IntersectionObserver), so slots in hidden steps or `lg:hidden` variants never request an ad. Keys and zones live in that script's `BANNERS` / constants.
 
 | `data-ad` | Size | Where |
 |---|---|---|
@@ -93,7 +93,7 @@ Each template function renders directly from the `cv` state object. Templates co
 - **Popunder** (/1/, afders.org) loads only after the visitor gets a PDF (`makecv:downloaded`, fired by `downloadPDF()` and `printATS()`), once per session (`sessionStorage.makecv_pu`). It binds a page-wide click handler, so loading it earlier hijacks clicks in the form.
 - **Direct link** (arwf.org): the `a[data-ad-link]` "Sponsored" cards in step 3 (`rel="sponsored"`, new tab).
 - `@media print` hides `body > *`, so no ad reaches the ATS print.
-- `sw.js` is a self-unregistering kill switch for the old Monetag push worker; keep it (served `no-cache`) so past subscribers stop getting pushes.
+- `sw.js` is a kill switch for an old third-party push service worker removed on 2026-10-27: browsers that registered it keep re-fetching the file, and this version unregisters itself (dropping the push subscription) and reloads open tabs. It is served `no-cache`. Delete `sw.js` and its `_headers` entry after 2026-11-26.
 - The cookie banner and privacy policy (modal) describe Adsterra; `ads.txt` lists no sellers (no AdSense).
 
 ### Analytics
