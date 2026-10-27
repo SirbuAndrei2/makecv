@@ -1,0 +1,16 @@
+{
+  "$schema": "https://unpkg.com/wrangler/config-schema.json",
+  // Static assets only: no Worker script, so no CPU limits and no per-request cost.
+  "name": "makecv",
+  "compatibility_date": "2026-10-20",
+  // makecv.org is a Cloudflare zone in this account, so deploy attaches it as a custom domain.
+  // www.makecv.org → apex is handled by the separate Worker in www-redirect/.
+  "routes": [{ "pattern": "makecv.org", "custom_domain": true }],
+  "workers_dev": false,
+  "assets": {
+    // The site is the repo root; .assetsignore keeps docs and config out of the upload.
+    "directory": ".",
+    "html_handling": "drop-trailing-slash",
+    "not_found_handling": "none"
+  }
+}

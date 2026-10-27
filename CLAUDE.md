@@ -14,7 +14,7 @@ Open `index.html` directly in a browser, or serve it locally:
 npx serve .          # or: python3 -m http.server 8080
 ```
 
-Deploy via Vercel — `vercel.json` handles routing (cleanUrls, security headers). No CI configuration exists.
+Hosted on Cloudflare Workers (static assets only, `wrangler.jsonc`; the repo root is the asset directory and `.assetsignore` excludes docs/config). Security and cache headers live in `_headers`. **Every push to `main` deploys automatically** via Cloudflare Workers Builds; `npx wrangler deploy` deploys manually. `www.makecv.org` → apex is a separate Worker in `www-redirect/` (`npx wrangler deploy -c www-redirect/wrangler.jsonc`).
 
 ## Architecture
 

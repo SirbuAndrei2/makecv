@@ -1,0 +1,8 @@
+{
+  // Separate Worker so the main site stays pure static assets. Deploy: npx wrangler deploy -c www-redirect/wrangler.jsonc
+  "name": "makecv-www-redirect",
+  "main": "index.js",
+  "compatibility_date": "2026-10-20",
+  "routes": [{ "pattern": "www.makecv.org", "custom_domain": true }],
+  "workers_dev": false
+}

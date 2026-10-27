@@ -1,0 +1,9 @@
+.git
+.gitignore
+.assetsignore
+.wrangler
+node_modules
+CLAUDE.md
+README.md
+wrangler.jsonc
+www-redirect

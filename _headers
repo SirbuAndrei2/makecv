@@ -1,0 +1,15 @@
+# Cloudflare Workers static assets: response headers by path (replaces vercel.json).
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+
+/sitemap.xml
+  Cache-Control: public, max-age=86400
+
+/robots.txt
+  Cache-Control: public, max-age=86400
+
+/ads.txt
+  Cache-Control: public, max-age=86400
