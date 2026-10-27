@@ -253,6 +253,7 @@
 </aside>
 
 </article>
+<aside class="ad-slot" data-ad="incontent" aria-label="Advertisement"></aside>
 <section class="faq" aria-labelledby="faq-h"><h2 id="faq-h">Frequently asked questions</h2><dl><div class="faq-item"><dt>How long should a resume be?</dt><dd>One page if you have less than about five to seven years of relevant experience, two pages if you have more. Academic CVs are the exception.</dd></div><div class="faq-item"><dt>What should I not put on a resume?</dt><dd>In the US, Canada, the UK and Ireland: no photo, date of birth, marital status, full street address, salary history or reasons for leaving. Also skip references (they are asked for later) and hobbies that say nothing about you as an employee.</dd></div><div class="faq-item"><dt>How far back should a resume go?</dt><dd>Around 10–15 years in detail. Earlier roles can be summarised in a line or left out unless they are directly relevant.</dd></div><div class="faq-item"><dt>Do I need a different resume for every job?</dt><dd>You need a tailored version: same facts, but the title, summary, skills order and the first bullets of each job adjusted to the advert. It takes ten minutes and makes a real difference.</dd></div></dl></section>
 <section class="related" aria-labelledby="rel-h"><h2 id="rel-h">Keep reading</h2><div class="rel-grid"><a class="rel-card" href="/resume-summary-examples"><span class="rel-title">Resume summary examples</span><span class="rel-blurb">A 4-part formula and 20 examples by career stage and field, including career changers and graduates.</span></a><a class="rel-card" href="/resume-skills"><span class="rel-title">Skills for your resume</span><span class="rel-blurb">How to choose, word and prove resume skills, with examples for 12 common fields.</span></a><a class="rel-card" href="/resume-format"><span class="rel-title">Resume format guide</span><span class="rel-blurb">Length, section order, PDF vs Word, A4 vs Letter, fonts, margins and file names, in one page.</span></a><a class="rel-card" href="/resume-with-no-experience"><span class="rel-title">Resume with no experience</span><span class="rel-blurb">How students and first-time job seekers fill a page with school, projects, volunteering and skills.</span></a></div></section>
 </main>
@@ -268,5 +269,26 @@
   </div>
   <div class="foot-bottom"><span>© 2026 MakeCV</span><span>No sign-up · No watermark · Data stays in your browser</span></div>
 </footer>
+<script>
+(function () {
+  var HOST = 'https://bicea.org';
+  var Z = { '728x90': { key: '0e7f300ebc75925f1b35d2404c7f5b04', w: 728, h: 90 }, '300x250': { key: '14546d762f4609577c45abcfd23ed569', w: 300, h: 250 } };
+  function mount(slot) {
+    var z = Z[window.matchMedia('(min-width: 768px)').matches ? '728x90' : '300x250'];
+    slot.style.maxWidth = (z.w + 18) + 'px';
+    slot.innerHTML = '<span class="ad-slot-label" aria-hidden="true">Advertisement</span>';
+    var b = document.createElement('div'); b.className = 'ad-slot-body'; b.style.minHeight = z.h + 'px';
+    var f = document.createElement('iframe'); f.title = 'Advertisement'; f.width = z.w; f.height = z.h; f.scrolling = 'no';
+    f.srcdoc = '<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;background:transparent;overflow:hidden}</style></head><body>'
+      + "<script>atOptions={key:'" + z.key + "',format:'iframe',height:" + z.h + ',width:' + z.w + ',params:{}}<\/script>'
+      + '<script src="' + HOST + '/22/' + z.key + '"><\/script></body></html>';
+    b.appendChild(f); slot.appendChild(b);
+  }
+  var slots = document.querySelectorAll('aside[data-ad]');
+  if (!('IntersectionObserver' in window)) { slots.forEach(mount); return; }
+  var io = new IntersectionObserver(function (en) { en.forEach(function (x) { if (x.isIntersecting) { io.unobserve(x.target); mount(x.target); } }); }, { rootMargin: '300px 0px' });
+  slots.forEach(function (s) { io.observe(s); });
+})();
+</script>
 </body>
 </html>

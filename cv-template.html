@@ -237,6 +237,7 @@
 </aside>
 
 </article>
+<aside class="ad-slot" data-ad="incontent" aria-label="Advertisement"></aside>
 <section class="faq" aria-labelledby="faq-h"><h2 id="faq-h">Frequently asked questions</h2><dl><div class="faq-item"><dt>How long should a UK CV be?</dt><dd>Two sides of A4 is the usual guide. School leavers and graduates often fit on one page; very senior candidates sometimes need three, but two is the norm.</dd></div><div class="faq-item"><dt>Should I put a photo on my CV in the UK?</dt><dd>No. UK employers generally do not expect a photo, and leaving it out avoids any question of bias. The same applies in Ireland.</dd></div><div class="faq-item"><dt>Do I need to include references on my CV?</dt><dd>No. Employers ask for referees later in the process. You don't need to write "references available on request" either; it is assumed.</dd></div><div class="faq-item"><dt>What is a personal statement on a CV?</dt><dd>It is the short paragraph at the top of a UK CV (called a professional summary in the US): three or four sentences on who you are, what you offer and what you are looking for.</dd></div></dl></section>
 <section class="related" aria-labelledby="rel-h"><h2 id="rel-h">Keep reading</h2><div class="rel-grid"><a class="rel-card" href="/resume-vs-cv"><span class="rel-title">Resume vs CV</span><span class="rel-blurb">What the two words mean in the US, UK, Europe and academia, and which document to send.</span></a><a class="rel-card" href="/resume-summary-examples"><span class="rel-title">Resume summary examples</span><span class="rel-blurb">A 4-part formula and 20 examples by career stage and field, including career changers and graduates.</span></a><a class="rel-card" href="/resume-templates/minimalist"><span class="rel-title">Minimalist resume template</span><span class="rel-blurb">Black-and-white, typography-led designs that look premium and stay easy to parse.</span></a><a class="rel-card" href="/resume-with-no-experience"><span class="rel-title">Resume with no experience</span><span class="rel-blurb">How students and first-time job seekers fill a page with school, projects, volunteering and skills.</span></a></div></section>
 </main>
@@ -252,5 +253,26 @@
   </div>
   <div class="foot-bottom"><span>© 2026 MakeCV</span><span>No sign-up · No watermark · Data stays in your browser</span></div>
 </footer>
+<script>
+(function () {
+  var HOST = 'https://bicea.org';
+  var Z = { '728x90': { key: '0e7f300ebc75925f1b35d2404c7f5b04', w: 728, h: 90 }, '300x250': { key: '14546d762f4609577c45abcfd23ed569', w: 300, h: 250 } };
+  function mount(slot) {
+    var z = Z[window.matchMedia('(min-width: 768px)').matches ? '728x90' : '300x250'];
+    slot.style.maxWidth = (z.w + 18) + 'px';
+    slot.innerHTML = '<span class="ad-slot-label" aria-hidden="true">Advertisement</span>';
+    var b = document.createElement('div'); b.className = 'ad-slot-body'; b.style.minHeight = z.h + 'px';
+    var f = document.createElement('iframe'); f.title = 'Advertisement'; f.width = z.w; f.height = z.h; f.scrolling = 'no';
+    f.srcdoc = '<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;background:transparent;overflow:hidden}</style></head><body>'
+      + "<script>atOptions={key:'" + z.key + "',format:'iframe',height:" + z.h + ',width:' + z.w + ',params:{}}<\/script>'
+      + '<script src="' + HOST + '/22/' + z.key + '"><\/script></body></html>';
+    b.appendChild(f); slot.appendChild(b);
+  }
+  var slots = document.querySelectorAll('aside[data-ad]');
+  if (!('IntersectionObserver' in window)) { slots.forEach(mount); return; }
+  var io = new IntersectionObserver(function (en) { en.forEach(function (x) { if (x.isIntersecting) { io.unobserve(x.target); mount(x.target); } }); }, { rootMargin: '300px 0px' });
+  slots.forEach(function (s) { io.observe(s); });
+})();
+</script>
 </body>
 </html>

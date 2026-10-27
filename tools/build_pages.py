@@ -136,6 +136,32 @@ GA = """<!-- Google Analytics 4 — same snippet as index.html; runs only on mak
 })();
 </script>"""
 
+# One in-content Adsterra banner per template/guide page, between the article and the FAQ (a natural break,
+# never inside the text or next to a "Use this template" button). Same zone keys and srcdoc-iframe approach as
+# index.html's ADS script; mounted lazily when it comes within 300px of the viewport. No social bar, no popunder.
+AD_SLOT = '<aside class="ad-slot" data-ad="incontent" aria-label="Advertisement"></aside>'
+AD_SCRIPT = """<script>
+(function () {
+  var HOST = 'https://bicea.org';
+  var Z = { '728x90': { key: '0e7f300ebc75925f1b35d2404c7f5b04', w: 728, h: 90 }, '300x250': { key: '14546d762f4609577c45abcfd23ed569', w: 300, h: 250 } };
+  function mount(slot) {
+    var z = Z[window.matchMedia('(min-width: 768px)').matches ? '728x90' : '300x250'];
+    slot.style.maxWidth = (z.w + 18) + 'px';
+    slot.innerHTML = '<span class="ad-slot-label" aria-hidden="true">Advertisement</span>';
+    var b = document.createElement('div'); b.className = 'ad-slot-body'; b.style.minHeight = z.h + 'px';
+    var f = document.createElement('iframe'); f.title = 'Advertisement'; f.width = z.w; f.height = z.h; f.scrolling = 'no';
+    f.srcdoc = '<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;background:transparent;overflow:hidden}</style></head><body>'
+      + "<script>atOptions={key:'" + z.key + "',format:'iframe',height:" + z.h + ',width:' + z.w + ',params:{}}<\\/script>'
+      + '<script src="' + HOST + '/22/' + z.key + '"><\\/script></body></html>';
+    b.appendChild(f); slot.appendChild(b);
+  }
+  var slots = document.querySelectorAll('aside[data-ad]');
+  if (!('IntersectionObserver' in window)) { slots.forEach(mount); return; }
+  var io = new IntersectionObserver(function (en) { en.forEach(function (x) { if (x.isIntersecting) { io.unobserve(x.target); mount(x.target); } }); }, { rootMargin: '300px 0px' });
+  slots.forEach(function (s) { io.observe(s); });
+})();
+</script>"""
+
 ORG = {"@type": "Organization", "@id": f"{SITE}/#organization", "name": "MakeCV", "url": f"{SITE}/",
        "logo": {"@type": "ImageObject", "url": f"{SITE}/logo.png", "width": 512, "height": 512}}
 
@@ -264,6 +290,9 @@ def render(meta, pages, by_path):
         cards = "".join(f'<a class="rel-card" href="{r["path"]}"><span class="rel-title">{esc(r["nav_label"])}</span><span class="rel-blurb">{esc(r["blurb"])}</span></a>' for r in rel)
         related_html = f'<section class="related" aria-labelledby="rel-h"><h2 id="rel-h">Keep reading</h2><div class="rel-grid">{cards}</div></section>'
 
+    with_ads = not noindex and meta.get("group") in ("templates", "guides")
+    ad_html = AD_SLOT if with_ads else ""
+    ad_script = AD_SCRIPT if with_ads else ""
     updated_h = meta["updated"]
     robots = "noindex, follow" if noindex else "index, follow, max-image-preview:large, max-snippet:-1"
     canonical = "" if noindex else f'<link rel="canonical" href="{url}">\n'
@@ -313,10 +342,12 @@ def render(meta, pages, by_path):
 {byline}
 {body}
 </article>
+{ad_html}
 {faq_html}
 {related_html if not noindex else ""}
 </main>
 {footer(pages)}
+{ad_script}
 </body>
 </html>
 '''

@@ -219,6 +219,7 @@ Run operations for a 1,200-person, 9-site logistics business. Consolidated three
 </aside>
 
 </article>
+<aside class="ad-slot" data-ad="incontent" aria-label="Advertisement"></aside>
 <section class="faq" aria-labelledby="faq-h"><h2 id="faq-h">Frequently asked questions</h2><dl><div class="faq-item"><dt>How long should an executive resume be?</dt><dd>Two pages is normal for directors and above. Put your most recent and most relevant roles on page one, and summarise roles older than about 15 years in a line each or leave them out.</dd></div><div class="faq-item"><dt>Should an executive resume have a photo?</dt><dd>In the US, Canada, the UK and Ireland, no. The Executive template only shows a photo if you upload one, so leaving it out leaves no gap.</dd></div><div class="faq-item"><dt>Is the Executive template ATS-friendly?</dt><dd>Reasonably. The main column holds your profile, experience, education and projects under standard headings; a narrow right column holds core competencies, languages and certifications. Download it with the ATS PDF button so the text is machine-readable.</dd></div></dl></section>
 <section class="related" aria-labelledby="rel-h"><h2 id="rel-h">Keep reading</h2><div class="rel-grid"><a class="rel-card" href="/resume-templates/minimalist"><span class="rel-title">Minimalist resume template</span><span class="rel-blurb">Black-and-white, typography-led designs that look premium and stay easy to parse.</span></a><a class="rel-card" href="/resume-format"><span class="rel-title">Resume format guide</span><span class="rel-blurb">Length, section order, PDF vs Word, A4 vs Letter, fonts, margins and file names, in one page.</span></a><a class="rel-card" href="/resume-summary-examples"><span class="rel-title">Resume summary examples</span><span class="rel-blurb">A 4-part formula and 20 examples by career stage and field, including career changers and graduates.</span></a><a class="rel-card" href="/how-to-write-a-resume"><span class="rel-title">How to write a resume</span><span class="rel-blurb">A step-by-step guide to every section, with before-and-after examples and a final checklist.</span></a></div></section>
 </main>
@@ -234,5 +235,26 @@ Run operations for a 1,200-person, 9-site logistics business. Consolidated three
   </div>
   <div class="foot-bottom"><span>© 2026 MakeCV</span><span>No sign-up · No watermark · Data stays in your browser</span></div>
 </footer>
+<script>
+(function () {
+  var HOST = 'https://bicea.org';
+  var Z = { '728x90': { key: '0e7f300ebc75925f1b35d2404c7f5b04', w: 728, h: 90 }, '300x250': { key: '14546d762f4609577c45abcfd23ed569', w: 300, h: 250 } };
+  function mount(slot) {
+    var z = Z[window.matchMedia('(min-width: 768px)').matches ? '728x90' : '300x250'];
+    slot.style.maxWidth = (z.w + 18) + 'px';
+    slot.innerHTML = '<span class="ad-slot-label" aria-hidden="true">Advertisement</span>';
+    var b = document.createElement('div'); b.className = 'ad-slot-body'; b.style.minHeight = z.h + 'px';
+    var f = document.createElement('iframe'); f.title = 'Advertisement'; f.width = z.w; f.height = z.h; f.scrolling = 'no';
+    f.srcdoc = '<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;background:transparent;overflow:hidden}</style></head><body>'
+      + "<script>atOptions={key:'" + z.key + "',format:'iframe',height:" + z.h + ',width:' + z.w + ',params:{}}<\/script>'
+      + '<script src="' + HOST + '/22/' + z.key + '"><\/script></body></html>';
+    b.appendChild(f); slot.appendChild(b);
+  }
+  var slots = document.querySelectorAll('aside[data-ad]');
+  if (!('IntersectionObserver' in window)) { slots.forEach(mount); return; }
+  var io = new IntersectionObserver(function (en) { en.forEach(function (x) { if (x.isIntersecting) { io.unobserve(x.target); mount(x.target); } }); }, { rootMargin: '300px 0px' });
+  slots.forEach(function (s) { io.observe(s); });
+})();
+</script>
 </body>
 </html>

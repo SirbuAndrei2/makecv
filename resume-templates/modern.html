@@ -228,6 +228,7 @@
 </aside>
 
 </article>
+<aside class="ad-slot" data-ad="incontent" aria-label="Advertisement"></aside>
 <section class="faq" aria-labelledby="faq-h"><h2 id="faq-h">Frequently asked questions</h2><dl><div class="faq-item"><dt>Are two-column resumes ATS-friendly?</dt><dd>Sometimes. Modern parsers handle many two-column files, but sidebars are the layout most often read out of order, which can mix contact details or skills into your work history. If the application goes through a portal, a single-column template is the lower-risk choice.</dd></div><div class="faq-item"><dt>Do skill bars belong on a resume?</dt><dd>They are a visual shorthand, not data. A recruiter cannot tell what "70%" of a skill means, and a parser ignores the bar entirely. If you use the Modern template, make sure the skill names themselves match the job advert; the bar is decoration.</dd></div><div class="faq-item"><dt>Will the dark sidebar print properly?</dt><dd>Yes. The ATS PDF keeps template backgrounds when you save it from the print dialog. If you print on paper, the Modern sidebar uses a lot of ink; Aurora is the lighter alternative.</dd></div></dl></section>
 <section class="related" aria-labelledby="rel-h"><h2 id="rel-h">Keep reading</h2><div class="rel-grid"><a class="rel-card" href="/ats-resume"><span class="rel-title">ATS-friendly resume guide</span><span class="rel-blurb">How applicant tracking systems read your resume, the formatting rules that matter, and how to export a text-based PDF.</span></a><a class="rel-card" href="/resume-templates/simple"><span class="rel-title">Simple resume template</span><span class="rel-blurb">A plain, single-column layout that suits almost any job and parses cleanly in ATS portals.</span></a><a class="rel-card" href="/resume-skills"><span class="rel-title">Skills for your resume</span><span class="rel-blurb">How to choose, word and prove resume skills, with examples for 12 common fields.</span></a><a class="rel-card" href="/resume-templates/creative"><span class="rel-title">Creative resume template</span><span class="rel-blurb">Colourful, card-based designs for creative fields, and how to use them without losing the job to a parser.</span></a></div></section>
 </main>
@@ -243,5 +244,26 @@
   </div>
   <div class="foot-bottom"><span>© 2026 MakeCV</span><span>No sign-up · No watermark · Data stays in your browser</span></div>
 </footer>
+<script>
+(function () {
+  var HOST = 'https://bicea.org';
+  var Z = { '728x90': { key: '0e7f300ebc75925f1b35d2404c7f5b04', w: 728, h: 90 }, '300x250': { key: '14546d762f4609577c45abcfd23ed569', w: 300, h: 250 } };
+  function mount(slot) {
+    var z = Z[window.matchMedia('(min-width: 768px)').matches ? '728x90' : '300x250'];
+    slot.style.maxWidth = (z.w + 18) + 'px';
+    slot.innerHTML = '<span class="ad-slot-label" aria-hidden="true">Advertisement</span>';
+    var b = document.createElement('div'); b.className = 'ad-slot-body'; b.style.minHeight = z.h + 'px';
+    var f = document.createElement('iframe'); f.title = 'Advertisement'; f.width = z.w; f.height = z.h; f.scrolling = 'no';
+    f.srcdoc = '<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;background:transparent;overflow:hidden}</style></head><body>'
+      + "<script>atOptions={key:'" + z.key + "',format:'iframe',height:" + z.h + ',width:' + z.w + ',params:{}}<\/script>'
+      + '<script src="' + HOST + '/22/' + z.key + '"><\/script></body></html>';
+    b.appendChild(f); slot.appendChild(b);
+  }
+  var slots = document.querySelectorAll('aside[data-ad]');
+  if (!('IntersectionObserver' in window)) { slots.forEach(mount); return; }
+  var io = new IntersectionObserver(function (en) { en.forEach(function (x) { if (x.isIntersecting) { io.unobserve(x.target); mount(x.target); } }); }, { rootMargin: '300px 0px' });
+  slots.forEach(function (s) { io.observe(s); });
+})();
+</script>
 </body>
 </html>

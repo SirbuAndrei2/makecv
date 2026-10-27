@@ -266,6 +266,7 @@
 </aside>
 
 </article>
+<aside class="ad-slot" data-ad="incontent" aria-label="Advertisement"></aside>
 <section class="faq" aria-labelledby="faq-h"><h2 id="faq-h">Frequently asked questions</h2><dl><div class="faq-item"><dt>Is a PDF resume ATS-friendly?</dt><dd>A text-based PDF is read well by current applicant tracking systems. A PDF that is really an image (a scan, a screenshot, or a design exported as a picture) is not, because there is no text to extract. If an advert asks for .docx, send .docx.</dd></div><div class="faq-item"><dt>Can an ATS read a two-column resume?</dt><dd>Many can, but columns are the most common cause of text being read out of order. A single column is the lowest-risk choice for portal applications.</dd></div><div class="faq-item"><dt>Does an ATS automatically reject resumes?</dt><dd>Usually not because of formatting alone. Automatic rejections typically come from knockout questions in the application form (work authorisation, required licence, location). Formatting problems hurt in a quieter way: a parser that misreads your resume makes you harder to find in a recruiter's keyword search.</dd></div><div class="faq-item"><dt>Do I need an ATS resume checker?</dt><dd>Not necessarily. Two free tests catch most problems: select all the text in your PDF and paste it into a plain text editor, and check that it reads in the right order with nothing missing.</dd></div><div class="faq-item"><dt>Which MakeCV download is ATS-friendly?</dt><dd>The ATS PDF button. It opens your browser's print dialog; choose "Save as PDF" to get a file with real, selectable text. The Download PDF button creates an image-based PDF meant for people, not parsers.</dd></div></dl></section>
 <section class="related" aria-labelledby="rel-h"><h2 id="rel-h">Keep reading</h2><div class="rel-grid"><a class="rel-card" href="/resume-templates/simple"><span class="rel-title">Simple resume template</span><span class="rel-blurb">A plain, single-column layout that suits almost any job and parses cleanly in ATS portals.</span></a><a class="rel-card" href="/resume-format"><span class="rel-title">Resume format guide</span><span class="rel-blurb">Length, section order, PDF vs Word, A4 vs Letter, fonts, margins and file names, in one page.</span></a><a class="rel-card" href="/resume-skills"><span class="rel-title">Skills for your resume</span><span class="rel-blurb">How to choose, word and prove resume skills, with examples for 12 common fields.</span></a><a class="rel-card" href="/how-to-write-a-resume"><span class="rel-title">How to write a resume</span><span class="rel-blurb">A step-by-step guide to every section, with before-and-after examples and a final checklist.</span></a></div></section>
 </main>
@@ -281,5 +282,26 @@
   </div>
   <div class="foot-bottom"><span>© 2026 MakeCV</span><span>No sign-up · No watermark · Data stays in your browser</span></div>
 </footer>
+<script>
+(function () {
+  var HOST = 'https://bicea.org';
+  var Z = { '728x90': { key: '0e7f300ebc75925f1b35d2404c7f5b04', w: 728, h: 90 }, '300x250': { key: '14546d762f4609577c45abcfd23ed569', w: 300, h: 250 } };
+  function mount(slot) {
+    var z = Z[window.matchMedia('(min-width: 768px)').matches ? '728x90' : '300x250'];
+    slot.style.maxWidth = (z.w + 18) + 'px';
+    slot.innerHTML = '<span class="ad-slot-label" aria-hidden="true">Advertisement</span>';
+    var b = document.createElement('div'); b.className = 'ad-slot-body'; b.style.minHeight = z.h + 'px';
+    var f = document.createElement('iframe'); f.title = 'Advertisement'; f.width = z.w; f.height = z.h; f.scrolling = 'no';
+    f.srcdoc = '<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;background:transparent;overflow:hidden}</style></head><body>'
+      + "<script>atOptions={key:'" + z.key + "',format:'iframe',height:" + z.h + ',width:' + z.w + ',params:{}}<\/script>'
+      + '<script src="' + HOST + '/22/' + z.key + '"><\/script></body></html>';
+    b.appendChild(f); slot.appendChild(b);
+  }
+  var slots = document.querySelectorAll('aside[data-ad]');
+  if (!('IntersectionObserver' in window)) { slots.forEach(mount); return; }
+  var io = new IntersectionObserver(function (en) { en.forEach(function (x) { if (x.isIntersecting) { io.unobserve(x.target); mount(x.target); } }); }, { rootMargin: '300px 0px' });
+  slots.forEach(function (s) { io.observe(s); });
+})();
+</script>
 </body>
 </html>

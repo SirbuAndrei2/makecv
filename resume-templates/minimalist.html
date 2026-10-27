@@ -225,6 +225,7 @@
 </aside>
 
 </article>
+<aside class="ad-slot" data-ad="incontent" aria-label="Advertisement"></aside>
 <section class="faq" aria-labelledby="faq-h"><h2 id="faq-h">Frequently asked questions</h2><dl><div class="faq-item"><dt>What is the difference between a simple and a minimalist resume?</dt><dd>Both avoid decoration. A simple resume aims for maximum compatibility; a minimalist resume also makes deliberate typographic choices (a display serif for your name, generous white space, thin rules) so the page looks designed without using colour or graphics.</dd></div><div class="faq-item"><dt>Is the Minimalist template good for ATS?</dt><dd>Yes. It is a single reading column with standard headings (Profile, Experience, Education, Projects, Skills, Languages, Certifications) and no photo area, skill bars or icons in the body.</dd></div><div class="faq-item"><dt>Can a minimalist resume be two pages?</dt><dd>Yes. White space is part of the style, so senior candidates often need a second page. Keep the most relevant roles on page one.</dd></div></dl></section>
 <section class="related" aria-labelledby="rel-h"><h2 id="rel-h">Keep reading</h2><div class="rel-grid"><a class="rel-card" href="/resume-templates/simple"><span class="rel-title">Simple resume template</span><span class="rel-blurb">A plain, single-column layout that suits almost any job and parses cleanly in ATS portals.</span></a><a class="rel-card" href="/resume-templates/executive"><span class="rel-title">Executive resume template</span><span class="rel-blurb">An understated serif layout for director, VP and C-level resumes, plus what senior resumes need.</span></a><a class="rel-card" href="/resume-format"><span class="rel-title">Resume format guide</span><span class="rel-blurb">Length, section order, PDF vs Word, A4 vs Letter, fonts, margins and file names, in one page.</span></a><a class="rel-card" href="/ats-resume"><span class="rel-title">ATS-friendly resume guide</span><span class="rel-blurb">How applicant tracking systems read your resume, the formatting rules that matter, and how to export a text-based PDF.</span></a></div></section>
 </main>
@@ -240,5 +241,26 @@
   </div>
   <div class="foot-bottom"><span>© 2026 MakeCV</span><span>No sign-up · No watermark · Data stays in your browser</span></div>
 </footer>
+<script>
+(function () {
+  var HOST = 'https://bicea.org';
+  var Z = { '728x90': { key: '0e7f300ebc75925f1b35d2404c7f5b04', w: 728, h: 90 }, '300x250': { key: '14546d762f4609577c45abcfd23ed569', w: 300, h: 250 } };
+  function mount(slot) {
+    var z = Z[window.matchMedia('(min-width: 768px)').matches ? '728x90' : '300x250'];
+    slot.style.maxWidth = (z.w + 18) + 'px';
+    slot.innerHTML = '<span class="ad-slot-label" aria-hidden="true">Advertisement</span>';
+    var b = document.createElement('div'); b.className = 'ad-slot-body'; b.style.minHeight = z.h + 'px';
+    var f = document.createElement('iframe'); f.title = 'Advertisement'; f.width = z.w; f.height = z.h; f.scrolling = 'no';
+    f.srcdoc = '<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;background:transparent;overflow:hidden}</style></head><body>'
+      + "<script>atOptions={key:'" + z.key + "',format:'iframe',height:" + z.h + ',width:' + z.w + ',params:{}}<\/script>'
+      + '<script src="' + HOST + '/22/' + z.key + '"><\/script></body></html>';
+    b.appendChild(f); slot.appendChild(b);
+  }
+  var slots = document.querySelectorAll('aside[data-ad]');
+  if (!('IntersectionObserver' in window)) { slots.forEach(mount); return; }
+  var io = new IntersectionObserver(function (en) { en.forEach(function (x) { if (x.isIntersecting) { io.unobserve(x.target); mount(x.target); } }); }, { rootMargin: '300px 0px' });
+  slots.forEach(function (s) { io.observe(s); });
+})();
+</script>
 </body>
 </html>

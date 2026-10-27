@@ -698,29 +698,33 @@ select.inp {
 
 /* ═══════════════════════════════════
    ADSTERRA AD SLOTS (filled by the ADS script at the end of <body>)
+   Each slot reserves its final height before it mounts (no layout shift) and carries a visible label.
    ═══════════════════════════════════ */
-.ad-slot {
-  background:#f8fafc; border:1px dashed #e2e8f0; border-radius:12px;
-  padding:6px 4px 8px; margin:16px auto; text-align:center; overflow:hidden; max-width:100%;
-}
-.ad-slot-label {
-  font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.08em;
-  color:#94a3b8; display:block; margin-bottom:4px;
-}
+.ad-slot { background:#f1f5f9; border:1px solid var(--border-soft); border-radius:12px; padding:6px 4px 8px; margin:16px auto; text-align:center; overflow:hidden; max-width:100%; }
+.ad-slot-label { font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#64748b; display:block; margin-bottom:4px; }
 .ad-slot-body { display:flex; align-items:center; justify-content:center; }
-/* 728×90 is wider than the 672px step-1 column: let wide slots overhang their column, centred, never past the viewport */
-.ad-wide { width:746px; max-width:calc(100vw - 32px); margin-left:50% !important; transform:translateX(-50%); }
 .ad-slot iframe { border:0; display:block; max-width:100%; }
-.ad-rail { position:fixed; top:96px; z-index:30; display:none; }
-.ad-rail .ad-slot { margin:0; }
-/* display comes from Tailwind classes on the element (flex / hidden lg:flex) */
-.sponsored-card {
-  align-items:center; gap:10px; background:#fff; border:1px solid #e2e8f0; border-radius:14px;
-  padding:12px 14px; text-decoration:none; color:#1e293b; box-shadow:0 1px 3px rgba(0,0,0,.06);
-  transition:border-color .15s, box-shadow .15s;
+/* reserved heights = creative + label/padding (≈30px); sizes follow the ADS script's SIZES */
+.ad-slot[data-ad="inline"] { min-height:80px; max-width:338px; }
+.ad-slot[data-ad="leaderboard"], .ad-slot[data-ad="responsive"] { min-height:280px; max-width:318px; }
+.ad-slot[data-ad="300x250"] { min-height:280px; max-width:318px; }
+.ad-slot[data-ad="native"] { min-height:150px; }
+@media (min-width:768px) {
+  .ad-slot[data-ad="inline"] { min-height:90px; max-width:486px; }
+  .ad-slot[data-ad="leaderboard"], .ad-slot[data-ad="responsive"] { min-height:120px; max-width:746px; }
 }
+.ad-wide { width:746px; max-width:100%; }
+.ad-after { margin-top:40px !important; }
+.after-builder { padding-top:32px; }
+body[data-step="2"] .after-builder { display:none; }
+.step3-only { display:none !important; }
+@media (max-width:1023px) { body[data-step="3"] .step3-only { display:flex !important; margin:0 auto 8px; max-width:746px; } }
+.ad-rail { position:fixed; top:calc(var(--header-h) + 16px); z-index:30; display:none; }
+.ad-rail .ad-slot { margin:0; min-height:0; }
+/* display comes from Tailwind classes on the element (flex / hidden lg:flex) */
+.sponsored-card { align-items:center; gap:10px; background:#fff; border:1px solid var(--border-soft); border-radius:14px; padding:12px 14px; min-height:56px; text-decoration:none; color:var(--fg); box-shadow:var(--sh-sm); transition:border-color .15s, box-shadow .15s; }
 .sponsored-card:hover { border-color:#93c5fd; box-shadow:0 4px 14px rgba(37,99,235,.12); }
-.sponsored-card .sp-tag { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#94a3b8; }
+.sponsored-card .sp-tag { font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#64748b; }
 
 /* ── Cookie Consent Banner ── */
 #cookie-banner {
@@ -953,9 +957,7 @@ select.inp {
       </div>
     </div>
 
-    <aside class="ad-slot ad-wide" data-ad="leaderboard" aria-label="Advertisement"></aside>
-
-    <div class="step1-grid">
+    <div class="step1-grid" data-rail-anchor>
     <div class="form-col">
 
     <!-- Personal Info -->
@@ -1066,6 +1068,7 @@ select.inp {
       <div id="skills-wrap" class="flex flex-wrap gap-2 mt-1" role="list" aria-label="Added skills"></div>
     </article>
 
+    <!-- Ad: natural pause between the core sections and the optional ones; far from the Next button -->
     <aside class="ad-slot" data-ad="inline" aria-label="Advertisement"></aside>
 
     <div class="section-break">Optional sections</div>
@@ -1124,7 +1127,7 @@ select.inp {
   </section>
 
   <!-- ────── STEP 2: TEMPLATES ────── -->
-  <section id="step2" class="hidden max-w-5xl mx-auto" aria-labelledby="step2-heading">
+  <section id="step2" class="hidden max-w-5xl mx-auto" aria-labelledby="step2-heading" data-rail-anchor>
     <div class="text-center mb-6">
       <h2 id="step2-heading" class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 mb-2">Choose your resume template</h2>
       <p class="text-[15px] text-slate-600">Your details fill every template, so you can switch at any time without retyping.</p>
@@ -1320,17 +1323,18 @@ select.inp {
 
     </div>
 
-    <aside class="ad-slot" data-ad="native" aria-label="Advertisement" style="max-width:none"></aside>
-
     <div class="step-actions">
       <button type="button" class="btn-ghost" onclick="goStep(1)"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back</button>
       <span class="hint">Selected: <strong id="sel-name" class="text-slate-800">Modern</strong></span>
       <button type="button" class="btn-blue" onclick="goStep(3)">Preview &amp; download <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
     </div>
+
+    <!-- Ad: below the step's action bar (≥40px gap), never between the template grid and the buttons -->
+    <aside class="ad-slot ad-after" data-ad="native" aria-label="Advertisement" style="max-width:none"></aside>
   </section>
 
   <!-- ────── STEP 3: PREVIEW ────── -->
-  <section id="step3" class="hidden" aria-labelledby="step3-heading">
+  <section id="step3" class="hidden" aria-labelledby="step3-heading" data-rail-anchor>
     <h2 id="step3-heading" class="sr-only">Resume Preview and Download</h2>
 
     <!-- Mobile: switch between the preview and the options panel -->
@@ -1401,23 +1405,25 @@ select.inp {
             <div id="cv-preview"></div>
           </div>
         </div>
-        <!-- Below 1024px the left-panel ad is hidden, so the 300×250 and the sponsored link sit under the preview -->
-        <div class="lg:hidden">
-          <aside class="ad-slot" data-ad="300x250" aria-label="Advertisement"></aside>
-          <a class="sponsored-card flex" data-ad-link href="#" target="_blank" rel="sponsored noopener">
-            <i class="fa-solid fa-gift text-blue-500 text-lg" aria-hidden="true"></i>
-            <span class="flex-1"><span class="sp-tag block">Sponsored</span><span class="text-sm font-semibold">Today's recommended offers</span></span>
-            <i class="fa-solid fa-arrow-up-right-from-square text-slate-300 text-xs" aria-hidden="true"></i>
-          </a>
-        </div>
       </div>
     </div>
   </section>
 
 </main>
 
+<!-- Ad: after the builder (end of the form / below the preview), separated from the step's action bar.
+     Hidden on step 2, where the native block already sits under the template grid. -->
+<div class="after-builder max-w-3xl mx-auto px-4">
+  <aside class="ad-slot ad-wide" data-ad="leaderboard" aria-label="Advertisement"></aside>
+  <a class="sponsored-card step3-only lg:hidden" data-ad-link href="#" target="_blank" rel="sponsored noopener">
+    <i class="fa-solid fa-gift text-blue-500 text-lg" aria-hidden="true"></i>
+    <span class="flex-1"><span class="sp-tag block">Sponsored</span><span class="text-sm font-semibold">Today's recommended offers</span></span>
+    <i class="fa-solid fa-arrow-up-right-from-square text-slate-300 text-xs" aria-hidden="true"></i>
+  </a>
+</div>
+
 <!-- ══════════════ HOW IT WORKS ══════════════ -->
-<section class="max-w-4xl mx-auto px-4 pt-14 pb-10" aria-labelledby="hiw-heading">
+<section id="hiw" class="max-w-4xl mx-auto px-4 pt-14 pb-10" aria-labelledby="hiw-heading">
   <h2 id="hiw-heading" class="sec-h2">How to Build Your Resume in 3 Steps</h2>
   <p class="sec-sub">No software to install. No account. Works on any device.</p>
   <div class="relative">
@@ -2545,7 +2551,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const wide = () => window.matchMedia('(min-width: 768px)').matches;
   // Responsive slot types pick their size when they mount; each reserves its height up front (no layout shift).
   const SIZES = {
-    leaderboard: () => (wide() ? '728x90' : '320x50'),
+    leaderboard: () => (wide() ? '728x90' : '300x250'),
     inline:      () => (wide() ? '468x60' : '320x50'),
     responsive:  () => (wide() ? '728x90' : '300x250'),
   };
@@ -2602,30 +2608,47 @@ document.addEventListener('DOMContentLoaded', function() {
     : null;
   document.querySelectorAll('aside[data-ad]').forEach(s => io ? io.observe(s) : mount(s));
 
-  // Side rails sit 16px outside the active step's content and show only where they fit without covering it.
-  const RAIL_W = 176, GAP = 16;
+  // Side rails sit 16px outside the active step's content box ([data-rail-anchor]) and show only where they
+  // fit beside it without covering anything: enough free width on both sides and enough height under the header.
+  const RAIL_W = 176, GAP = 16, TOP = 80;
   function placeRails() {
     const sec = document.querySelector('main > section:not(.hidden)');
     const l = document.getElementById('rail-left'), r = document.getElementById('rail-right');
     if (!sec) return;
-    const box = sec.getBoundingClientRect();
-    const fits = box.left >= RAIL_W + GAP && document.documentElement.clientWidth - box.right >= RAIL_W + GAP;
-    l.style.display = r.style.display = fits ? 'block' : 'none';
+    const box = (sec.querySelector('[data-rail-anchor]') || sec).getBoundingClientRect();
+    const vw = document.documentElement.clientWidth, vh = window.innerHeight;
+    const fits = box.left >= RAIL_W + GAP && vw - box.right >= RAIL_W + GAP;
+    l.style.display = fits && vh >= TOP + 630 + 16 ? 'block' : 'none';
+    r.style.display = fits && vh >= TOP + 330 + 16 ? 'block' : 'none';
     if (fits) {
       l.style.left = (box.left - RAIL_W - GAP) + 'px';
       r.style.left = (box.right + GAP) + 'px';
     }
   }
   const origGoStep = window.goStep;
-  window.goStep = function (n) { origGoStep(n); placeRails(); };
+  window.goStep = function (n) { origGoStep(n); placeRails(); if (n >= 2) socialBar(); };
   window.addEventListener('resize', placeRails);
   placeRails();
 
   // Sponsored direct-link cards (clearly labelled, open in a new tab).
   document.querySelectorAll('a[data-ad-link]').forEach(a => { a.href = DIRECT_LINK; });
 
-  // Social Bar: once per page, after load so it never delays the form.
-  window.addEventListener('load', () => setTimeout(() => addScript(SOCIAL_BAR_SRC), 1500));
+  // Social Bar: a floating unit that can cover form fields on phones, so it waits for the first natural pause:
+  // the visitor leaves step 1 (template choice or preview) or scrolls down to the content below the builder.
+  // Never before 'load', once per page view.
+  let sbDone = false, loaded = document.readyState === 'complete', sbWanted = false;
+  function socialBar() {
+    sbWanted = true;
+    if (sbDone || !loaded) return;
+    sbDone = true;
+    setTimeout(() => addScript(SOCIAL_BAR_SRC), 800);
+  }
+  window.addEventListener('load', () => { loaded = true; if (sbWanted) socialBar(); });
+  const hiw = document.getElementById('hiw');
+  if (hiw && 'IntersectionObserver' in window) {
+    const so = new IntersectionObserver(en => { if (en.some(x => x.isIntersecting)) { so.disconnect(); socialBar(); } });
+    so.observe(hiw);
+  }
 
   // Popunder: it binds a page-wide click handler, so it loads only after the visitor has their PDF,
   // once per browser session. Loading it on page load would hijack the first click in the form.
