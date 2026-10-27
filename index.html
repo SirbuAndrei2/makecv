@@ -260,179 +260,249 @@
 <!-- html2pdf (~900 KB) is loaded on demand by loadHtml2pdf(): prefetched when step 3 opens, awaited by downloadPDF(). -->
 
 <style>
+/* ═══════════════════════════════════════════════════════════════════
+   MAKECV DESIGN SYSTEM (ui-ux-pro-max: "Minimalism & Swiss Style", SaaS tool)
+   Tokens: navy primary, blue action, green success, slate neutrals, Plus Jakarta Sans.
+   Documented in CLAUDE.md → Design system. guide.css mirrors these tokens.
+   ═══════════════════════════════════════════════════════════════════ */
+:root {
+  --navy:#1e3a5f; --navy-700:#16304f;
+  --brand:#2563eb; --brand-700:#1d4ed8; --brand-50:#eff6ff; --brand-100:#dbeafe;
+  --ok:#15803d; --ok-50:#f0fdf4; --ok-200:#bbf7d0;
+  --warn:#b45309; --warn-50:#fffbeb;
+  --danger:#dc2626; --danger-50:#fef2f2;
+  --bg:#f8fafc; --surface:#fff; --fg:#0f172a; --fg-2:#334155; --muted-fg:#475569; --subtle-fg:#64748b;
+  --muted:#e9eef5; --border:#cbd5e1; --border-soft:#e2e8f0;
+  --ring:0 0 0 3px rgba(37,99,235,.28);
+  --r-sm:8px; --r:12px; --r-lg:16px;
+  --sh-sm:0 1px 2px rgba(15,23,42,.06);
+  --sh:0 1px 3px rgba(15,23,42,.06), 0 6px 20px rgba(15,23,42,.05);
+  --sh-lg:0 10px 40px rgba(15,23,42,.12);
+  --header-h:64px;
+}
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f1f5f9; min-height: 100vh; }
+html { scroll-padding-top: calc(var(--header-h) + 16px); }
+body { font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif; background: var(--bg); color: var(--fg); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+:focus-visible { outline: 3px solid rgba(37,99,235,.55); outline-offset: 2px; border-radius: 6px; }
+button, [role="button"], select, label[for], .tpl-card { cursor: pointer; }
 
-/* ── Animations ── */
+/* ── Motion (honours reduced motion) ── */
 @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-5px)} 40%{transform:translateX(5px)} 60%{transform:translateX(-3px)} 80%{transform:translateX(3px)} }
-@keyframes slideIn { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
+@keyframes slideIn { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
 @keyframes spin { to{transform:rotate(360deg)} }
-@keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.6} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+.shake { animation: shake .35s ease; }
+.fade-up { animation: fadeUp .22s ease both; }
+.spin-icon { animation: spin .7s linear infinite; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+}
 
-.shake { animation: shake 0.35s ease; }
-.fade-up { animation: fadeUp 0.25s ease both; }
+/* ── Header + stepper ── */
+.site-header { position: sticky; top: 0; z-index: 50; height: var(--header-h); background: rgba(255,255,255,.92); backdrop-filter: saturate(1.4) blur(10px); -webkit-backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--border-soft); }
+.site-header .bar { height: 100%; max-width: 1280px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; gap: 12px; }
+@media (min-width: 640px) { .site-header .bar { padding: 0 24px; } }
+.logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--fg); flex-shrink: 0; min-height: 44px; }
+.logo-mark { width: 32px; height: 32px; border-radius: 9px; background: var(--navy); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+.logo-text { font-weight: 800; font-size: 18px; letter-spacing: -.02em; }
+.stepper { flex: 1; display: flex; justify-content: center; min-width: 0; }
+.stepper ol { list-style: none; display: flex; align-items: center; gap: 4px; }
+.step-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 8px; border: 0; background: none; border-radius: 10px; font: inherit; color: var(--subtle-fg); font-size: 13.5px; font-weight: 600; white-space: nowrap; transition: background .15s, color .15s; }
+.step-btn:hover { background: var(--bg); color: var(--fg); }
+.step-num { width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 700; background: var(--muted); color: var(--muted-fg); flex-shrink: 0; transition: background .2s, color .2s, box-shadow .2s; }
+.step-btn.done .step-num { background: var(--brand-100); color: var(--brand-700); }
+.step-btn.done { color: var(--fg-2); }
+.step-btn.current { color: var(--fg); }
+.step-btn.current .step-num { background: var(--brand); color: #fff; box-shadow: 0 0 0 4px rgba(37,99,235,.16); }
+.step-sep { width: 28px; height: 2px; background: var(--border-soft); border-radius: 2px; flex-shrink: 0; }
+.step-sep.done { background: #93c5fd; }
+@media (max-width: 639px) {
+  .logo-text { display: none; }
+  .step-btn { padding: 0 4px; gap: 6px; font-size: 13px; }
+  .step-btn:not(.current) .step-lbl { display: none; }
+  .step-sep { width: 16px; }
+}
+@media (min-width: 1024px) { .step-sep { width: 48px; } }
+.header-meta { display: none; align-items: center; gap: 16px; font-size: 12.5px; color: var(--subtle-fg); font-weight: 500; flex-shrink: 0; }
+.header-meta a { color: var(--fg-2); text-decoration: none; font-weight: 600; }
+.header-meta a:hover { color: var(--brand); }
+@media (min-width: 1100px) { .header-meta { display: flex; } }
+.free-pill { font-size: 11.5px; font-weight: 700; color: var(--ok); background: var(--ok-50); border: 1px solid var(--ok-200); padding: 2px 8px; border-radius: 999px; }
 
-/* ── Form inputs ── */
+/* ── Hero ── */
+.hero { text-align: center; padding: 8px 0 24px; }
+.hero h1 { font-size: 28px; line-height: 1.15; font-weight: 800; letter-spacing: -.025em; color: var(--fg); margin-bottom: 12px; text-wrap: balance; }
+@media (min-width: 640px) { .hero h1 { font-size: 36px; } }
+.hero p.sub { font-size: 15.5px; line-height: 1.6; color: var(--muted-fg); max-width: 560px; margin: 0 auto 16px; text-wrap: pretty; }
+.chip { display: inline-flex; align-items: center; gap: 6px; background: var(--surface); border: 1px solid var(--border-soft); border-radius: 999px; padding: 5px 12px; font-size: 12.5px; color: var(--fg-2); font-weight: 600; }
+.chip i { color: var(--ok); }
+
+/* ── Form ── */
+.form-card { background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--r-lg); box-shadow: var(--sh-sm); padding: 20px 16px; margin-bottom: 16px; }
+@media (min-width: 640px) { .form-card { padding: 24px 28px; } }
+.card-head { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 18px; }
+.card-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--brand-50); color: var(--brand); display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.card-title { font-size: 16px; font-weight: 700; color: var(--fg); line-height: 1.3; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.card-hint { font-size: 13px; color: var(--subtle-fg); line-height: 1.5; margin-top: 2px; }
+.tag-opt { font-size: 11px; font-weight: 700; letter-spacing: .02em; color: var(--subtle-fg); background: var(--bg); border: 1px solid var(--border-soft); border-radius: 999px; padding: 1px 8px; }
+.tag-cap { font-size: 11px; font-weight: 600; color: var(--subtle-fg); }
+.section-break { display: flex; align-items: center; gap: 12px; margin: 28px 0 14px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--subtle-fg); }
+.section-break::before, .section-break::after { content: ''; flex: 1; height: 1px; background: var(--border-soft); }
+
+.lbl { display: block; font-size: 13px; font-weight: 600; color: var(--fg-2); margin-bottom: 6px; }
+.lbl .req { color: var(--danger); margin-left: 2px; }
+.field { margin-bottom: 14px; }
+.field:last-child { margin-bottom: 0; }
 .inp {
-  width:100%; border:1.5px solid #e2e8f0; border-radius:10px; padding:10px 13px;
-  font-family:'Plus Jakarta Sans',sans-serif; font-size:13.5px; color:#1e293b;
-  background:#fff; transition:border-color .18s, box-shadow .18s; outline:none;
-  line-height:1.5;
+  width: 100%; min-height: 44px; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px;
+  font-family: inherit; font-size: 16px; color: var(--fg); background: var(--surface); line-height: 1.45;
+  transition: border-color .15s, box-shadow .15s; outline: none;
 }
-.inp:focus { border-color:#3b82f6; box-shadow:0 0 0 3px rgba(59,130,246,.12); }
-.inp.error { border-color:#f87171; box-shadow:0 0 0 3px rgba(248,113,113,.12); }
-.inp::placeholder { color:#b0bec5; }
-textarea.inp { resize:vertical; }
+@media (min-width: 768px) { .inp { font-size: 14.5px; } }
+.inp:hover { border-color: #94a3b8; }
+.inp:focus { border-color: var(--brand); box-shadow: var(--ring); }
+.inp[aria-invalid="true"], .inp.error { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(220,38,38,.14); }
+.inp::placeholder { color: #8391a7; }
+.inp:disabled { background: var(--bg); color: var(--subtle-fg); cursor: not-allowed; }
+textarea.inp { resize: vertical; min-height: 88px; }
 select.inp {
-  appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
-  background-repeat:no-repeat; background-position:right 10px center; background-size:18px; padding-right:34px;
+  appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.6' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center; background-size: 18px; padding-right: 34px;
 }
+.field-help { font-size: 12.5px; color: var(--subtle-fg); margin-top: 6px; line-height: 1.45; }
+.field-err { display: none; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; color: var(--danger); margin-top: 6px; }
+.field-err.show { display: flex; animation: slideIn .15s ease both; }
+.check { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; font-size: 13.5px; color: var(--fg-2); }
+.check input { width: 18px; height: 18px; accent-color: var(--brand); }
 
 /* ── Buttons ── */
-.btn-blue {
-  background:#2563eb; color:#fff; border:none; border-radius:10px; padding:11px 22px;
-  font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; font-weight:600; cursor:pointer;
-  transition:background .15s, transform .12s, box-shadow .15s;
-  box-shadow:0 2px 8px rgba(37,99,235,.25); display:inline-flex; align-items:center; gap:8px;
-}
-.btn-blue:hover:not(:disabled) { background:#1d4ed8; transform:translateY(-1px); box-shadow:0 4px 14px rgba(37,99,235,.35); }
-.btn-blue:active:not(:disabled) { transform:translateY(0); }
-.btn-blue:disabled { opacity:.45; cursor:not-allowed; }
+.btn-blue, .btn-ghost, .btn-add, .btn-del, .btn-link { font-family: inherit; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; border-radius: 10px; font-weight: 600; text-decoration: none; transition: background .15s, border-color .15s, color .15s, box-shadow .15s, transform .12s; }
+.btn-blue { background: var(--brand); color: #fff; border: 1px solid var(--brand); padding: 10px 20px; font-size: 15px; box-shadow: 0 1px 2px rgba(15,23,42,.1), 0 4px 12px rgba(37,99,235,.22); }
+.btn-blue:hover:not(:disabled) { background: var(--brand-700); border-color: var(--brand-700); }
+.btn-blue:active:not(:disabled) { transform: translateY(1px); }
+.btn-blue:disabled { background: #93a8d6; border-color: #93a8d6; box-shadow: none; cursor: not-allowed; }
+.btn-ghost { background: var(--surface); color: var(--fg-2); border: 1px solid var(--border); padding: 10px 18px; font-size: 14.5px; }
+.btn-ghost:hover:not(:disabled) { border-color: var(--brand); color: var(--brand-700); background: var(--brand-50); }
+.btn-ghost:disabled { opacity: .5; cursor: not-allowed; }
+.btn-add { width: 100%; background: var(--surface); color: var(--brand-700); border: 1.5px dashed #93c5fd; padding: 10px 18px; font-size: 14px; }
+.btn-add:hover { background: var(--brand-50); border-color: var(--brand); }
+.btn-del { background: transparent; color: var(--danger); border: 1px solid transparent; padding: 6px 12px; font-size: 13px; min-height: 40px; }
+.btn-del:hover { background: var(--danger-50); border-color: #fecaca; }
+.btn-link { background: none; border: 0; color: var(--subtle-fg); font-size: 13.5px; padding: 8px 10px; min-height: 44px; }
+.btn-link:hover { color: var(--danger); }
 
-.btn-ghost {
-  background:#fff; color:#475569; border:1.5px solid #e2e8f0; border-radius:10px; padding:10px 20px;
-  font-family:'Plus Jakarta Sans',sans-serif; font-size:13.5px; font-weight:500; cursor:pointer;
-  transition:border-color .15s, color .15s, transform .12s; display:inline-flex; align-items:center; gap:7px;
-}
-.btn-ghost:hover { border-color:#93c5fd; color:#2563eb; transform:translateY(-1px); }
+/* ── Entries (repeatable items) ── */
+.entry-card { border: 1px solid var(--border-soft); border-radius: var(--r); padding: 14px; margin-bottom: 12px; background: #fbfcfe; }
+@media (min-width: 640px) { .entry-card { padding: 16px 18px; } }
+.entry-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; }
+.entry-num { font-size: 12.5px; font-weight: 700; color: var(--subtle-fg); }
 
-.btn-add {
-  background:#f0f9ff; color:#0369a1; border:1.5px dashed #7dd3fc; border-radius:10px;
-  padding:9px 18px; font-size:13px; font-weight:600; cursor:pointer; width:100%;
-  transition:background .15s, border-color .15s; font-family:'Plus Jakarta Sans',sans-serif;
-  display:flex; align-items:center; justify-content:center; gap:6px;
-}
-.btn-add:hover { background:#e0f2fe; border-color:#38bdf8; }
-
-.btn-del {
-  background:#fff0f0; color:#dc2626; border:none; border-radius:7px; padding:5px 11px;
-  font-size:12px; font-weight:600; cursor:pointer; transition:background .15s;
-  font-family:'Plus Jakarta Sans',sans-serif; white-space:nowrap;
-}
-.btn-del:hover { background:#fee2e2; }
-
-/* ── Cards ── */
-.form-card {
-  background:#fff; border-radius:16px;
-  box-shadow:0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04);
-  padding:22px 24px; margin-bottom:14px; animation: fadeUp .2s ease both;
-}
-.card-title {
-  font-size:14px; font-weight:700; color:#1e293b; margin-bottom:18px;
-  display:flex; align-items:center; gap:9px; border-bottom:1px solid #f1f5f9; padding-bottom:13px;
-}
-.card-title i { width:30px; height:30px; background:#eff6ff; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#3b82f6; font-size:13px; flex-shrink:0; }
-.lbl { display:block; font-size:11.5px; font-weight:600; color:#64748b; margin-bottom:5px; text-transform:uppercase; letter-spacing:.05em; }
-.field { margin-bottom:14px; }
-.field:last-child { margin-bottom:0; }
-
-/* ── Entry card ── */
-.entry-card { border:1.5px solid #f1f5f9; border-radius:12px; padding:16px; margin-bottom:10px; background:#fafcff; position:relative; }
-
-/* ── Progress ── */
-.step-dot {
-  width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-  font-size:13px; font-weight:700; flex-shrink:0; transition:all .25s;
-}
-.step-dot.done { background:#2563eb; color:#fff; }
-.step-dot.current { background:#2563eb; color:#fff; box-shadow:0 0 0 5px rgba(37,99,235,.18); }
-.step-dot.pending { background:#e2e8f0; color:#94a3b8; }
-.step-line { flex:1; height:2px; background:#e2e8f0; transition:background .3s; }
-.step-line.done { background:#2563eb; }
-.step-label { font-size:11.5px; font-weight:600; }
-
-/* ── Template cards ── */
-.tpl-card {
-  border:2px solid #e2e8f0; border-radius:14px; cursor:pointer; overflow:hidden;
-  transition:border-color .2s, box-shadow .2s, transform .15s; background:#fff;
-}
-.tpl-card:hover { border-color:#93c5fd; transform:translateY(-3px); box-shadow:0 6px 24px rgba(0,0,0,.1); }
-.tpl-card.sel { border-color:#2563eb; box-shadow:0 0 0 4px rgba(37,99,235,.14); }
-.tpl-check { position:absolute; top:8px; right:8px; width:22px; height:22px; background:#2563eb; border-radius:50%; display:none; align-items:center; justify-content:center; }
-.tpl-card.sel .tpl-check { display:flex; }
-
-/* ── Skill tags ── */
-.skill-pill {
-  display:inline-flex; align-items:center; gap:5px; background:#eff6ff; color:#1d4ed8;
-  border-radius:20px; padding:4px 10px 4px 13px; font-size:12px; font-weight:600;
-  animation:slideIn .18s ease both;
-}
-.skill-pill select { background:none; border:none; outline:none; color:#60a5fa; font-size:10px; cursor:pointer; padding:0; }
-.skill-pill button { background:none; border:none; cursor:pointer; color:#93c5fd; line-height:1; font-size:15px; padding:0; transition:color .12s; }
-.skill-pill button:hover { color:#1d4ed8; }
+/* ── Skills ── */
+.skill-pill { display: inline-flex; align-items: center; gap: 2px; background: var(--brand-50); color: var(--brand-700); border: 1px solid var(--brand-100); border-radius: 999px; padding: 2px 4px 2px 12px; font-size: 13.5px; font-weight: 600; animation: slideIn .15s ease both; min-height: 36px; }
+.skill-pill select { background: transparent; border: 0; outline: none; color: var(--brand-700); font: inherit; font-size: 12px; font-weight: 600; padding: 4px 2px; border-radius: 6px; }
+.skill-pill select:focus-visible { outline: 2px solid var(--brand); }
+.skill-pill button { background: none; border: 0; color: #60a5fa; width: 32px; height: 32px; border-radius: 50%; font-size: 17px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; }
+.skill-pill button:hover { color: var(--brand-700); background: var(--brand-100); }
 
 /* ── Photo ── */
-#photo-wrap {
-  width:82px; height:82px; border-radius:50%; border:2.5px dashed #cbd5e1; overflow:hidden;
-  display:flex; align-items:center; justify-content:center; background:#f8fafc; cursor:pointer;
-  transition:border-color .18s, background .18s; flex-shrink:0;
-}
-#photo-wrap:hover { border-color:#3b82f6; background:#eff6ff; }
-#photo-wrap img { width:100%; height:100%; object-fit:cover; }
+#photo-wrap { width: 88px; height: 88px; border-radius: 50%; border: 2px dashed var(--border); overflow: hidden; display: flex; align-items: center; justify-content: center; background: var(--bg); transition: border-color .15s, background .15s; flex-shrink: 0; }
+#photo-wrap:hover { border-color: var(--brand); background: var(--brand-50); }
+#photo-wrap img { width: 100%; height: 100%; object-fit: cover; }
 
-/* ── Spinner ── */
-.spin-icon { animation:spin .7s linear infinite; }
+/* ── Sticky step actions (always reachable; rests at the end of the step) ── */
+.step-actions { position: sticky; bottom: 0; z-index: 40; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 8px -16px 0; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: rgba(248,250,252,.94); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-top: 1px solid var(--border-soft); }
+@media (min-width: 640px) { .step-actions { margin: 8px 0 0; padding: 14px 0; border-top: 1px solid var(--border-soft); } }
+.step-actions .btn-blue { min-width: 0; }
+.step-actions .hint { font-size: 12.5px; color: var(--subtle-fg); display: none; }
+@media (min-width: 768px) { .step-actions .hint { display: block; } }
 
-/* ── A4 Preview ── */
-#preview-outer {
-  background:#64748b;
-  padding:24px;
-  display:flex; justify-content:center; align-items:flex-start;
-  border-radius:0 0 14px 14px; overflow:hidden;
-}
-#cv-preview {
-  width:794px; /* 210mm @ 96dpi */
-  min-height:1123px; /* 297mm @ 96dpi */
-  background:#fff;
-  transform-origin:top center;
-  box-shadow:0 8px 40px rgba(0,0,0,.3);
-  transition:opacity .2s;
-  flex-shrink:0;
-}
+/* ── Live preview (step 1, ≥1280px) ── */
+.live-card { position: sticky; top: calc(var(--header-h) + 20px); background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--r-lg); box-shadow: var(--sh); overflow: hidden; }
+.live-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--border-soft); font-size: 13px; }
+.live-head .t { font-weight: 700; color: var(--fg); display: flex; align-items: center; gap: 8px; }
+.live-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,.18); }
+.live-stage { background: #e2e8f0; padding: 14px; display: flex; justify-content: center; overflow: hidden; position: relative; }
+#mini-preview { width: 794px; min-height: 1123px; background: #fff; transform-origin: top center; box-shadow: 0 6px 24px rgba(15,23,42,.18); flex-shrink: 0; pointer-events: none; }
+.live-empty { position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); background: rgba(15,23,42,.86); color: #fff; font-size: 12.5px; font-weight: 600; padding: 7px 12px; border-radius: 999px; white-space: nowrap; }
 
-/* ── Mobile tabs ── */
-.m-tab { padding:10px 20px; border-bottom:2.5px solid transparent; font-weight:600; font-size:13.5px; cursor:pointer; color:#64748b; background:none; border-top:none; border-left:none; border-right:none; transition:color .15s; }
-.m-tab.act { border-bottom-color:#2563eb; color:#2563eb; }
+/* ── Template cards (step 2) ── */
+.tpl-filters { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 6px; margin-bottom: 14px; scrollbar-width: none; }
+.tpl-filters::-webkit-scrollbar { display: none; }
+.f-chip { flex-shrink: 0; min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); font: inherit; font-size: 13.5px; font-weight: 600; color: var(--fg-2); transition: background .15s, border-color .15s, color .15s; }
+.f-chip:hover { border-color: var(--brand); color: var(--brand-700); }
+.f-chip[aria-pressed="true"] { background: var(--navy); border-color: var(--navy); color: #fff; }
+.tpl-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
+@media (min-width: 768px) { .tpl-grid { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+@media (min-width: 1024px) { .tpl-grid { grid-template-columns: repeat(4, minmax(0,1fr)); gap: 18px; } }
+.tpl-card { position: relative; display: flex; flex-direction: column; text-align: left; border: 1px solid var(--border-soft); border-radius: 14px; overflow: hidden; background: var(--surface); box-shadow: var(--sh-sm); font: inherit; color: inherit; padding: 0; transition: border-color .15s, box-shadow .2s, transform .15s; }
+.tpl-card:hover { border-color: #93c5fd; box-shadow: var(--sh); transform: translateY(-2px); }
+.tpl-card.sel { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(37,99,235,.25), var(--sh); }
+.tpl-card[hidden] { display: none; }
+.tpl-thumb { display: block; width: 100%; aspect-ratio: 640 / 906; background: #f1f5f9; border-bottom: 1px solid var(--border-soft); overflow: hidden; }
+.tpl-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.tpl-meta { padding: 10px 12px 12px; }
+.tpl-meta .nm { font-weight: 700; font-size: 14.5px; color: var(--fg); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.tpl-meta .ds { font-size: 12.5px; color: var(--subtle-fg); margin-top: 3px; line-height: 1.4; }
+.ats-b { font-size: 10.5px; font-weight: 700; padding: 1px 7px; border-radius: 999px; border: 1px solid; white-space: nowrap; }
+.ats-best { color: #166534; background: var(--ok-50); border-color: var(--ok-200); }
+.ats-good { color: #1e40af; background: var(--brand-50); border-color: #bfdbfe; }
+.ats-fair { color: #92400e; background: var(--warn-50); border-color: #fde68a; }
+.tpl-check { position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; background: var(--brand); color: #fff; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 13px; box-shadow: 0 2px 8px rgba(37,99,235,.4); }
+.tpl-card.sel .tpl-check { display: flex; }
+.tpl-pop { position: absolute; top: 8px; left: 8px; font-size: 10.5px; font-weight: 700; background: var(--navy); color: #fff; padding: 2px 8px; border-radius: 999px; }
+
+/* ── A4 preview (step 3) ── */
+.preview-shell { background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--r-lg); box-shadow: var(--sh-sm); overflow: hidden; }
+.preview-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 10px 14px; border-bottom: 1px solid var(--border-soft); background: var(--surface); }
+@media (min-width: 768px) { .preview-bar { position: sticky; top: var(--header-h); z-index: 30; padding: 12px 16px; } }
+.preview-bar .meta { display: flex; align-items: center; gap: 10px; min-width: 0; font-size: 13px; color: var(--subtle-fg); }
+.preview-bar select.inp { min-height: 40px; width: auto; font-size: 14px; font-weight: 600; padding-top: 6px; padding-bottom: 6px; }
+.pages-badge { font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: var(--ok-50); color: #166534; border: 1px solid var(--ok-200); white-space: nowrap; }
+.pages-badge.multi { background: var(--warn-50); color: #92400e; border-color: #fde68a; }
+.dl-actions { display: flex; align-items: center; gap: 8px; }
+#preview-outer { background: #e2e8f0; padding: 24px; display: flex; justify-content: center; align-items: flex-start; overflow: hidden; }
+#cv-preview { width: 794px; min-height: 1123px; background: #fff; transform-origin: top center; box-shadow: 0 10px 40px rgba(15,23,42,.22); transition: opacity .2s; flex-shrink: 0; position: relative; }
+@media (max-width: 768px) { #preview-outer { padding: 12px; } }
+.valid-box { display: none; margin: 0; padding: 10px 14px; background: var(--warn-50); border-bottom: 1px solid #fde68a; font-size: 13px; color: #78350f; line-height: 1.5; }
+.valid-box.show { display: block; }
+.valid-box button { background: none; border: 0; color: var(--brand-700); font: inherit; font-weight: 700; text-decoration: underline; padding: 0; min-height: 0; }
+.side-card { background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--r-lg); box-shadow: var(--sh-sm); padding: 16px; }
+.side-title { font-size: 12px; font-weight: 700; color: var(--subtle-fg); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; }
+
+/* ── Mobile step-3 tabs ── */
+.seg { display: flex; background: var(--muted); border-radius: 12px; padding: 4px; margin-bottom: 12px; }
+.m-tab { flex: 1; min-height: 40px; border: 0; background: none; border-radius: 9px; font: inherit; font-weight: 600; font-size: 14px; color: var(--muted-fg); display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.m-tab.act { background: var(--surface); color: var(--fg); box-shadow: var(--sh-sm); }
 
 /* ── Tooltip ── */
-[data-tip] { position:relative; }
-[data-tip]:hover::after {
-  content:attr(data-tip); position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%);
-  background:#1e293b; color:#fff; font-size:11.5px; padding:5px 11px; border-radius:7px; white-space:nowrap;
-  pointer-events:none; z-index:200; font-family:'Plus Jakarta Sans',sans-serif;
-}
-
-/* ── Scrollbar ── */
-::-webkit-scrollbar { width:5px; }
-::-webkit-scrollbar-track { background:transparent; }
-::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:3px; }
+[data-tip] { position: relative; }
+[data-tip]:hover::after { content: attr(data-tip); position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: var(--fg); color: #fff; font-size: 12px; padding: 5px 10px; border-radius: 7px; white-space: nowrap; pointer-events: none; z-index: 200; }
 
 /* ── Print / ATS PDF ── */
 @media print {
   body > *                 { display:none !important; }
-  #ats-print-layer         { display:block !important; position:fixed; top:0; left:0; width:100%; }
+  #ats-print-layer         { display:block !important; position:static; width:210mm; }
   /* keep template backgrounds (Tech, Neon, Modern sidebar…) even when "Background graphics" is off,
      otherwise light text prints on white */
   #ats-print-layer, #ats-print-layer * { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  #ats-print-layer .entry, #ats-print-layer li, #ats-print-layer .keep { break-inside: avoid; page-break-inside: avoid; }
+  #ats-print-layer .sec-title, #ats-print-layer .m-sec-title, #ats-print-layer .s-sec-title, #ats-print-layer .a-sec-title, #ats-print-layer .a-title { break-after: avoid; page-break-after: avoid; }
   @page                    { size:A4 portrait; margin:0; }
 }
 
-/* ── How it works ── */
-.hiw-step { display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px; }
-.hiw-icon { width:56px; height:56px; border-radius:16px; background:#eff6ff; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; border:1.5px solid #dbeafe; }
-.hiw-connector { flex:1; height:2px; background:linear-gradient(90deg,#bfdbfe,#93c5fd); margin-top:-40px; }
+/* ── Content sections below the builder ── */
+.sec-h2 { font-size: 24px; font-weight: 800; letter-spacing: -.02em; color: var(--fg); text-align: center; margin-bottom: 8px; }
+.sec-sub { font-size: 14.5px; color: var(--muted-fg); text-align: center; margin-bottom: 28px; }
+.hiw-step { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; }
+.hiw-icon { width: 56px; height: 56px; border-radius: 16px; background: var(--surface); border: 1px solid var(--border-soft); box-shadow: var(--sh-sm); display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--brand); flex-shrink: 0; }
+.faq-item { background: var(--surface); border: 1px solid var(--border-soft); border-radius: 14px; padding: 18px 22px; }
+.faq-item dt { font-weight: 700; color: var(--fg); margin-bottom: 4px; }
+.faq-item dd { font-size: 14.5px; color: var(--muted-fg); line-height: 1.65; }
+.faq-item a, .link { color: var(--brand-700); text-decoration: underline; text-underline-offset: 2px; }
+.guide-card { background: var(--surface); border: 1px solid var(--border-soft); border-radius: 14px; padding: 16px 18px; display: flex; gap: 12px; align-items: flex-start; text-decoration: none; transition: border-color .15s, box-shadow .15s; min-height: 44px; }
+.guide-card:hover { border-color: #93c5fd; box-shadow: var(--sh); }
+.guide-card i { color: var(--brand); margin-top: 3px; }
 
 /* ── Testimonials ── */
 .review-card { background:#fff; border-radius:16px; padding:22px; box-shadow:0 1px 4px rgba(0,0,0,.07); display:flex; flex-direction:column; gap:12px; }
@@ -440,6 +510,34 @@ select.inp {
 .review-text { font-size:13.5px; color:#475569; line-height:1.65; flex:1; }
 .review-author { display:flex; align-items:center; gap:10px; }
 .review-avatar { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+
+/* ── Footer ── */
+.site-footer { background: var(--surface); border-top: 1px solid var(--border-soft); margin-top: 24px; }
+.foot-grid { max-width: 1152px; margin: 0 auto; padding: 40px 20px 24px; display: grid; grid-template-columns: 1fr; gap: 28px; }
+@media (min-width: 768px) { .foot-grid { grid-template-columns: 1.4fr 1fr 1fr 1fr; } }
+.foot-brand p { font-size: 13.5px; color: var(--muted-fg); line-height: 1.6; margin-top: 10px; max-width: 320px; }
+.foot-title { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: var(--fg); margin-bottom: 8px; }
+.foot-grid ul { list-style: none; }
+.foot-grid li { margin: 2px 0; }
+.foot-grid li a, .foot-grid li button { display: inline-flex; align-items: center; min-height: 32px; font: inherit; font-size: 14px; color: var(--muted-fg); text-decoration: none; background: none; border: 0; padding: 0; }
+.foot-grid li a:hover, .foot-grid li button:hover { color: var(--brand-700); text-decoration: underline; }
+.foot-bottom { max-width: 1152px; margin: 0 auto; padding: 16px 20px 28px; border-top: 1px solid var(--border-soft); font-size: 12.5px; color: var(--subtle-fg); display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: space-between; }
+
+/* ── Step layouts ── */
+.step1-grid { display: grid; grid-template-columns: minmax(0,1fr); gap: 32px; max-width: 700px; margin: 0 auto; }
+.live-col { display: none; }
+@media (min-width: 1280px) {
+  .step1-grid { max-width: 1180px; grid-template-columns: minmax(0,680px) minmax(0,440px); justify-content: center; align-items: start; }
+  .live-col { display: block; }
+}
+/* Mobile step 3: the two download buttons become a bar fixed to the bottom of the screen */
+@media (max-width: 767px) {
+  body[data-step="3"] { padding-bottom: 76px; }
+  body[data-step="3"] .dl-actions { position: fixed; left: 0; right: 0; bottom: 0; z-index: 45; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: rgba(248,250,252,.96); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-top: 1px solid var(--border-soft); }
+  body[data-step="3"] .dl-actions > button { flex: 1; }
+  .preview-bar .meta { width: 100%; justify-content: space-between; }
+  .preview-bar select.inp { flex: 1; }
+}
 
 /* =============================================
    CV TEMPLATE STYLES  (scoped inside #cv-preview)
@@ -598,11 +696,6 @@ select.inp {
 .tpl-tech .cert-item { font-size:8pt; color:#94a3b8; padding:3px 0; border-bottom:1px solid #1e293b; }
 .tpl-tech .cert-name { color:#cbd5e1; font-weight:600; }
 
-/* responsive */
-@media (max-width:768px) {
-  #preview-outer { padding:10px; }
-}
-
 /* ═══════════════════════════════════
    ADSTERRA AD SLOTS (filled by the ADS script at the end of <body>)
    ═══════════════════════════════════ */
@@ -632,31 +725,24 @@ select.inp {
 /* ── Cookie Consent Banner ── */
 #cookie-banner {
   position:fixed; bottom:0; left:0; right:0; z-index:9999;
-  background:#1e293b; color:#e2e8f0; padding:14px 20px;
+  background:var(--navy-700); color:#e2e8f0; padding:14px 20px calc(14px + env(safe-area-inset-bottom));
   display:flex; align-items:center; gap:12px; flex-wrap:wrap;
-  box-shadow:0 -4px 20px rgba(0,0,0,.2); font-size:13px; line-height:1.5;
+  box-shadow:0 -4px 20px rgba(0,0,0,.2); font-size:13.5px; line-height:1.5;
   transform:translateY(0); transition:transform .3s ease;
 }
-#cookie-banner.hidden { transform:translateY(110%); }
+#cookie-banner.hidden { transform:translateY(110%); visibility:hidden; }
 #cookie-banner p { flex:1; margin:0; min-width:240px; }
-#cookie-banner a { color:#60a5fa; text-decoration:underline; cursor:pointer; }
+#cookie-banner a { color:#93c5fd; text-decoration:underline; }
 #cookie-banner .cb-actions { display:flex; gap:8px; flex-shrink:0; }
-.cb-accept {
-  background:#2563eb; color:#fff; border:none; border-radius:8px; padding:8px 18px;
-  font-size:13px; font-weight:600; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif;
-  transition:background .15s;
-}
-.cb-accept:hover { background:#1d4ed8; }
-.cb-decline {
-  background:transparent; color:#94a3b8; border:1px solid #334155; border-radius:8px;
-  padding:8px 14px; font-size:13px; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif;
-  transition:border-color .15s, color .15s;
-}
-.cb-decline:hover { border-color:#64748b; color:#cbd5e1; }
+.cb-accept, .cb-decline { min-height:44px; border-radius:10px; padding:8px 18px; font-size:14px; font-weight:600; font-family:inherit; transition:background .15s, border-color .15s, color .15s; }
+.cb-accept { background:var(--brand); color:#fff; border:1px solid var(--brand); }
+.cb-accept:hover { background:var(--brand-700); }
+.cb-decline { background:transparent; color:#cbd5e1; border:1px solid #4b6587; }
+.cb-decline:hover { border-color:#94a3b8; color:#fff; }
 
 /* ── Privacy Policy Modal ── */
 #privacy-modal {
-  position:fixed; inset:0; z-index:10000; background:rgba(0,0,0,.6);
+  position:fixed; inset:0; z-index:10000; background:rgba(15,23,42,.6);
   display:flex; align-items:center; justify-content:center; padding:20px;
   opacity:0; pointer-events:none; transition:opacity .2s;
 }
@@ -664,16 +750,16 @@ select.inp {
 #privacy-modal .modal-box {
   background:#fff; border-radius:16px; max-width:640px; width:100%;
   max-height:80vh; overflow-y:auto; padding:32px;
-  box-shadow:0 20px 60px rgba(0,0,0,.3);
+  box-shadow:var(--sh-lg);
 }
-#privacy-modal h2 { font-size:20px; font-weight:700; color:#1e293b; margin-bottom:16px; }
-#privacy-modal h3 { font-size:14px; font-weight:700; color:#1e293b; margin:16px 0 6px; }
-#privacy-modal p, #privacy-modal li { font-size:13px; color:#475569; line-height:1.65; }
+#privacy-modal h2 { font-size:20px; font-weight:700; color:var(--fg); margin-bottom:16px; }
+#privacy-modal h3 { font-size:14px; font-weight:700; color:var(--fg); margin:16px 0 6px; }
+#privacy-modal p, #privacy-modal li { font-size:13.5px; color:var(--muted-fg); line-height:1.65; }
 #privacy-modal ul { padding-left:18px; margin:6px 0; }
+#privacy-modal a { color:var(--brand-700); text-decoration:underline; }
 #privacy-modal .close-modal {
-  position:sticky; top:0; float:right; background:#f1f5f9; border:none; border-radius:8px;
-  padding:6px 14px; font-size:13px; font-weight:600; cursor:pointer; color:#475569;
-  font-family:'Plus Jakarta Sans',sans-serif;
+  position:sticky; top:0; float:right; background:var(--muted); border:none; border-radius:10px;
+  min-height:44px; padding:6px 16px; font-size:13.5px; font-weight:600; color:var(--fg-2); font-family:inherit;
 }
 
 /* ═══════════════════════════════════
@@ -820,186 +906,229 @@ select.inp {
 </head>
 <body>
 
-<!-- ══════════════ HEADER ══════════════ -->
-<header class="bg-white border-b border-slate-100 sticky top-0 z-50" role="banner" aria-label="Site header" style="box-shadow:0 1px 8px rgba(0,0,0,.07)">
-  <div class="max-w-7xl mx-auto px-5 py-3 flex items-center justify-between">
-    <div class="flex items-center gap-2.5">
-      <div class="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center flex-shrink-0" aria-hidden="true">
-        <i class="fa-solid fa-file-lines text-white text-sm"></i>
-      </div>
-      <a href="#" onclick="goStep(1);return false;" class="font-bold text-lg text-slate-800 tracking-tight" aria-label="MakeCV — Free Resume Builder">MakeCV</a>
-      <span class="text-xs bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full font-semibold">100% Free</span>
-    </div>
-    <nav aria-label="Feature highlights" class="hidden md:flex items-center gap-5 text-xs text-slate-400 font-medium">
-      <span><i class="fa-solid fa-lock text-slate-300 mr-1" aria-hidden="true"></i>No sign-up required</span>
-      <span><i class="fa-solid fa-browser text-slate-300 mr-1" aria-hidden="true"></i>Runs in browser</span>
-      <span><i class="fa-solid fa-file-pdf text-slate-300 mr-1" aria-hidden="true"></i>Free PDF download</span>
+<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[60] focus:bg-white focus:px-4 focus:py-2 focus:rounded-lg">Skip to the resume form</a>
+
+<!-- ══════════════ HEADER (logo + step navigation) ══════════════ -->
+<header class="site-header" role="banner">
+  <div class="bar">
+    <a href="/" class="logo" onclick="goStep(1);return false;" aria-label="MakeCV — Free Resume Builder">
+      <span class="logo-mark" aria-hidden="true"><i class="fa-solid fa-file-lines"></i></span>
+      <span class="logo-text">MakeCV</span>
+    </a>
+    <nav class="stepper" aria-label="Resume builder steps">
+      <ol>
+        <li><button type="button" class="step-btn current" id="sd1" onclick="goStep(1)" aria-current="step"><span class="step-num">1</span><span class="step-lbl">Details</span></button></li>
+        <li aria-hidden="true"><span class="step-sep" id="sl1"></span></li>
+        <li><button type="button" class="step-btn" id="sd2" onclick="goStep(2)"><span class="step-num">2</span><span class="step-lbl">Template</span></button></li>
+        <li aria-hidden="true"><span class="step-sep" id="sl2"></span></li>
+        <li><button type="button" class="step-btn" id="sd3" onclick="goStep(3)"><span class="step-num">3</span><span class="step-lbl">Download</span></button></li>
+      </ol>
     </nav>
+    <div class="header-meta">
+      <span class="free-pill">100% Free</span>
+      <span><i class="fa-solid fa-lock mr-1" aria-hidden="true"></i>No sign-up</span>
+      <a href="/resume-templates">Templates</a>
+    </div>
   </div>
 </header>
 
-<!-- ══════════════ PROGRESS ══════════════ -->
-<div class="bg-white border-b border-slate-100" role="navigation" aria-label="Resume builder steps">
-  <div class="max-w-xl mx-auto px-5 py-4">
-    <ol class="flex items-center gap-0" aria-label="Progress">
-      <li><div id="sd1" class="step-dot current" aria-current="step" aria-label="Step 1">1</div></li>
-      <li class="flex-1"><div id="sl1" class="step-line mx-1"></div></li>
-      <li><div id="sd2" class="step-dot pending" aria-label="Step 2">2</div></li>
-      <li class="flex-1"><div id="sl2" class="step-line mx-1"></div></li>
-      <li><div id="sd3" class="step-dot pending" aria-label="Step 3">3</div></li>
-    </ol>
-    <div class="flex justify-between mt-2 px-1">
-      <span id="slb1" class="step-label text-blue-600">Your Details</span>
-      <span id="slb2" class="step-label text-slate-400">Template</span>
-      <span id="slb3" class="step-label text-slate-400">Preview</span>
-    </div>
-  </div>
-</div>
-
 <!-- ══════════════ MAIN ══════════════ -->
-<main class="max-w-7xl mx-auto px-4 py-6">
+<main id="main" class="max-w-7xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8 pb-6">
 
   <!-- ────── STEP 1: FORM ────── -->
-  <section id="step1" class="max-w-2xl mx-auto" aria-labelledby="step1-heading">
+  <section id="step1" aria-labelledby="step1-heading">
     <!-- Visible H1 — critical for SEO keyword signal and E-E-A-T -->
-    <div class="text-center mb-7">
+    <div class="hero">
       <div class="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold px-3.5 py-1.5 rounded-full mb-4">
         <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
         <span><span id="cv-counter">0</span> resumes created this month — free, forever</span>
       </div>
-      <h1 id="step1-heading" class="text-3xl font-bold text-slate-800 mb-3 leading-tight">Build a Professional Resume<br class="hidden sm:block"> in 5 Minutes — 100% Free</h1>
-      <p class="text-sm text-slate-500 max-w-lg mx-auto leading-relaxed mb-5">No sign-up. No watermark. No cost. Pick from <strong class="text-slate-700">10 expert templates</strong>, fill in your details, and download a perfectly formatted A4 PDF instantly.</p>
+      <h1 id="step1-heading">Build a Professional Resume<br class="hidden sm:block"> in 5 Minutes — 100% Free</h1>
+      <p class="sub">No sign-up. No watermark. No cost. Pick from <strong class="text-slate-800">10 expert templates</strong>, fill in your details, and download a perfectly formatted A4 PDF instantly.</p>
       <div class="flex flex-wrap justify-center gap-2">
-        <span class="inline-flex items-center gap-1.5 bg-white border border-slate-200 rounded-full px-3 py-1 text-xs text-slate-600 font-medium shadow-sm"><i class="fa-solid fa-lock-open text-blue-500" aria-hidden="true"></i> No account needed</span>
-        <span class="inline-flex items-center gap-1.5 bg-white border border-slate-200 rounded-full px-3 py-1 text-xs text-slate-600 font-medium shadow-sm"><i class="fa-solid fa-droplet-slash text-blue-500" aria-hidden="true"></i> Zero watermark</span>
-        <span class="inline-flex items-center gap-1.5 bg-white border border-slate-200 rounded-full px-3 py-1 text-xs text-slate-600 font-medium shadow-sm"><i class="fa-solid fa-shield-halved text-blue-500" aria-hidden="true"></i> Data stays in your browser</span>
-        <span class="inline-flex items-center gap-1.5 bg-white border border-slate-200 rounded-full px-3 py-1 text-xs text-slate-600 font-medium shadow-sm"><i class="fa-solid fa-file-pdf text-blue-500" aria-hidden="true"></i> Instant A4 PDF</span>
+        <span class="chip"><i class="fa-solid fa-check" aria-hidden="true"></i> No account needed</span>
+        <span class="chip"><i class="fa-solid fa-check" aria-hidden="true"></i> Zero watermark</span>
+        <span class="chip"><i class="fa-solid fa-check" aria-hidden="true"></i> Data stays in your browser</span>
+        <span class="chip"><i class="fa-solid fa-check" aria-hidden="true"></i> Instant A4 PDF</span>
       </div>
     </div>
 
     <aside class="ad-slot ad-wide" data-ad="leaderboard" aria-label="Advertisement"></aside>
 
+    <div class="step1-grid">
+    <div class="form-col">
+
     <!-- Personal Info -->
     <article class="form-card" aria-labelledby="sec-personal">
-      <div class="card-title" id="sec-personal"><i class="fa-solid fa-user" aria-hidden="true"></i> Personal Information</div>
-      <div class="flex flex-col sm:flex-row gap-4 mb-4 items-start">
-        <div>
-          <div id="photo-wrap" onclick="document.getElementById('photo-input').click()" role="button" aria-label="Upload profile photo" tabindex="0">
+      <div class="card-head">
+        <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-user"></i></span>
+        <div><h2 class="card-title" id="sec-personal">Personal information</h2><p class="card-hint">Only your name and email are required.</p></div>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-5 mb-4 items-start">
+        <div class="flex sm:flex-col items-center gap-3 sm:gap-2">
+          <div id="photo-wrap" onclick="document.getElementById('photo-input').click()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}" role="button" aria-label="Upload profile photo (optional)" tabindex="0">
             <img id="photo-img" style="display:none" alt="Profile photo preview">
-            <i id="photo-ph" class="fa-regular fa-image text-slate-300 text-2xl" aria-hidden="true"></i>
+            <i id="photo-ph" class="fa-solid fa-camera text-slate-400 text-xl" aria-hidden="true"></i>
           </div>
           <input type="file" id="photo-input" accept="image/*" class="hidden" aria-label="Upload profile photo">
-          <div class="text-center text-xs text-slate-400 mt-1.5 cursor-pointer" onclick="document.getElementById('photo-input').click()">Photo</div>
+          <div class="text-left sm:text-center">
+            <div class="text-xs font-semibold text-slate-700">Photo <span class="font-normal text-slate-500">(optional)</span></div>
+            <button type="button" id="photo-rm" class="btn-link hidden" style="min-height:32px;padding:2px 0;font-size:12.5px" onclick="removePhoto()">Remove photo</button>
+          </div>
         </div>
-        <div class="flex-1 grid grid-cols-1 gap-3">
+        <div class="flex-1 w-full grid grid-cols-1 gap-3">
           <div class="field">
-            <label class="lbl" for="f-name">Full Name *</label>
-            <input type="text" class="inp" id="f-name" name="fullName" autocomplete="name" placeholder="John Smith" oninput="upd('personal.name',this.value)" required aria-required="true">
+            <label class="lbl" for="f-name">Full name<span class="req" aria-hidden="true">*</span></label>
+            <input type="text" class="inp" id="f-name" name="fullName" autocomplete="name" placeholder="e.g. John Smith" oninput="upd('personal.name',this.value);clearErr(this)" onblur="checkField(this)" required aria-required="true" aria-describedby="f-name-err">
+            <p class="field-err" id="f-name-err"><i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i><span>Enter your full name (at least 3 characters).</span></p>
           </div>
           <div class="field">
-            <label class="lbl" for="f-title">Professional Title</label>
-            <input type="text" class="inp" id="f-title" name="jobTitle" autocomplete="organization-title" placeholder="Senior Software Engineer" oninput="upd('personal.title',this.value)">
+            <label class="lbl" for="f-title">Professional title</label>
+            <input type="text" class="inp" id="f-title" name="jobTitle" autocomplete="organization-title" placeholder="e.g. Senior Software Engineer" oninput="upd('personal.title',this.value)">
           </div>
         </div>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
         <div class="field">
-          <label class="lbl" for="f-email"><i class="fa-regular fa-envelope mr-1" aria-hidden="true"></i>Email *</label>
-          <input type="email" class="inp" id="f-email" name="email" autocomplete="email" placeholder="john@email.com" oninput="upd('personal.email',this.value)" required aria-required="true">
+          <label class="lbl" for="f-email">Email<span class="req" aria-hidden="true">*</span></label>
+          <input type="email" class="inp" id="f-email" name="email" autocomplete="email" inputmode="email" placeholder="john@email.com" oninput="upd('personal.email',this.value);clearErr(this)" onblur="checkField(this)" required aria-required="true" aria-describedby="f-email-err">
+          <p class="field-err" id="f-email-err"><i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i><span>Enter an email address like name@example.com.</span></p>
         </div>
         <div class="field">
-          <label class="lbl" for="f-phone"><i class="fa-solid fa-phone mr-1" aria-hidden="true"></i>Phone</label>
-          <input type="tel" class="inp" id="f-phone" name="phone" autocomplete="tel" placeholder="+1 555 123 456" oninput="upd('personal.phone',this.value)">
+          <label class="lbl" for="f-phone">Phone</label>
+          <input type="tel" class="inp" id="f-phone" name="phone" autocomplete="tel" inputmode="tel" placeholder="+1 555 123 456" oninput="upd('personal.phone',this.value)">
         </div>
         <div class="field">
-          <label class="lbl" for="f-city"><i class="fa-solid fa-location-dot mr-1" aria-hidden="true"></i>City, Country</label>
+          <label class="lbl" for="f-city">City, country</label>
           <input type="text" class="inp" id="f-city" name="city" autocomplete="address-level2" placeholder="New York, USA" oninput="upd('personal.city',this.value)">
         </div>
         <div class="field">
-          <label class="lbl" for="f-linkedin"><i class="fa-brands fa-linkedin mr-1" aria-hidden="true"></i>LinkedIn</label>
-          <input type="url" class="inp" id="f-linkedin" name="linkedin" autocomplete="url" placeholder="linkedin.com/in/johnsmith" oninput="upd('personal.linkedin',this.value)">
+          <label class="lbl" for="f-linkedin">LinkedIn</label>
+          <input type="url" class="inp" id="f-linkedin" name="linkedin" autocomplete="url" inputmode="url" placeholder="linkedin.com/in/johnsmith" oninput="upd('personal.linkedin',this.value)">
         </div>
         <div class="field sm:col-span-2">
-          <label class="lbl" for="f-website"><i class="fa-solid fa-globe mr-1" aria-hidden="true"></i>Website / Portfolio</label>
-          <input type="url" class="inp" id="f-website" name="website" autocomplete="url" placeholder="johnsmith.dev" oninput="upd('personal.website',this.value)">
+          <label class="lbl" for="f-website">Website / portfolio</label>
+          <input type="url" class="inp" id="f-website" name="website" autocomplete="url" inputmode="url" placeholder="johnsmith.dev" oninput="upd('personal.website',this.value)">
         </div>
       </div>
     </article>
 
     <!-- Summary -->
     <article class="form-card" aria-labelledby="sec-summary">
-      <div class="card-title" id="sec-summary"><i class="fa-solid fa-align-left" aria-hidden="true"></i> Professional Summary</div>
+      <div class="card-head">
+        <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-align-left"></i></span>
+        <div><h2 class="card-title" id="sec-summary">Professional summary</h2><p class="card-hint">2–4 sentences: who you are, your strongest result, what you want next. <a class="link" href="/resume-summary-examples" target="_blank" rel="noopener">See examples</a></p></div>
+      </div>
+      <label class="sr-only" for="f-summary">Professional summary</label>
       <textarea class="inp" id="f-summary" name="summary" rows="4"
         placeholder="Software engineer with 5+ years of experience in web development. Specialized in React and Node.js, working in agile teams on large-scale projects. Passionate about clean code and excellent user experiences."
-        oninput="upd('summary',this.value); charCount(this)" aria-label="Professional summary"></textarea>
-      <div class="flex justify-between mt-1.5">
-        <span class="text-xs text-slate-400">Recommended: 300–500 characters</span>
-        <span id="char-cnt" class="text-xs text-slate-400" aria-live="polite">0 characters</span>
+        oninput="upd('summary',this.value); charCount(this)" aria-describedby="char-cnt"></textarea>
+      <div class="flex justify-between mt-1.5 gap-3">
+        <span class="field-help" style="margin-top:0">Recommended: 300–500 characters</span>
+        <span id="char-cnt" class="text-xs font-semibold text-slate-500" aria-live="polite">0 characters</span>
       </div>
     </article>
 
     <!-- Experience -->
     <article class="form-card" aria-labelledby="sec-exp">
-      <div class="card-title" id="sec-exp"><i class="fa-solid fa-briefcase" aria-hidden="true"></i> Work Experience <span class="text-slate-400 font-normal text-xs ml-1">(max 5)</span></div>
+      <div class="card-head">
+        <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-briefcase"></i></span>
+        <div><h2 class="card-title" id="sec-exp">Work experience <span class="tag-cap">up to 5</span></h2><p class="card-hint">Most recent first. Write one achievement per line: each line becomes a bullet point.</p></div>
+      </div>
       <div id="exp-list" role="list" aria-label="Work experience entries"></div>
-      <button class="btn-add" id="btn-exp" onclick="addEntry('experience')" aria-label="Add work experience"><i class="fa-solid fa-plus text-xs" aria-hidden="true"></i> Add Experience</button>
+      <button type="button" class="btn-add" id="btn-exp" onclick="addEntry('experience')"><i class="fa-solid fa-plus text-xs" aria-hidden="true"></i> Add experience</button>
     </article>
 
     <!-- Education -->
     <article class="form-card" aria-labelledby="sec-edu">
-      <div class="card-title" id="sec-edu"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Education <span class="text-slate-400 font-normal text-xs ml-1">(max 3)</span></div>
+      <div class="card-head">
+        <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-graduation-cap"></i></span>
+        <div><h2 class="card-title" id="sec-edu">Education <span class="tag-cap">up to 3</span></h2><p class="card-hint">Your highest degree first. Students: add coursework or GPA in the notes.</p></div>
+      </div>
       <div id="edu-list" role="list" aria-label="Education entries"></div>
-      <button class="btn-add" id="btn-edu" onclick="addEntry('education')" aria-label="Add education"><i class="fa-solid fa-plus text-xs" aria-hidden="true"></i> Add Education</button>
+      <button type="button" class="btn-add" id="btn-edu" onclick="addEntry('education')"><i class="fa-solid fa-plus text-xs" aria-hidden="true"></i> Add education</button>
     </article>
 
     <!-- Skills -->
     <article class="form-card" aria-labelledby="sec-skills">
-      <div class="card-title" id="sec-skills"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Technical Skills</div>
+      <div class="card-head">
+        <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-bolt"></i></span>
+        <div><h2 class="card-title" id="sec-skills">Skills</h2><p class="card-hint">6–12 skills that match the jobs you want. <a class="link" href="/resume-skills" target="_blank" rel="noopener">Skill ideas</a></p></div>
+      </div>
       <div class="field">
-        <label class="lbl" for="skill-inp">Type a skill and press Enter or comma</label>
-        <input type="text" class="inp" id="skill-inp" placeholder="React, TypeScript, SQL, Figma..." onkeydown="skillKey(event)" aria-describedby="skills-wrap">
+        <label class="lbl" for="skill-inp">Add a skill</label>
+        <div class="flex gap-2">
+          <input type="text" class="inp" id="skill-inp" placeholder="React, SQL, Customer service…" onkeydown="skillKey(event)" aria-describedby="skill-help" enterkeyhint="done" autocomplete="off">
+          <button type="button" class="btn-ghost flex-shrink-0" onclick="addSkillFromInput()" aria-label="Add skill"><i class="fa-solid fa-plus" aria-hidden="true"></i><span class="hidden sm:inline">Add</span></button>
+        </div>
+        <p class="field-help" id="skill-help">Press Enter or a comma to add. Set the level on each skill (used by templates with skill bars).</p>
       </div>
       <div id="skills-wrap" class="flex flex-wrap gap-2 mt-1" role="list" aria-label="Added skills"></div>
     </article>
 
-    <aside class="ad-slot ad-wide" data-ad="inline" aria-label="Advertisement"></aside>
+    <aside class="ad-slot" data-ad="inline" aria-label="Advertisement"></aside>
+
+    <div class="section-break">Optional sections</div>
 
     <!-- Languages -->
     <article class="form-card" aria-labelledby="sec-lang">
-      <div class="card-title" id="sec-lang"><i class="fa-solid fa-language" aria-hidden="true"></i> Languages <span class="text-slate-400 font-normal text-xs ml-1">(max 4)</span></div>
+      <div class="card-head">
+        <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-language"></i></span>
+        <div><h2 class="card-title" id="sec-lang">Languages <span class="tag-opt">Optional</span> <span class="tag-cap">up to 4</span></h2><p class="card-hint">CEFR levels (A1–C2) are understood across Europe; "Native" for your first language.</p></div>
+      </div>
       <div id="lang-list" role="list" aria-label="Language entries"></div>
-      <button class="btn-add" id="btn-lang" onclick="addEntry('languages')" aria-label="Add language"><i class="fa-solid fa-plus text-xs" aria-hidden="true"></i> Add Language</button>
+      <button type="button" class="btn-add" id="btn-lang" onclick="addEntry('languages')"><i class="fa-solid fa-plus text-xs" aria-hidden="true"></i> Add language</button>
     </article>
 
     <!-- Projects -->
     <article class="form-card" aria-labelledby="sec-proj">
-      <div class="card-title" id="sec-proj"><i class="fa-solid fa-rocket" aria-hidden="true"></i> Projects <span class="text-slate-400 font-normal text-xs ml-1">(optional, max 3)</span></div>
+      <div class="card-head">
+        <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-rocket"></i></span>
+        <div><h2 class="card-title" id="sec-proj">Projects <span class="tag-opt">Optional</span> <span class="tag-cap">up to 3</span></h2><p class="card-hint">Great for students, career changers and developers.</p></div>
+      </div>
       <div id="proj-list" role="list" aria-label="Project entries"></div>
-      <button class="btn-add" id="btn-proj" onclick="addEntry('projects')" aria-label="Add project"><i class="fa-solid fa-plus text-xs" aria-hidden="true"></i> Add Project</button>
+      <button type="button" class="btn-add" id="btn-proj" onclick="addEntry('projects')"><i class="fa-solid fa-plus text-xs" aria-hidden="true"></i> Add project</button>
     </article>
 
     <!-- Certifications -->
     <article class="form-card" aria-labelledby="sec-cert">
-      <div class="card-title" id="sec-cert"><i class="fa-solid fa-certificate" aria-hidden="true"></i> Courses & Certifications <span class="text-slate-400 font-normal text-xs ml-1">(optional, max 4)</span></div>
+      <div class="card-head">
+        <span class="card-icon" aria-hidden="true"><i class="fa-solid fa-certificate"></i></span>
+        <div><h2 class="card-title" id="sec-cert">Courses &amp; certifications <span class="tag-opt">Optional</span> <span class="tag-cap">up to 4</span></h2></div>
+      </div>
       <div id="cert-list" role="list" aria-label="Certification entries"></div>
-      <button class="btn-add" id="btn-cert" onclick="addEntry('certifications')" aria-label="Add certification"><i class="fa-solid fa-plus text-xs" aria-hidden="true"></i> Add Certification</button>
+      <button type="button" class="btn-add" id="btn-cert" onclick="addEntry('certifications')"><i class="fa-solid fa-plus text-xs" aria-hidden="true"></i> Add certification</button>
     </article>
 
-
-    <div class="flex justify-between items-center mt-4 mb-8">
-      <button class="text-sm text-slate-400 hover:text-red-500 transition-colors" onclick="resetCV()" aria-label="Reset and start over">
-        <i class="fa-solid fa-rotate-left mr-1" aria-hidden="true"></i>Reset
-      </button>
-      <button class="btn-blue text-base px-7 py-3" onclick="goStep(2)" aria-label="Go to template selection">
-        Choose Template <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-      </button>
+    <div class="step-actions">
+      <button type="button" class="btn-link" onclick="resetCV()"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i>Reset</button>
+      <span class="hint">Nothing is uploaded: your details stay in this tab.</span>
+      <button type="button" class="btn-blue" onclick="goStep(2)">Choose template <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
     </div>
+    </div><!-- /form-col -->
+
+    <!-- Live preview: desktop ≥1280px only (renderMini), so the resume is visible while typing -->
+    <div class="live-col" aria-label="Live preview of your resume">
+      <div class="live-card">
+        <div class="live-head">
+          <span class="t"><span class="live-dot" aria-hidden="true"></span>Live preview · <span id="mini-tpl">Modern</span></span>
+          <button type="button" class="btn-link" style="min-height:36px;color:var(--brand-700);font-weight:700" onclick="goStep(2)">Change template</button>
+        </div>
+        <div class="live-stage" id="mini-stage">
+          <div id="mini-preview" aria-hidden="true"></div>
+          <div class="live-empty" id="mini-empty">Start typing: your resume appears here</div>
+        </div>
+      </div>
+    </div>
+    </div><!-- /step1-grid -->
   </section>
 
   <!-- ────── STEP 2: TEMPLATES ────── -->
-  <section id="step2" class="hidden max-w-4xl mx-auto" aria-labelledby="step2-heading">
-    <h2 id="step2-heading" class="text-xl font-bold text-slate-800 mb-2 text-center">Choose Your Resume Template</h2>
-    <p class="text-sm text-slate-500 text-center mb-6">10 professionally designed templates — click one to select, then preview in Step 3</p>
+  <section id="step2" class="hidden max-w-5xl mx-auto" aria-labelledby="step2-heading">
+    <div class="text-center mb-6">
+      <h2 id="step2-heading" class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 mb-2">Choose your resume template</h2>
+      <p class="text-[15px] text-slate-600">Your details fill every template, so you can switch at any time without retyping.</p>
+    </div>
 
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
 
@@ -1193,9 +1322,10 @@ select.inp {
 
     <aside class="ad-slot" data-ad="native" aria-label="Advertisement" style="max-width:none"></aside>
 
-    <div class="flex justify-between items-center mt-4 mb-8">
-      <button class="btn-ghost" onclick="goStep(1)"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back</button>
-      <button class="btn-blue px-7 py-3 text-base" onclick="goStep(3)">Preview Resume <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+    <div class="step-actions">
+      <button type="button" class="btn-ghost" onclick="goStep(1)"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back</button>
+      <span class="hint">Selected: <strong id="sel-name" class="text-slate-800">Modern</strong></span>
+      <button type="button" class="btn-blue" onclick="goStep(3)">Preview &amp; download <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
     </div>
   </section>
 
@@ -1203,25 +1333,27 @@ select.inp {
   <section id="step3" class="hidden" aria-labelledby="step3-heading">
     <h2 id="step3-heading" class="sr-only">Resume Preview and Download</h2>
 
-    <!-- Mobile tabs -->
-    <div class="md:hidden flex border-b border-slate-200 mb-4 bg-white rounded-t-xl overflow-hidden" role="tablist" aria-label="Preview mode">
-      <button class="m-tab act flex-1" id="tab-edit" onclick="mobileTab('edit')" role="tab" aria-selected="true"><i class="fa-solid fa-pen-to-square mr-1" aria-hidden="true"></i>Edit</button>
-      <button class="m-tab flex-1" id="tab-prev" onclick="mobileTab('preview')" role="tab" aria-selected="false"><i class="fa-solid fa-eye mr-1" aria-hidden="true"></i>Preview</button>
+    <!-- Mobile: switch between the preview and the options panel -->
+    <div class="seg md:hidden" role="tablist" aria-label="Preview mode">
+      <button type="button" class="m-tab" id="tab-edit" onclick="mobileTab('edit')" role="tab" aria-selected="false"><i class="fa-solid fa-sliders" aria-hidden="true"></i>Options</button>
+      <button type="button" class="m-tab act" id="tab-prev" onclick="mobileTab('preview')" role="tab" aria-selected="true"><i class="fa-solid fa-eye" aria-hidden="true"></i>Preview</button>
     </div>
 
-    <div class="flex gap-5 items-start">
+    <div class="flex gap-6 items-start">
 
       <!-- Left panel -->
       <aside class="hidden md:flex flex-col w-72 lg:w-80 flex-shrink-0 gap-3" id="left-panel" aria-label="Resume summary">
-        <div class="bg-white rounded-2xl p-4" style="box-shadow:0 1px 3px rgba(0,0,0,.06)">
-          <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Resume Summary</div>
-          <div id="data-sum" class="text-xs text-slate-600 space-y-1.5 leading-relaxed" aria-live="polite"></div>
+        <div class="side-card">
+          <div class="side-title">Your resume</div>
+          <div id="data-sum" class="text-sm text-slate-600 space-y-2 leading-relaxed" aria-live="polite"></div>
         </div>
-        <button class="btn-ghost w-full justify-center text-sm" onclick="goStep(1)"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> Edit Details</button>
-        <button class="btn-ghost w-full justify-center text-sm" onclick="goStep(2)"><i class="fa-solid fa-palette" aria-hidden="true"></i> Change Template</button>
-        <button class="text-xs text-slate-400 hover:text-red-400 transition-colors py-2 text-center" onclick="resetCV()">
-          <i class="fa-solid fa-rotate-left mr-1" aria-hidden="true"></i>Start Over
-        </button>
+        <button type="button" class="btn-ghost w-full" onclick="goStep(1)"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> Edit details</button>
+        <button type="button" class="btn-ghost w-full" onclick="goStep(2)"><i class="fa-solid fa-table-cells-large" aria-hidden="true"></i> Browse templates</button>
+        <div class="side-card">
+          <div class="side-title">Which PDF should I send?</div>
+          <p class="text-sm text-slate-600 leading-relaxed"><strong class="text-slate-800">ATS PDF</strong> keeps real text: use it for online application portals. <strong class="text-slate-800">Download PDF</strong> is an exact image of the preview: good for email and print. <a class="link" href="/ats-resume" target="_blank" rel="noopener">How ATS works</a></p>
+        </div>
+        <button type="button" class="btn-link" onclick="resetCV()"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i>Start over</button>
 
         <!-- 300×250 needs ≥1024px here: the panel is 288px wide, so it is widened to 320px from lg up -->
         <aside class="ad-slot hidden lg:block" data-ad="300x250" aria-label="Advertisement" style="margin:0"></aside>
@@ -1230,39 +1362,41 @@ select.inp {
           <span class="flex-1"><span class="sp-tag block">Sponsored</span><span class="text-sm font-semibold">Today's recommended offers</span></span>
           <i class="fa-solid fa-arrow-up-right-from-square text-slate-300 text-xs" aria-hidden="true"></i>
         </a>
-
       </aside>
 
-      <!-- Mobile left panel -->
-      <div class="md:hidden w-full flex-col gap-2" id="mob-left" style="display:none">
-        <button class="btn-ghost w-full justify-center text-sm mb-2" onclick="goStep(1)"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> Edit</button>
-        <button class="btn-ghost w-full justify-center text-sm mb-2" onclick="goStep(2)"><i class="fa-solid fa-palette" aria-hidden="true"></i> Template</button>
-        <button class="text-xs text-slate-400 w-full text-center py-2" onclick="resetCV()">↺ Start Over</button>
+      <!-- Mobile options panel -->
+      <div class="md:hidden w-full flex-col gap-3" id="mob-left" style="display:none">
+        <button type="button" class="btn-ghost w-full" onclick="goStep(1)"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> Edit details</button>
+        <button type="button" class="btn-ghost w-full" onclick="goStep(2)"><i class="fa-solid fa-table-cells-large" aria-hidden="true"></i> Browse templates</button>
+        <div class="side-card">
+          <div class="side-title">Which PDF should I send?</div>
+          <p class="text-sm text-slate-600 leading-relaxed"><strong class="text-slate-800">ATS PDF</strong> keeps real text: use it for online application portals. <strong class="text-slate-800">Download PDF</strong> is an exact image of the preview: good for email and print.</p>
+        </div>
+        <button type="button" class="btn-link w-full" onclick="resetCV()"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i>Start over</button>
       </div>
 
       <!-- Preview panel -->
       <div class="flex-1 min-w-0" id="right-panel">
-        <div class="bg-white rounded-2xl overflow-hidden" style="box-shadow:0 1px 3px rgba(0,0,0,.06)">
-          <div class="flex items-center justify-between px-5 py-3.5 border-b border-slate-100">
-            <div class="flex items-center gap-2">
-              <div class="w-2.5 h-2.5 rounded-full bg-red-400"></div>
-              <div class="w-2.5 h-2.5 rounded-full bg-amber-400"></div>
-              <div class="w-2.5 h-2.5 rounded-full bg-emerald-400"></div>
-              <span class="text-xs text-slate-400 ml-2 font-medium">Format A4 · <span id="tpl-label">Modern</span></span>
+        <div class="preview-shell">
+          <div class="preview-bar">
+            <div class="meta">
+              <label for="tpl-switch" class="sr-only">Template</label>
+              <select id="tpl-switch" class="inp" onchange="selTpl(this.value)"></select>
+              <span id="pages-badge" class="pages-badge" aria-live="polite">1 page</span>
             </div>
-            <div class="flex items-center gap-2 flex-wrap justify-end">
-              <span id="valid-msg" class="text-xs text-amber-600 hidden max-w-48 text-right leading-tight" role="alert">Add Name, Email + at least one Experience or Education</span>
-              <button id="ats-btn" class="btn-ghost text-sm py-2 px-3" onclick="printATS()" disabled aria-label="Download ATS-friendly PDF via print" title="Text-based PDF — readable by ATS systems">
-                <i class="fa-solid fa-robot text-emerald-500" aria-hidden="true"></i>
+            <div class="dl-actions">
+              <button type="button" id="ats-btn" class="btn-ghost" onclick="printATS()" disabled aria-label="Download ATS-friendly PDF via print" title="Text-based PDF — readable by ATS systems">
+                <i class="fa-solid fa-file-lines text-emerald-600" aria-hidden="true"></i>
                 <span>ATS PDF</span>
               </button>
-              <button id="dl-btn" class="btn-blue text-sm py-2 px-4" onclick="downloadPDF()" disabled aria-label="Download resume as PDF">
+              <button type="button" id="dl-btn" class="btn-blue" onclick="downloadPDF()" disabled aria-label="Download resume as PDF">
                 <i id="dl-ico" class="fa-solid fa-download" aria-hidden="true"></i>
                 <i id="dl-spin" class="fa-solid fa-circle-notch spin-icon hidden" aria-hidden="true"></i>
                 <span id="dl-txt">Download PDF</span>
               </button>
             </div>
           </div>
+          <div id="valid-msg" class="valid-box" role="status"></div>
           <div id="preview-outer">
             <div id="cv-preview"></div>
           </div>
@@ -1283,34 +1417,34 @@ select.inp {
 </main>
 
 <!-- ══════════════ HOW IT WORKS ══════════════ -->
-<section class="max-w-3xl mx-auto px-4 py-12" aria-labelledby="hiw-heading">
-  <h2 id="hiw-heading" class="text-2xl font-bold text-slate-800 mb-2 text-center">How to Build Your Resume in 3 Steps</h2>
-  <p class="text-sm text-slate-500 text-center mb-10">No software to install. No account. Works on any device.</p>
+<section class="max-w-4xl mx-auto px-4 pt-14 pb-10" aria-labelledby="hiw-heading">
+  <h2 id="hiw-heading" class="sec-h2">How to Build Your Resume in 3 Steps</h2>
+  <p class="sec-sub">No software to install. No account. Works on any device.</p>
   <div class="relative">
     <div class="hidden md:block absolute left-1/2 top-7 h-0.5 w-2/3 -translate-x-1/2 bg-gradient-to-r from-blue-100 via-blue-300 to-blue-100" aria-hidden="true"></div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       <div class="hiw-step">
-        <div class="hiw-icon"><i class="fa-solid fa-user-pen text-blue-600" aria-hidden="true"></i></div>
+        <div class="hiw-icon"><i class="fa-solid fa-user-pen" aria-hidden="true"></i></div>
         <div>
-          <div class="text-xs font-bold text-blue-600 uppercase tracking-wider mb-1">Step 1</div>
+          <div class="text-xs font-bold text-blue-700 uppercase tracking-wider mb-1">Step 1</div>
           <div class="font-bold text-slate-800 mb-1">Enter Your Details</div>
-          <p class="text-sm text-slate-500 leading-relaxed">Fill in your name, work experience, education, and skills. All data stays in your browser — nothing is uploaded.</p>
+          <p class="text-sm text-slate-600 leading-relaxed">Fill in your name, work experience, education, and skills. All data stays in your browser — nothing is uploaded.</p>
         </div>
       </div>
       <div class="hiw-step">
-        <div class="hiw-icon"><i class="fa-solid fa-palette text-blue-600" aria-hidden="true"></i></div>
+        <div class="hiw-icon"><i class="fa-solid fa-palette" aria-hidden="true"></i></div>
         <div>
-          <div class="text-xs font-bold text-blue-600 uppercase tracking-wider mb-1">Step 2</div>
+          <div class="text-xs font-bold text-blue-700 uppercase tracking-wider mb-1">Step 2</div>
           <div class="font-bold text-slate-800 mb-1">Pick a Template</div>
-          <p class="text-sm text-slate-500 leading-relaxed">Choose from 10 professional designs — from clean ATS-friendly layouts to bold creative formats for any industry.</p>
+          <p class="text-sm text-slate-600 leading-relaxed">Choose from 10 professional designs — from clean ATS-friendly layouts to bold creative formats for any industry.</p>
         </div>
       </div>
       <div class="hiw-step">
-        <div class="hiw-icon"><i class="fa-solid fa-file-arrow-down text-blue-600" aria-hidden="true"></i></div>
+        <div class="hiw-icon"><i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i></div>
         <div>
-          <div class="text-xs font-bold text-blue-600 uppercase tracking-wider mb-1">Step 3</div>
+          <div class="text-xs font-bold text-blue-700 uppercase tracking-wider mb-1">Step 3</div>
           <div class="font-bold text-slate-800 mb-1">Download Free PDF</div>
-          <p class="text-sm text-slate-500 leading-relaxed">Preview your finished resume live, then download a perfectly formatted A4 PDF — no watermark, no email required.</p>
+          <p class="text-sm text-slate-600 leading-relaxed">Preview your finished resume live, then download a perfectly formatted A4 PDF — no watermark, no email required.</p>
         </div>
       </div>
     </div>
@@ -1323,43 +1457,43 @@ select.inp {
 
 <!-- ══════════════ FAQ SECTION (SEO) ══════════════ -->
 <section class="max-w-3xl mx-auto px-4 py-12" aria-labelledby="faq-heading">
-  <h2 id="faq-heading" class="text-2xl font-bold text-slate-800 mb-6 text-center">Frequently Asked Questions</h2>
-  <dl class="space-y-4">
-    <div class="bg-white rounded-xl px-6 py-5" style="box-shadow:0 1px 4px rgba(0,0,0,.07)">
-      <dt class="font-semibold text-slate-800 mb-1">Is this resume builder completely free?</dt>
-      <dd class="text-sm text-slate-500 leading-relaxed">Yes. MakeCV has no paid plan, no watermark and no account. The site is funded by ads, which never appear in the PDF you download.</dd>
+  <h2 id="faq-heading" class="sec-h2 mb-6">Frequently Asked Questions</h2>
+  <dl class="space-y-3">
+    <div class="faq-item">
+      <dt>Is this resume builder completely free?</dt>
+      <dd>Yes. MakeCV has no paid plan, no watermark and no account. The site is funded by ads, which never appear in the PDF you download.</dd>
     </div>
-    <div class="bg-white rounded-xl px-6 py-5" style="box-shadow:0 1px 4px rgba(0,0,0,.07)">
-      <dt class="font-semibold text-slate-800 mb-1">Do I need to create an account to download my resume?</dt>
-      <dd class="text-sm text-slate-500 leading-relaxed">No sign-up needed. Fill in your details, pick a template, and click Download — your PDF resume is ready instantly, with no email required.</dd>
+    <div class="faq-item">
+      <dt>Do I need to create an account to download my resume?</dt>
+      <dd>No sign-up needed. Fill in your details, pick a template, and click Download — your PDF resume is ready instantly, with no email required.</dd>
     </div>
-    <div class="bg-white rounded-xl px-6 py-5" style="box-shadow:0 1px 4px rgba(0,0,0,.07)">
-      <dt class="font-semibold text-slate-800 mb-1">What format is the resume exported in?</dt>
-      <dd class="text-sm text-slate-500 leading-relaxed">You get two PDF options. <strong>Download PDF</strong> creates an A4 PDF that looks exactly like the preview; it is rendered as an image, so its text cannot be selected. <strong>ATS PDF</strong> opens your browser's print dialog — choose “Save as PDF” to get a text-based PDF that applicant tracking systems can read. Use the ATS PDF for online applications (<a href="/ats-resume" class="text-blue-600 underline hover:text-blue-800">how ATS reads your resume</a>).</dd>
+    <div class="faq-item">
+      <dt>What format is the resume exported in?</dt>
+      <dd>You get two PDF options. <strong>Download PDF</strong> creates an A4 PDF that looks exactly like the preview; it is rendered as an image, so its text cannot be selected. <strong>ATS PDF</strong> opens your browser's print dialog — choose “Save as PDF” to get a text-based PDF that applicant tracking systems can read. Use the ATS PDF for online applications (<a href="/ats-resume" class="link">how ATS reads your resume</a>).</dd>
     </div>
-    <div class="bg-white rounded-xl px-6 py-5" style="box-shadow:0 1px 4px rgba(0,0,0,.07)">
-      <dt class="font-semibold text-slate-800 mb-1">Is my resume data stored or shared?</dt>
-      <dd class="text-sm text-slate-500 leading-relaxed">No. Your resume is built in your browser and is never sent to our servers. Nothing is saved either: refreshing the page clears the form, so finish and download your PDF in one session.</dd>
+    <div class="faq-item">
+      <dt>Is my resume data stored or shared?</dt>
+      <dd>No. Your resume is built in your browser and is never sent to our servers. Nothing is saved either: refreshing the page clears the form, so finish and download your PDF in one session.</dd>
     </div>
-    <div class="bg-white rounded-xl px-6 py-5" style="box-shadow:0 1px 4px rgba(0,0,0,.07)">
-      <dt class="font-semibold text-slate-800 mb-1">Which resume templates are available?</dt>
-      <dd class="text-sm text-slate-500 leading-relaxed">MakeCV offers 10 templates: Classic, Modern (sidebar), Minimalist, Creative, Executive, Tech/Dark, Bloom, Neon, Aurora and Swiss. <a href="/resume-templates" class="text-blue-600 underline hover:text-blue-800">Compare all 10 templates</a> to see which suits your industry and whether it is ATS-safe.</dd>
+    <div class="faq-item">
+      <dt>Which resume templates are available?</dt>
+      <dd>MakeCV offers 10 templates: Classic, Modern (sidebar), Minimalist, Creative, Executive, Tech/Dark, Bloom, Neon, Aurora and Swiss. <a href="/resume-templates" class="link">Compare all 10 templates</a> to see which suits your industry and whether it is ATS-safe.</dd>
     </div>
-    <div class="bg-white rounded-xl px-6 py-5" style="box-shadow:0 1px 4px rgba(0,0,0,.07)">
-      <dt class="font-semibold text-slate-800 mb-1">Will my downloaded resume have a watermark?</dt>
-      <dd class="text-sm text-slate-500 leading-relaxed">No. Every resume you download from MakeCV is watermark-free. The PDF is clean, with no branding overlaid on your content.</dd>
+    <div class="faq-item">
+      <dt>Will my downloaded resume have a watermark?</dt>
+      <dd>No. Every resume you download from MakeCV is watermark-free. The PDF is clean, with no branding overlaid on your content.</dd>
     </div>
-    <div class="bg-white rounded-xl px-6 py-5" style="box-shadow:0 1px 4px rgba(0,0,0,.07)">
-      <dt class="font-semibold text-slate-800 mb-1">Are the resume templates ATS-friendly?</dt>
-      <dd class="text-sm text-slate-500 leading-relaxed">Classic, Minimalist and Executive are single-column layouts with standard section headings, the safest choice for applicant tracking systems. Whichever template you pick, download it with the <strong>ATS PDF</strong> button so the text stays machine-readable. See the <a href="/ats-resume" class="text-blue-600 underline hover:text-blue-800">ATS-friendly resume guide</a>.</dd>
+    <div class="faq-item">
+      <dt>Are the resume templates ATS-friendly?</dt>
+      <dd>Classic, Minimalist and Executive are single-column layouts with standard section headings, the safest choice for applicant tracking systems. Whichever template you pick, download it with the <strong>ATS PDF</strong> button so the text stays machine-readable. See the <a href="/ats-resume" class="link">ATS-friendly resume guide</a>.</dd>
     </div>
-    <div class="bg-white rounded-xl px-6 py-5" style="box-shadow:0 1px 4px rgba(0,0,0,.07)">
-      <dt class="font-semibold text-slate-800 mb-1">Resume or CV — which one do I need?</dt>
-      <dd class="text-sm text-slate-500 leading-relaxed">In the US and Canada a resume is a 1–2 page summary of your experience, while a CV is a longer academic record. In the UK, Ireland and most of Europe, “CV” is simply the name for that 1–2 page document. MakeCV builds the 1–2 page version. <a href="/resume-vs-cv" class="text-blue-600 underline hover:text-blue-800">Resume vs CV explained</a>.</dd>
+    <div class="faq-item">
+      <dt>Resume or CV — which one do I need?</dt>
+      <dd>In the US and Canada a resume is a 1–2 page summary of your experience, while a CV is a longer academic record. In the UK, Ireland and most of Europe, “CV” is simply the name for that 1–2 page document. MakeCV builds the 1–2 page version. <a href="/resume-vs-cv" class="link">Resume vs CV explained</a>.</dd>
     </div>
-    <div class="bg-white rounded-xl px-6 py-5" style="box-shadow:0 1px 4px rgba(0,0,0,.07)">
-      <dt class="font-semibold text-slate-800 mb-1">Can I use this resume builder on my phone or tablet?</dt>
-      <dd class="text-sm text-slate-500 leading-relaxed">Yes. MakeCV works on desktop, tablet and mobile. On mobile you can switch between the edit view and a full live preview of your resume with a single tap.</dd>
+    <div class="faq-item">
+      <dt>Can I use this resume builder on my phone or tablet?</dt>
+      <dd>Yes. MakeCV works on desktop, tablet and mobile. On mobile you can switch between the edit view and a full live preview of your resume with a single tap.</dd>
     </div>
   </dl>
 </section>
@@ -1367,47 +1501,47 @@ select.inp {
 
 <!-- ══════════════ TEMPLATES & GUIDES (crawlable links to the content pages) ══════════════ -->
 <section class="max-w-3xl mx-auto px-4 pb-12" aria-labelledby="guides-heading">
-  <h2 id="guides-heading" class="text-2xl font-bold text-slate-800 mb-2 text-center">Resume Templates &amp; Guides</h2>
-  <p class="text-sm text-slate-500 text-center mb-6">Practical help for every section of your resume, plus a side-by-side look at all 10 templates.</p>
+  <h2 id="guides-heading" class="sec-h2">Resume Templates &amp; Guides</h2>
+  <p class="sec-sub" style="margin-bottom:24px">Practical help for every section of your resume, plus a side-by-side look at all 10 templates.</p>
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-    <a href="/resume-templates" class="bg-white rounded-xl px-5 py-4 flex gap-3 items-start hover:shadow-md transition-shadow" style="box-shadow:0 1px 4px rgba(0,0,0,.07)">
-      <i class="fa-solid fa-table-cells-large text-blue-600 mt-1" aria-hidden="true"></i>
-      <span><span class="block font-semibold text-slate-800 text-sm">All 10 resume templates</span><span class="block text-xs text-slate-500 leading-relaxed mt-0.5">Compare layouts, photo options and ATS safety with real previews.</span></span>
+    <a href="/resume-templates" class="guide-card">
+      <i class="fa-solid fa-table-cells-large" aria-hidden="true"></i>
+      <span><span class="block font-semibold text-slate-800 text-sm">All 10 resume templates</span><span class="block text-[13px] text-slate-600 leading-relaxed mt-0.5">Compare layouts, photo options and ATS safety with real previews.</span></span>
     </a>
-    <a href="/how-to-write-a-resume" class="bg-white rounded-xl px-5 py-4 flex gap-3 items-start hover:shadow-md transition-shadow" style="box-shadow:0 1px 4px rgba(0,0,0,.07)">
-      <i class="fa-solid fa-pen-nib text-blue-600 mt-1" aria-hidden="true"></i>
-      <span><span class="block font-semibold text-slate-800 text-sm">How to write a resume</span><span class="block text-xs text-slate-500 leading-relaxed mt-0.5">Every section step by step, with before-and-after examples.</span></span>
+    <a href="/how-to-write-a-resume" class="guide-card">
+      <i class="fa-solid fa-pen-nib" aria-hidden="true"></i>
+      <span><span class="block font-semibold text-slate-800 text-sm">How to write a resume</span><span class="block text-[13px] text-slate-600 leading-relaxed mt-0.5">Every section step by step, with before-and-after examples.</span></span>
     </a>
-    <a href="/ats-resume" class="bg-white rounded-xl px-5 py-4 flex gap-3 items-start hover:shadow-md transition-shadow" style="box-shadow:0 1px 4px rgba(0,0,0,.07)">
-      <i class="fa-solid fa-robot text-blue-600 mt-1" aria-hidden="true"></i>
-      <span><span class="block font-semibold text-slate-800 text-sm">ATS-friendly resume guide</span><span class="block text-xs text-slate-500 leading-relaxed mt-0.5">How tracking systems read resumes, and how to export a text-based PDF.</span></span>
+    <a href="/ats-resume" class="guide-card">
+      <i class="fa-solid fa-robot" aria-hidden="true"></i>
+      <span><span class="block font-semibold text-slate-800 text-sm">ATS-friendly resume guide</span><span class="block text-[13px] text-slate-600 leading-relaxed mt-0.5">How tracking systems read resumes, and how to export a text-based PDF.</span></span>
     </a>
-    <a href="/resume-format" class="bg-white rounded-xl px-5 py-4 flex gap-3 items-start hover:shadow-md transition-shadow" style="box-shadow:0 1px 4px rgba(0,0,0,.07)">
-      <i class="fa-solid fa-ruler-combined text-blue-600 mt-1" aria-hidden="true"></i>
-      <span><span class="block font-semibold text-slate-800 text-sm">Resume format</span><span class="block text-xs text-slate-500 leading-relaxed mt-0.5">Length, section order, PDF vs Word, A4 vs Letter, fonts.</span></span>
+    <a href="/resume-format" class="guide-card">
+      <i class="fa-solid fa-ruler-combined" aria-hidden="true"></i>
+      <span><span class="block font-semibold text-slate-800 text-sm">Resume format</span><span class="block text-[13px] text-slate-600 leading-relaxed mt-0.5">Length, section order, PDF vs Word, A4 vs Letter, fonts.</span></span>
     </a>
-    <a href="/resume-vs-cv" class="bg-white rounded-xl px-5 py-4 flex gap-3 items-start hover:shadow-md transition-shadow" style="box-shadow:0 1px 4px rgba(0,0,0,.07)">
-      <i class="fa-solid fa-scale-balanced text-blue-600 mt-1" aria-hidden="true"></i>
-      <span><span class="block font-semibold text-slate-800 text-sm">Resume vs CV</span><span class="block text-xs text-slate-500 leading-relaxed mt-0.5">What each word means in the US, UK, Europe and academia.</span></span>
+    <a href="/resume-vs-cv" class="guide-card">
+      <i class="fa-solid fa-scale-balanced" aria-hidden="true"></i>
+      <span><span class="block font-semibold text-slate-800 text-sm">Resume vs CV</span><span class="block text-[13px] text-slate-600 leading-relaxed mt-0.5">What each word means in the US, UK, Europe and academia.</span></span>
     </a>
-    <a href="/cv-template" class="bg-white rounded-xl px-5 py-4 flex gap-3 items-start hover:shadow-md transition-shadow" style="box-shadow:0 1px 4px rgba(0,0,0,.07)">
-      <i class="fa-solid fa-file-lines text-blue-600 mt-1" aria-hidden="true"></i>
-      <span><span class="block font-semibold text-slate-800 text-sm">UK CV template</span><span class="block text-xs text-slate-500 leading-relaxed mt-0.5">UK and Irish CV conventions and a personal statement formula.</span></span>
+    <a href="/cv-template" class="guide-card">
+      <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
+      <span><span class="block font-semibold text-slate-800 text-sm">UK CV template</span><span class="block text-[13px] text-slate-600 leading-relaxed mt-0.5">UK and Irish CV conventions and a personal statement formula.</span></span>
     </a>
-    <a href="/resume-summary-examples" class="bg-white rounded-xl px-5 py-4 flex gap-3 items-start hover:shadow-md transition-shadow" style="box-shadow:0 1px 4px rgba(0,0,0,.07)">
-      <i class="fa-solid fa-quote-left text-blue-600 mt-1" aria-hidden="true"></i>
-      <span><span class="block font-semibold text-slate-800 text-sm">Resume summary examples</span><span class="block text-xs text-slate-500 leading-relaxed mt-0.5">20 examples by career stage and field, plus a simple formula.</span></span>
+    <a href="/resume-summary-examples" class="guide-card">
+      <i class="fa-solid fa-quote-left" aria-hidden="true"></i>
+      <span><span class="block font-semibold text-slate-800 text-sm">Resume summary examples</span><span class="block text-[13px] text-slate-600 leading-relaxed mt-0.5">20 examples by career stage and field, plus a simple formula.</span></span>
     </a>
-    <a href="/resume-skills" class="bg-white rounded-xl px-5 py-4 flex gap-3 items-start hover:shadow-md transition-shadow" style="box-shadow:0 1px 4px rgba(0,0,0,.07)">
-      <i class="fa-solid fa-bolt text-blue-600 mt-1" aria-hidden="true"></i>
-      <span><span class="block font-semibold text-slate-800 text-sm">Skills for your resume</span><span class="block text-xs text-slate-500 leading-relaxed mt-0.5">How to choose and word skills, with lists for 12 fields.</span></span>
+    <a href="/resume-skills" class="guide-card">
+      <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+      <span><span class="block font-semibold text-slate-800 text-sm">Skills for your resume</span><span class="block text-[13px] text-slate-600 leading-relaxed mt-0.5">How to choose and word skills, with lists for 12 fields.</span></span>
     </a>
-    <a href="/resume-with-no-experience" class="bg-white rounded-xl px-5 py-4 flex gap-3 items-start hover:shadow-md transition-shadow" style="box-shadow:0 1px 4px rgba(0,0,0,.07)">
-      <i class="fa-solid fa-graduation-cap text-blue-600 mt-1" aria-hidden="true"></i>
-      <span><span class="block font-semibold text-slate-800 text-sm">Resume with no experience</span><span class="block text-xs text-slate-500 leading-relaxed mt-0.5">For students and first jobs: what to include and how.</span></span>
+    <a href="/resume-with-no-experience" class="guide-card">
+      <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+      <span><span class="block font-semibold text-slate-800 text-sm">Resume with no experience</span><span class="block text-[13px] text-slate-600 leading-relaxed mt-0.5">For students and first jobs: what to include and how.</span></span>
     </a>
   </div>
-  <p class="text-xs text-slate-500 text-center mt-5">Template styles:
+  <p class="text-[13px] text-slate-600 text-center mt-5 leading-8">Template styles:
     <a href="/resume-templates/simple" class="underline hover:text-blue-600">Simple</a> ·
     <a href="/resume-templates/modern" class="underline hover:text-blue-600">Modern</a> ·
     <a href="/resume-templates/minimalist" class="underline hover:text-blue-600">Minimalist</a> ·
@@ -1483,46 +1617,42 @@ select.inp {
 </section>
 
 <!-- ══════════════ FOOTER ══════════════ -->
-<footer class="bg-white border-t border-slate-100 mt-6" role="contentinfo">
-  <div class="max-w-7xl mx-auto px-5 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
-    <div class="flex items-center gap-2">
-      <div class="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center" aria-hidden="true">
-        <i class="fa-solid fa-file-lines text-white text-xs"></i>
-      </div>
-      <span class="font-bold text-slate-700">MakeCV</span>
-      <span class="text-slate-300">·</span>
-      <span class="text-sm text-slate-400">Free Resume Builder Online</span>
+<footer class="site-footer" role="contentinfo">
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <a href="/" class="logo" onclick="goStep(1);window.scrollTo({top:0});return false;"><span class="logo-mark" aria-hidden="true"><i class="fa-solid fa-file-lines"></i></span><span class="font-extrabold text-slate-800">MakeCV</span></a>
+      <p>Build a professional resume for free — no sign-up, no watermark, instant PDF download. Your resume never leaves your browser.</p>
     </div>
-    <p class="text-xs text-slate-400 text-center">
-      Build a professional resume for free — no sign-up, no watermark, instant PDF download. © 2026 MakeCV.
-      <br class="md:hidden">
-      <a href="/privacy" onclick="openPrivacy();return false;" class="underline hover:text-slate-600 transition-colors text-xs text-slate-400 mt-1">Privacy Policy</a>
-      &nbsp;·&nbsp;
-      <a href="/about" class="underline hover:text-slate-600 transition-colors text-xs text-slate-400">About</a>
-      &nbsp;·&nbsp;
-      <button onclick="document.getElementById('cookie-banner').classList.remove('hidden')" class="underline hover:text-slate-600 transition-colors bg-transparent border-none cursor-pointer text-xs text-slate-400">Cookie Settings</button>
-    </p>
-    <nav aria-label="Site links" class="flex gap-4 text-xs text-slate-400 flex-wrap justify-center">
-      <a href="#step1" onclick="goStep(1)" class="hover:text-slate-600 transition-colors">Resume Builder</a>
-      <span aria-hidden="true">·</span>
-      <a href="#step2" onclick="goStep(2)" class="hover:text-slate-600 transition-colors">CV Templates</a>
-      <span aria-hidden="true">·</span>
-      <a href="#faq-heading" class="hover:text-slate-600 transition-colors">FAQ</a>
-      <span aria-hidden="true">·</span>
-      <a href="#step3" onclick="goStep(3)" class="hover:text-slate-600 transition-colors">Download PDF Resume</a>
-    </nav>
+    <nav aria-label="Resume templates"><div class="foot-title">Templates</div><ul>
+      <li><a href="/resume-templates">Resume Templates</a></li>
+      <li><a href="/resume-templates/simple">Simple</a></li>
+      <li><a href="/resume-templates/modern">Modern</a></li>
+      <li><a href="/resume-templates/minimalist">Minimalist</a></li>
+      <li><a href="/resume-templates/creative">Creative</a></li>
+      <li><a href="/resume-templates/executive">Executive</a></li>
+      <li><a href="/resume-templates/tech">Tech</a></li>
+    </ul></nav>
+    <nav aria-label="Templates and guides"><div class="foot-title">Guides</div><ul>
+      <li><a href="/how-to-write-a-resume">How to Write a Resume</a></li>
+      <li><a href="/ats-resume">ATS Resume Guide</a></li>
+      <li><a href="/resume-format">Resume Format</a></li>
+      <li><a href="/resume-vs-cv">Resume vs CV</a></li>
+      <li><a href="/cv-template">UK CV Template</a></li>
+      <li><a href="/resume-summary-examples">Summary Examples</a></li>
+      <li><a href="/resume-skills">Resume Skills</a></li>
+      <li><a href="/resume-with-no-experience">Resume With No Experience</a></li>
+    </ul></nav>
+    <nav aria-label="Site links"><div class="foot-title">MakeCV</div><ul>
+      <li><a href="#step1" onclick="goStep(1)">Resume Builder</a></li>
+      <li><a href="#step2" onclick="goStep(2)">CV Templates</a></li>
+      <li><a href="#step3" onclick="goStep(3)">Download PDF Resume</a></li>
+      <li><a href="#faq-heading">FAQ</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/privacy" onclick="openPrivacy();return false;">Privacy Policy</a></li>
+      <li><button type="button" onclick="document.getElementById('cookie-banner').classList.remove('hidden')">Cookie Settings</button></li>
+    </ul></nav>
   </div>
-  <nav aria-label="Templates and guides" class="max-w-7xl mx-auto px-5 pb-8 -mt-2 flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-slate-400">
-    <a href="/resume-templates" class="hover:text-slate-600 transition-colors">Resume Templates</a>
-    <a href="/how-to-write-a-resume" class="hover:text-slate-600 transition-colors">How to Write a Resume</a>
-    <a href="/ats-resume" class="hover:text-slate-600 transition-colors">ATS Resume Guide</a>
-    <a href="/resume-format" class="hover:text-slate-600 transition-colors">Resume Format</a>
-    <a href="/resume-vs-cv" class="hover:text-slate-600 transition-colors">Resume vs CV</a>
-    <a href="/cv-template" class="hover:text-slate-600 transition-colors">UK CV Template</a>
-    <a href="/resume-summary-examples" class="hover:text-slate-600 transition-colors">Summary Examples</a>
-    <a href="/resume-skills" class="hover:text-slate-600 transition-colors">Resume Skills</a>
-    <a href="/resume-with-no-experience" class="hover:text-slate-600 transition-colors">Resume With No Experience</a>
-  </nav>
+  <div class="foot-bottom"><span>© 2026 MakeCV · Free Resume Builder Online</span><span>No sign-up · No watermark · Data stays in your browser</span></div>
 </footer>
 
 <script>
@@ -1538,6 +1668,7 @@ const cv = {
 
 let step = 1;
 let renderTmr = null;
+document.body.dataset.step = '1';
 
 // ════════════════════════════════
 //  NAVIGATION
@@ -1546,49 +1677,78 @@ function goStep(n) {
   [1,2,3].forEach(i => document.getElementById('step'+i).classList.add('hidden'));
   document.getElementById('step'+n).classList.remove('hidden');
   step = n;
+  document.body.dataset.step = String(n);
   updateProgress();
-  if (n === 3) { applyScale(); renderCV(); updateSummary(); loadHtml2pdf().catch(()=>{}); }
+  if (n === 1) renderMini();
+  if (n === 3) { renderCV(); applyScale(); updateSummary(); loadHtml2pdf().catch(()=>{}); }
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function updateProgress() {
-  const labels = ['Your Details','Template','Preview'];
   [1,2,3].forEach(i => {
     const d = document.getElementById('sd'+i);
+    d.className = 'step-btn' + (i<step?' done':i===step?' current':'');
+    if (i===step) d.setAttribute('aria-current','step'); else d.removeAttribute('aria-current');
     const l = document.getElementById('sl'+i);
-    const lb = document.getElementById('slb'+i);
-    d.className = 'step-dot ' + (i<step?'done':i===step?'current':'pending');
-    if (l) l.className = 'step-line mx-1' + (i<step?' done':'');
-    lb.className = 'step-label ' + (i<=step?'text-blue-600':'text-slate-400');
+    if (l) l.className = 'step-sep' + (i<step?' done':'');
   });
 }
 
 // ════════════════════════════════
-//  STATE UPDATE
+//  STATE UPDATE + RENDER QUEUE
 // ════════════════════════════════
+// One debounced re-render for every edit: the step-3 preview, or the step-1 live preview on wide screens.
+function queueRender() {
+  clearTimeout(renderTmr);
+  renderTmr = setTimeout(() => { if (step === 3) renderCV(); else if (step === 1) renderMini(); }, 250);
+}
 function upd(path, val) {
   const p = path.split('.');
   let o = cv;
   for (let i=0;i<p.length-1;i++) o=o[p[i]];
   o[p[p.length-1]] = val;
-  if (step===3) { clearTimeout(renderTmr); renderTmr=setTimeout(renderCV,300); }
+  queueRender();
 }
+
+// ════════════════════════════════
+//  INLINE VALIDATION (name + email are the only required fields)
+// ════════════════════════════════
+const RULES = {
+  'f-name':  v => v.trim().length > 2,
+  'f-email': v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()),
+};
+function setErr(el, bad) {
+  el.setAttribute('aria-invalid', bad ? 'true' : 'false');
+  const m = document.getElementById(el.id + '-err');
+  if (m) m.classList.toggle('show', bad);
+}
+function checkField(el) { const ok = RULES[el.id]; if (ok && el.value !== '') setErr(el, !ok(el.value)); }
+function clearErr(el) { if (el.getAttribute('aria-invalid') === 'true' && RULES[el.id](el.value)) setErr(el, false); }
 
 // ════════════════════════════════
 //  PHOTO
 // ════════════════════════════════
-document.getElementById('photo-input').addEventListener('change', e=>{
-  const f=e.target.files[0]; if(!f) return;
+document.getElementById('photo-input').addEventListener('change', ev=>{
+  const f=ev.target.files[0]; if(!f) return;
   const r=new FileReader();
-  r.onload=ev=>{
-    cv.personal.photo=ev.target.result;
+  r.onload=x=>{
+    cv.personal.photo=x.target.result;
     const img=document.getElementById('photo-img');
-    img.src=ev.target.result; img.style.display='block';
+    img.src=x.target.result; img.style.display='block';
     document.getElementById('photo-ph').style.display='none';
-    if(step===3) { clearTimeout(renderTmr); renderTmr=setTimeout(renderCV,300); }
+    document.getElementById('photo-rm').classList.remove('hidden');
+    queueRender();
   };
   r.readAsDataURL(f);
 });
+function removePhoto() {
+  cv.personal.photo=null;
+  const img=document.getElementById('photo-img'); img.removeAttribute('src'); img.style.display='none';
+  document.getElementById('photo-ph').style.display='';
+  document.getElementById('photo-rm').classList.add('hidden');
+  document.getElementById('photo-input').value='';
+  queueRender();
+}
 
 // ════════════════════════════════
 //  CHAR COUNT
@@ -1596,16 +1756,18 @@ document.getElementById('photo-input').addEventListener('change', e=>{
 function charCount(el) {
   const n=el.value.length;
   const s=document.getElementById('char-cnt');
-  s.textContent=n+' characters';
-  s.className='text-xs '+(n<300?'text-amber-500':n<=500?'text-emerald-500':'text-red-500');
+  s.textContent=n+' characters'+(n && n<300?' · a bit short':n>500?' · try to trim':'');
+  s.className='text-xs font-semibold '+(n===0?'text-slate-500':n<300?'text-amber-700':n<=500?'text-emerald-700':'text-red-600');
 }
 
 // ════════════════════════════════
 //  MONTHS / YEARS
 // ════════════════════════════════
 const MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const moOpts = MO.map((m,i)=>`<option value="${i+1}">${m}</option>`).join('');
-const yrOpts = Array.from({length:30},(_,i)=>2026-i).map(y=>`<option value="${y}">${y}</option>`).join('');
+const YEARS=Array.from({length:45},(_,i)=>2030-i);
+// Options keep the entry's current value selected, so re-rendering a list (add/remove, "Present") never wipes dates.
+const moOpts = v => '<option value="">Month</option>'+MO.map((m,i)=>`<option value="${i+1}" ${String(v)===String(i+1)?'selected':''}>${m}</option>`).join('');
+const yrOpts = v => '<option value="">Year</option>'+YEARS.map(y=>`<option value="${y}" ${String(v)===String(y)?'selected':''}>${y}</option>`).join('');
 
 // ════════════════════════════════
 //  REPEATABLE ENTRIES
@@ -1622,17 +1784,22 @@ function addEntry(type) {
   else if(type==='projects') cv.projects.push({name:'',description:'',url:'',tech:''});
   else if(type==='certifications') cv.certifications.push({name:'',org:'',year:'',url:''});
   renderList(type);
+  queueRender();
+  // focus the first field of the new entry
+  const c=document.getElementById(listIds[type]);
+  const last=c && c.lastElementChild; const f=last && last.querySelector('input,select,textarea');
+  if(f) f.focus({preventScroll:false});
 }
 
 function removeEntry(type,idx) {
   cv[type].splice(idx,1);
   renderList(type);
-  if(step===3) { clearTimeout(renderTmr); renderTmr=setTimeout(renderCV,300); }
+  queueRender();
 }
 
 function updEntry(type,idx,field,val) {
   cv[type][idx][field]=(val==='true'?true:val==='false'?false:val);
-  if(step===3) { clearTimeout(renderTmr); renderTmr=setTimeout(renderCV,300); }
+  queueRender();
 }
 
 function renderList(type) {
@@ -1642,6 +1809,7 @@ function renderList(type) {
   cv[type].forEach((item,idx)=>{
     const d=document.createElement('div');
     d.className='entry-card fade-up';
+    d.setAttribute('role','listitem');
     d.innerHTML=entryForm(type,idx,item);
     c.appendChild(d);
   });
@@ -1650,79 +1818,85 @@ function renderList(type) {
 }
 
 function entryForm(type,idx,item) {
-  const rm=`<button class="btn-del" onclick="removeEntry('${type}',${idx})" aria-label="Remove entry"><i class="fa-solid fa-xmark mr-1" aria-hidden="true"></i>Remove</button>`;
-  if(type==='experience') return `
-    <div class="flex justify-between items-start mb-3"><span class="text-xs font-semibold text-slate-400">Experience #${idx+1}</span>${rm}</div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-      <div class="field"><label class="lbl">Job Title</label><input class="inp" type="text" value="${e(item.title)}" placeholder="Senior Frontend Developer" oninput="updEntry('experience',${idx},'title',this.value)"></div>
-      <div class="field"><label class="lbl">Company</label><input class="inp" type="text" value="${e(item.company)}" placeholder="Google LLC" oninput="updEntry('experience',${idx},'company',this.value)"></div>
-      <div class="field"><label class="lbl">Start Date</label><div class="flex gap-2"><select class="inp" onchange="updEntry('experience',${idx},'startMonth',this.value)"><option value="">Month</option>${moOpts}</select><select class="inp" onchange="updEntry('experience',${idx},'startYear',this.value)"><option value="">Year</option>${yrOpts}</select></div></div>
-      <div class="field"><label class="lbl">End Date</label><div class="flex gap-2"><select class="inp" onchange="updEntry('experience',${idx},'endMonth',this.value)" ${item.current?'disabled':''}><option value="">Month</option>${moOpts}</select><select class="inp" onchange="updEntry('experience',${idx},'endYear',this.value)" ${item.current?'disabled':''}><option value="">Year</option>${yrOpts}</select></div><label class="flex items-center gap-1.5 mt-1.5 text-xs text-slate-600 cursor-pointer"><input type="checkbox" ${item.current?'checked':''} onchange="updEntry('experience',${idx},'current',this.checked.toString());renderList('experience')"> Present</label></div>
-      <div class="field"><label class="lbl">Location</label><input class="inp" type="text" value="${e(item.location)}" placeholder="San Francisco, CA" oninput="updEntry('experience',${idx},'location',this.value)"></div>
-      <div class="field sm:col-span-2"><label class="lbl">Responsibilities & Achievements</label><textarea class="inp" rows="3" placeholder="Key responsibilities, achievements, and impact..." oninput="updEntry('experience',${idx},'description',this.value)">${e(item.description)}</textarea></div>
+  const id=f=>`x-${type}-${idx}-${f}`;
+  const rm=`<button type="button" class="btn-del" onclick="removeEntry('${type}',${idx})"><i class="fa-solid fa-trash-can" aria-hidden="true"></i>Remove</button>`;
+  const head=label=>`<div class="entry-head"><span class="entry-num">${label} ${idx+1}</span>${rm}</div>`;
+  const inp=(f,label,ph,extra='')=>`<div class="field"><label class="lbl" for="${id(f)}">${label}</label><input class="inp" id="${id(f)}" type="text" value="${e(item[f])}" placeholder="${ph}" oninput="updEntry('${type}',${idx},'${f}',this.value)" ${extra}></div>`;
+  if(type==='experience') return head('Experience')+`
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
+      ${inp('title','Job title','Senior Frontend Developer')}
+      ${inp('company','Company','Google LLC')}
+      <div class="field"><span class="lbl" id="${id('start')}">Start date</span><div class="flex gap-2" role="group" aria-labelledby="${id('start')}"><select class="inp" aria-label="Start month" onchange="updEntry('experience',${idx},'startMonth',this.value)">${moOpts(item.startMonth)}</select><select class="inp" aria-label="Start year" onchange="updEntry('experience',${idx},'startYear',this.value)">${yrOpts(item.startYear)}</select></div></div>
+      <div class="field"><span class="lbl" id="${id('end')}">End date</span><div class="flex gap-2" role="group" aria-labelledby="${id('end')}"><select class="inp" aria-label="End month" onchange="updEntry('experience',${idx},'endMonth',this.value)" ${item.current?'disabled':''}>${moOpts(item.endMonth)}</select><select class="inp" aria-label="End year" onchange="updEntry('experience',${idx},'endYear',this.value)" ${item.current?'disabled':''}>${yrOpts(item.endYear)}</select></div><label class="check mt-1"><input type="checkbox" ${item.current?'checked':''} onchange="updEntry('experience',${idx},'current',this.checked.toString());renderList('experience')"> I currently work here</label></div>
+      ${inp('location','Location','San Francisco, CA')}
+      <div class="field sm:col-span-2"><label class="lbl" for="${id('description')}">Responsibilities &amp; achievements</label><textarea class="inp" id="${id('description')}" rows="4" placeholder="Led the redesign of the checkout, raising conversion by 12%&#10;Mentored 3 junior developers&#10;Cut page load time from 4s to 1.5s" oninput="updEntry('experience',${idx},'description',this.value)" aria-describedby="${id('dhelp')}">${e(item.description)}</textarea><p class="field-help" id="${id('dhelp')}">One achievement per line. Start with a verb and add a number where you can.</p></div>
     </div>`;
-  if(type==='education') return `
-    <div class="flex justify-between items-start mb-3"><span class="text-xs font-semibold text-slate-400">Education #${idx+1}</span>${rm}</div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-      <div class="field"><label class="lbl">Degree / Major</label><input class="inp" type="text" value="${e(item.degree)}" placeholder="B.Sc. Computer Science" oninput="updEntry('education',${idx},'degree',this.value)"></div>
-      <div class="field"><label class="lbl">Institution</label><input class="inp" type="text" value="${e(item.institution)}" placeholder="MIT" oninput="updEntry('education',${idx},'institution',this.value)"></div>
-      <div class="field"><label class="lbl">Start Year</label><select class="inp" onchange="updEntry('education',${idx},'startYear',this.value)"><option value="">Year</option>${yrOpts}</select></div>
-      <div class="field"><label class="lbl">End Year</label><select class="inp" onchange="updEntry('education',${idx},'endYear',this.value)" ${item.current?'disabled':''}><option value="">Year</option>${yrOpts}</select><label class="flex items-center gap-1.5 mt-1.5 text-xs text-slate-600 cursor-pointer"><input type="checkbox" ${item.current?'checked':''} onchange="updEntry('education',${idx},'current',this.checked.toString());renderList('education')"> Present</label></div>
-      <div class="field sm:col-span-2"><label class="lbl">Honors / GPA (optional)</label><input class="inp" type="text" value="${e(item.notes)}" placeholder="GPA 3.9 / 4.0, Magna Cum Laude" oninput="updEntry('education',${idx},'notes',this.value)"></div>
+  if(type==='education') return head('Education')+`
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
+      ${inp('degree','Degree / major','B.Sc. Computer Science')}
+      ${inp('institution','School / university','MIT')}
+      <div class="field"><label class="lbl" for="${id('startYear')}">Start year</label><select class="inp" id="${id('startYear')}" onchange="updEntry('education',${idx},'startYear',this.value)">${yrOpts(item.startYear)}</select></div>
+      <div class="field"><label class="lbl" for="${id('endYear')}">End year (or expected)</label><select class="inp" id="${id('endYear')}" onchange="updEntry('education',${idx},'endYear',this.value)" ${item.current?'disabled':''}>${yrOpts(item.endYear)}</select><label class="check mt-1"><input type="checkbox" ${item.current?'checked':''} onchange="updEntry('education',${idx},'current',this.checked.toString());renderList('education')"> I study here now</label></div>
+      <div class="sm:col-span-2">${inp('notes','Honors, GPA or coursework (optional)','GPA 3.9 / 4.0, Magna Cum Laude')}</div>
     </div>`;
   if(type==='languages') return `
-    <div class="flex gap-3 items-center">
-      <div class="flex-1"><label class="lbl">Language</label><input class="inp" type="text" value="${e(item.name)}" placeholder="English" oninput="updEntry('languages',${idx},'name',this.value)"></div>
-      <div style="width:140px"><label class="lbl">Level</label><select class="inp" onchange="updEntry('languages',${idx},'level',this.value)">${['A1','A2','B1','B2','C1','C2','Native'].map(l=>`<option value="${l}" ${item.level===l?'selected':''}>${l}</option>`).join('')}</select></div>
-      <div class="mt-5">${rm}</div>
+    <div class="flex gap-3 items-end flex-wrap sm:flex-nowrap">
+      <div class="flex-1 min-w-[140px]">${inp('name','Language','English')}</div>
+      <div style="width:130px"><label class="lbl" for="${id('level')}">Level</label><select class="inp" id="${id('level')}" onchange="updEntry('languages',${idx},'level',this.value)">${['A1','A2','B1','B2','C1','C2','Native'].map(l=>`<option value="${l}" ${item.level===l?'selected':''}>${l}</option>`).join('')}</select></div>
+      <div>${rm}</div>
     </div>`;
-  if(type==='projects') return `
-    <div class="flex justify-between items-start mb-3"><span class="text-xs font-semibold text-slate-400">Project #${idx+1}</span>${rm}</div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-      <div class="field"><label class="lbl">Project Name</label><input class="inp" type="text" value="${e(item.name)}" placeholder="Resume Builder App" oninput="updEntry('projects',${idx},'name',this.value)"></div>
-      <div class="field"><label class="lbl">URL (optional)</label><input class="inp" type="url" value="${e(item.url)}" placeholder="github.com/user/repo" oninput="updEntry('projects',${idx},'url',this.value)"></div>
-      <div class="field sm:col-span-2"><label class="lbl">Description</label><textarea class="inp" rows="2" placeholder="What the project does and your role in it..." oninput="updEntry('projects',${idx},'description',this.value)">${e(item.description)}</textarea></div>
-      <div class="field sm:col-span-2"><label class="lbl">Technologies Used</label><input class="inp" type="text" value="${e(item.tech)}" placeholder="React, Node.js, PostgreSQL" oninput="updEntry('projects',${idx},'tech',this.value)"></div>
+  if(type==='projects') return head('Project')+`
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
+      ${inp('name','Project name','Resume Builder App')}
+      ${inp('url','Link (optional)','github.com/user/repo','inputmode="url"')}
+      <div class="field sm:col-span-2"><label class="lbl" for="${id('description')}">What it does and your role</label><textarea class="inp" id="${id('description')}" rows="2" placeholder="What the project does and your role in it..." oninput="updEntry('projects',${idx},'description',this.value)">${e(item.description)}</textarea></div>
+      <div class="sm:col-span-2">${inp('tech','Tools / technologies','React, Node.js, PostgreSQL')}</div>
     </div>`;
-  if(type==='certifications') return `
-    <div class="flex justify-between items-start mb-3"><span class="text-xs font-semibold text-slate-400">Certification #${idx+1}</span>${rm}</div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-      <div class="field"><label class="lbl">Certification Name</label><input class="inp" type="text" value="${e(item.name)}" placeholder="AWS Certified Developer" oninput="updEntry('certifications',${idx},'name',this.value)"></div>
-      <div class="field"><label class="lbl">Issuing Organization</label><input class="inp" type="text" value="${e(item.org)}" placeholder="Amazon Web Services" oninput="updEntry('certifications',${idx},'org',this.value)"></div>
-      <div class="field"><label class="lbl">Year Obtained</label><input class="inp" type="number" value="${e(item.year)}" placeholder="2024" min="2000" max="2030" oninput="updEntry('certifications',${idx},'year',this.value)"></div>
-      <div class="field"><label class="lbl">Certificate URL</label><input class="inp" type="url" value="${e(item.url)}" placeholder="credly.com/badges/..." oninput="updEntry('certifications',${idx},'url',this.value)"></div>
+  if(type==='certifications') return head('Certification')+`
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
+      ${inp('name','Certification name','AWS Certified Developer')}
+      ${inp('org','Issuing organization','Amazon Web Services')}
+      ${inp('year','Year','2024','inputmode="numeric" maxlength="4"')}
+      ${inp('url','Certificate link (optional)','credly.com/badges/...','inputmode="url"')}
     </div>`;
 }
 
 // ════════════════════════════════
-//  SKILLS
+//  SKILLS  (levels are stored as 'Începător' | 'Mediu' | 'Avansat' — barW() depends on these exact strings)
 // ════════════════════════════════
+const LEVELS=[['Începător','Beginner'],['Mediu','Intermediate'],['Avansat','Advanced']];
+function addSkill(raw) {
+  const v=String(raw||'').replace(/,/g,'').trim();
+  if(v && !cv.skills.find(s=>s.name.toLowerCase()===v.toLowerCase())) {
+    cv.skills.push({name:v,level:'Mediu'});
+    renderSkills();
+    queueRender();
+  }
+}
 function skillKey(evt) {
   if(evt.key==='Enter'||evt.key===','){
     evt.preventDefault();
-    const v=evt.target.value.replace(',','').trim();
-    if(v && !cv.skills.find(s=>s.name===v)) {
-      cv.skills.push({name:v,level:'Mediu'});
-      renderSkills();
-      if(step===3) { clearTimeout(renderTmr); renderTmr=setTimeout(renderCV,300); }
-    }
+    addSkill(evt.target.value);
     evt.target.value='';
   }
 }
+function addSkillFromInput() {
+  const el=document.getElementById('skill-inp');
+  el.value.split(',').forEach(addSkill);
+  el.value=''; el.focus();
+}
 function removeSkill(i) {
   cv.skills.splice(i,1); renderSkills();
-  if(step===3) { clearTimeout(renderTmr); renderTmr=setTimeout(renderCV,300); }
+  queueRender();
 }
 function renderSkills() {
   document.getElementById('skills-wrap').innerHTML=cv.skills.map((s,i)=>`
-    <div class="skill-pill">
-      ${e(s.name)}
-      <select title="Level" onchange="cv.skills[${i}].level=this.value;if(step===3){clearTimeout(renderTmr);renderTmr=setTimeout(renderCV,300);}">
-        <option value="Începător" ${s.level==='Începător'?'selected':''}>·</option>
-        <option value="Mediu" ${s.level==='Mediu'?'selected':''}>··</option>
-        <option value="Avansat" ${s.level==='Avansat'?'selected':''}>···</option>
+    <div class="skill-pill" role="listitem">
+      <span>${e(s.name)}</span>
+      <select aria-label="Level for ${e(s.name)}" onchange="cv.skills[${i}].level=this.value;queueRender()">
+        ${LEVELS.map(([v,l])=>`<option value="${v}" ${s.level===v?'selected':''}>${l}</option>`).join('')}
       </select>
-      <button onclick="removeSkill(${i})">×</button>
+      <button type="button" onclick="removeSkill(${i})" aria-label="Remove ${e(s.name)}">×</button>
     </div>`).join('');
 }
 
@@ -1732,61 +1906,87 @@ function renderSkills() {
 const tplNames={clasic:'Classic',modern:'Modern',minimalist:'Minimalist',creativ:'Creative',executive:'Executive',tech:'Tech / Dark',bloom:'Bloom',neon:'Neon',aurora:'Aurora',swiss:'Swiss'};
 
 function selTpl(name) {
+  if(!TPLS[name]) return;
   cv.selectedTemplate=name;
-  document.querySelectorAll('.tpl-card').forEach(c=>c.classList.remove('sel'));
-  document.getElementById('tc-'+name).classList.add('sel');
+  document.querySelectorAll('.tpl-card').forEach(c=>{ const on=c.id==='tc-'+name; c.classList.toggle('sel',on); c.setAttribute('aria-pressed',on?'true':'false'); });
+  const sw=document.getElementById('tpl-switch'); if(sw) sw.value=name;
+  ['sel-name','mini-tpl'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=tplNames[name]; });
   if(step===3){
     const p=document.getElementById('cv-preview');
     p.style.opacity='0';
-    setTimeout(()=>{ renderCV(); p.style.opacity='1'; },200);
-    document.getElementById('tpl-label').textContent=tplNames[name];
-  }
+    setTimeout(()=>{ renderCV(); p.style.opacity='1'; },150);
+    updateSummary();
+  } else if(step===1) renderMini();
 }
 
 // ════════════════════════════════
 //  A4 SCALE (dynamic, responsive)
 // ════════════════════════════════
+const A4W=794, A4H=1123;
 function applyScale() {
   const outer=document.getElementById('preview-outer');
   const preview=document.getElementById('cv-preview');
-  const avail=outer.clientWidth - 48; // 24px padding each side
-  const a4w=794, a4h=1123;
-  const scale=Math.min(avail/a4w, 1);
+  const cs=getComputedStyle(outer);
+  const avail=outer.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+  const scale=Math.min(avail/A4W, 1);
+  const h=Math.max(preview.scrollHeight, A4H);
   preview.style.transform=`scale(${scale})`;
   preview.style.transformOrigin='top center';
-  // Adjust outer height so it wraps correctly
-  outer.style.minHeight=(a4h*scale+48)+'px';
-  // Negative margin trick: pull up the space after the scaled element
-  preview.style.marginBottom=(a4h*(scale-1))+'px';
+  // Negative margin pulls up the space the unscaled element still occupies
+  preview.style.marginBottom=(h*(scale-1))+'px';
 }
-window.addEventListener('resize',()=>{ if(step===3) applyScale(); });
+// Step-1 live preview (≥1280px): the scaled page fits the column width and the viewport height.
+function renderMini() {
+  const box=document.getElementById('mini-preview');
+  if(!box || !window.matchMedia('(min-width: 1280px)').matches) return;
+  box.innerHTML=TPLS[cv.selectedTemplate](cv);
+  const p=cv.personal;
+  document.getElementById('mini-empty').style.display=(p.name||p.email||cv.summary||cv.experience.length||cv.education.length)?'none':'';
+  const stage=document.getElementById('mini-stage');
+  const w=stage.clientWidth-28;
+  const hMax=window.innerHeight - 64 - 20 - 46 - 28 - 24;
+  const scale=Math.max(0.3, Math.min(w/A4W, hMax/A4H));
+  box.style.transform=`scale(${scale})`;
+  box.style.marginBottom=(A4H*(scale-1))+'px';
+  stage.style.height=(A4H*scale+28)+'px';
+}
+let rsTmr=null;
+window.addEventListener('resize',()=>{ clearTimeout(rsTmr); rsTmr=setTimeout(()=>{ if(step===3) applyScale(); if(step===1) renderMini(); },120); });
 
 // ════════════════════════════════
 //  MOBILE TABS
 // ════════════════════════════════
 function mobileTab(tab) {
-  document.getElementById('tab-edit').classList.toggle('act',tab==='edit');
-  document.getElementById('tab-prev').classList.toggle('act',tab==='preview');
-  const ml=document.getElementById('mob-left');
-  const rp=document.getElementById('right-panel');
-  ml.style.display=tab==='edit'?'flex':'none';
-  rp.style.display=tab==='preview'?'block':'none';
+  const te=document.getElementById('tab-edit'), tp=document.getElementById('tab-prev');
+  te.classList.toggle('act',tab==='edit'); te.setAttribute('aria-selected',tab==='edit');
+  tp.classList.toggle('act',tab==='preview'); tp.setAttribute('aria-selected',tab==='preview');
+  document.getElementById('mob-left').style.display=tab==='edit'?'flex':'none';
+  document.getElementById('right-panel').style.display=tab==='preview'?'block':'none';
   if(tab==='preview') applyScale();
 }
 
 // ════════════════════════════════
 //  VALIDATION
 // ════════════════════════════════
-function isValid() {
-  return cv.personal.name.trim().length>2 &&
-    cv.personal.email.includes('@') &&
-    (cv.experience.length>0 || cv.education.length>0);
+function missing() {
+  const m=[];
+  if(!(cv.personal.name.trim().length>2)) m.push(['f-name','your full name']);
+  if(!cv.personal.email.includes('@')) m.push(['f-email','an email address']);
+  if(!(cv.experience.length>0 || cv.education.length>0)) m.push(['btn-exp','at least one job or school']);
+  return m;
+}
+function isValid() { return missing().length===0; }
+function fixField(id) {
+  goStep(1);
+  setTimeout(()=>{ const el=document.getElementById(id); if(el){ el.scrollIntoView({block:'center'}); el.focus({preventScroll:true}); if(RULES[id]) setErr(el,true); } },350);
 }
 function updateDlBtn() {
-  const v=isValid();
+  const m=missing(), v=m.length===0;
   document.getElementById('dl-btn').disabled=!v;
   document.getElementById('ats-btn').disabled=!v;
-  document.getElementById('valid-msg').classList.toggle('hidden',v);
+  const box=document.getElementById('valid-msg');
+  box.classList.toggle('show',!v);
+  box.innerHTML=v?'':'<i class="fa-solid fa-circle-info mr-1" aria-hidden="true"></i>To download, add '+m.map(([id,t])=>`<button type="button" onclick="fixField('${id}')">${t}</button>`).join(', ')+'.';
 }
 
 // ════════════════════════════════
@@ -1796,16 +1996,13 @@ function updateSummary() {
   const el=document.getElementById('data-sum');
   if(!el) return;
   const p=cv.personal;
-  el.innerHTML=`
-    <div class="flex items-center gap-2"><i class="fa-regular fa-user text-blue-400 w-3" aria-hidden="true"></i><span><b>Name:</b> ${e(p.name)||'—'}</span></div>
-    <div class="flex items-center gap-2"><i class="fa-solid fa-briefcase text-blue-400 w-3" aria-hidden="true"></i><span><b>Title:</b> ${e(p.title)||'—'}</span></div>
-    <div class="flex items-center gap-2"><i class="fa-regular fa-envelope text-blue-400 w-3" aria-hidden="true"></i><span>${e(p.email)||'—'}</span></div>
-    <div class="flex items-center gap-2"><i class="fa-solid fa-palette text-blue-400 w-3" aria-hidden="true"></i><span><b>Template:</b> ${tplNames[cv.selectedTemplate]}</span></div>
-    <div class="flex items-center gap-2"><i class="fa-solid fa-briefcase text-slate-300 w-3" aria-hidden="true"></i><span>${cv.experience.length} experience entries</span></div>
-    <div class="flex items-center gap-2"><i class="fa-solid fa-graduation-cap text-slate-300 w-3" aria-hidden="true"></i><span>${cv.education.length} education entries</span></div>
-    <div class="flex items-center gap-2"><i class="fa-solid fa-bolt text-slate-300 w-3" aria-hidden="true"></i><span>${cv.skills.length} skills</span></div>
-  `;
-  document.getElementById('tpl-label').textContent=tplNames[cv.selectedTemplate];
+  const row=(ic,txt,ok)=>`<div class="flex items-center gap-2"><i class="fa-solid ${ok?'fa-circle-check text-emerald-600':'fa-circle text-slate-300'} w-4" aria-hidden="true"></i><span>${txt}</span></div>`;
+  el.innerHTML=
+    row('',`<b class="text-slate-800">${e(p.name)||'No name yet'}</b>${p.title?' · '+e(p.title):''}`,!!p.name)+
+    row('',e(p.email)||'No email yet',!!p.email)+
+    row('',`${cv.experience.length} job${cv.experience.length===1?'':'s'} · ${cv.education.length} school${cv.education.length===1?'':'s'}`,cv.experience.length+cv.education.length>0)+
+    row('',`${cv.skills.length} skill${cv.skills.length===1?'':'s'}`,cv.skills.length>0)+
+    row('',`Template: <b class="text-slate-800">${tplNames[cv.selectedTemplate]}</b>`,true);
 }
 
 // ════════════════════════════════
@@ -1826,8 +2023,15 @@ function barW(lvl) { return lvl==='Avansat'?92:lvl==='Mediu'?62:32; }
 //  RENDER CV
 // ════════════════════════════════
 function renderCV() {
-  document.getElementById('cv-preview').innerHTML=TPLS[cv.selectedTemplate](cv);
+  const p=document.getElementById('cv-preview');
+  p.innerHTML=TPLS[cv.selectedTemplate](cv);
   updateDlBtn();
+  // page count: content taller than one A4 page spills onto a second page in both PDFs
+  const pages=Math.max(1, Math.ceil((p.scrollHeight-4)/A4H));
+  const b=document.getElementById('pages-badge');
+  b.textContent=pages===1?'Fits on 1 page':pages+' pages';
+  b.classList.toggle('multi',pages>1);
+  applyScale();
 }
 
 // ════════════════════════════════
@@ -2236,9 +2440,9 @@ function resetCV() {
   cv.summary=''; cv.experience=[]; cv.education=[]; cv.skills=[]; cv.languages=[]; cv.projects=[]; cv.certifications=[];
   cv.selectedTemplate='modern';
   ['f-name','f-title','f-email','f-phone','f-city','f-linkedin','f-website','f-summary'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  const img=document.getElementById('photo-img'); img.src=''; img.style.display='none';
-  document.getElementById('photo-ph').style.display='';
-  document.getElementById('char-cnt').textContent='0 characters';
+  removePhoto();
+  ['f-name','f-email'].forEach(id=>setErr(document.getElementById(id),false));
+  charCount(document.getElementById('f-summary'));
   ['experience','education','languages','projects','certifications'].forEach(renderList);
   renderSkills();
   selTpl('modern');
@@ -2250,6 +2454,9 @@ function resetCV() {
 // ════════════════════════════════
 ['experience','education','languages','projects','certifications'].forEach(renderList);
 renderSkills();
+document.getElementById('tpl-switch').innerHTML=Object.keys(TPLS).map(k=>`<option value="${k}">${tplNames[k]}</option>`).join('');
+selTpl(cv.selectedTemplate);
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{ if(step===1) renderMini(); });
 
 // Deep link from /resume-templates: /?template=<key> preselects that template (the canonical stays /).
 (function(){
