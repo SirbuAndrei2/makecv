@@ -194,6 +194,27 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=DM+Sans:wght@300;400;500;700&family=Nunito:wght@400;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Space+Grotesk:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <!-- Font Awesome 6 -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!-- Google Analytics 4 — set GA_ID to makecv.org's web data stream (G-…); empty = no tag.
+     Consent Mode v2: storage denied by default in the EEA/UK/CH, granted elsewhere; the cookie banner's choice overrides it.
+     Runs only on makecv.org, so local previews never reach the reports. -->
+<script>
+(function () {
+  var GA_ID = '';
+  if (!GA_ID || location.hostname !== 'makecv.org') return;
+  var GRANTED = { ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted', analytics_storage: 'granted' };
+  var DENIED = { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied' };
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { dataLayer.push(arguments); };
+  gtag('consent', 'default', Object.assign({}, DENIED, { region: ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IS','IE','IT','LV','LI','LT','LU','MT','NL','NO','PL','PT','RO','SK','SI','ES','SE','GB','CH'] }));
+  gtag('consent', 'default', GRANTED);
+  try { var c = localStorage.getItem('makecv_cookie_consent'); if (c === 'accepted') gtag('consent', 'update', GRANTED); if (c === 'declined') gtag('consent', 'update', DENIED); } catch (e) {}
+  gtag('js', new Date());
+  gtag('config', GA_ID);
+  var s = document.createElement('script'); s.async = true; s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+  document.head.appendChild(s);
+  window.makecvConsent = function (accepted) { gtag('consent', 'update', accepted ? GRANTED : DENIED); };
+})();
+</script>
 <!-- Tailwind -->
 <script src="https://cdn.tailwindcss.com"></script>
 <!-- html2pdf -->
@@ -2126,11 +2147,13 @@ document.addEventListener('DOMContentLoaded', function() {
 function acceptCookies() {
   localStorage.setItem('makecv_cookie_consent', 'accepted');
   document.getElementById('cookie-banner').classList.add('hidden');
+  if (window.makecvConsent) makecvConsent(true);
 }
 
 function declineCookies() {
   localStorage.setItem('makecv_cookie_consent', 'declined');
   document.getElementById('cookie-banner').classList.add('hidden');
+  if (window.makecvConsent) makecvConsent(false);
 }
 
 function openPrivacy() {
@@ -2308,11 +2331,13 @@ document.addEventListener('DOMContentLoaded', function() {
     <ul>
       <li><strong>Essential cookies:</strong> Used to remember your cookie consent preference (stored in <code>localStorage</code>).</li>
       <li><strong>Advertising cookies:</strong> Set by our advertising partner (Adsterra) to serve and measure ads.</li>
+      <li><strong>Analytics cookies:</strong> Set by Google Analytics to measure aggregate site usage. In the EEA, UK and Switzerland they are only set after you click "Accept"; before that Google Analytics receives cookieless pings.</li>
     </ul>
 
     <h3>5. Third-Party Services</h3>
     <ul>
       <li><a href="https://adsterra.com/privacy-policy/" target="_blank" rel="noopener noreferrer">Adsterra Privacy Policy</a></li>
+      <li><a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a> (Google Analytics)</li>
       <li><a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">Cloudflare Privacy Policy</a> (hosting)</li>
     </ul>
 

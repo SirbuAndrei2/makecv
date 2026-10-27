@@ -96,6 +96,10 @@ Each template function renders directly from the `cv` state object. Templates co
 - `sw.js` is a self-unregistering kill switch for the old Monetag push worker; keep it (served `no-cache`) so past subscribers stop getting pushes.
 - The cookie banner and privacy policy (modal) describe Adsterra; `ads.txt` lists no sellers (no AdSense).
 
+### Analytics
+
+Google Analytics 4: inline script at the top of `<head>` (`GA_ID`, empty = no tag; only runs on the `makecv.org` hostname). Consent Mode v2 denies storage by default in the EEA/UK/CH and grants it elsewhere; `acceptCookies()` / `declineCookies()` call `makecvConsent()` to update it, and a stored choice is applied on every load.
+
 ### SEO / Structured data
 
 Head contains JSON-LD for: `WebApplication`, `FAQPage`, `HowTo`, `Organization`, `BreadcrumbList`. Update `lastmod` in `sitemap.xml` on content changes.
