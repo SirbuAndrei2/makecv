@@ -147,9 +147,14 @@ tr:last-child td { border-bottom: none; }
 .foot-grid li a:hover { color: var(--brand-700); text-decoration: underline; }
 .foot-bottom { max-width: 1152px; margin: 0 auto; padding: 16px 20px 28px; border-top: 1px solid var(--border-soft); font-size: 12.5px; color: var(--subtle-fg); display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: space-between; }
 
-/* ── In-content ad (one per template/guide page, filled by the script build_pages.py adds) ── */
-.ad-slot { background: #f1f5f9; border: 1px solid var(--border-soft); border-radius: 12px; padding: 6px 4px 8px; margin: 26px auto 0; text-align: center; overflow: hidden; max-width: 318px; min-height: 280px; }
-@media (min-width: 768px) { .ad-slot { max-width: 746px; min-height: 120px; } }
+/* ── Ads on template/guide pages (filled by the script build_pages.py adds). Reserved height = creative + 36px label/padding/border.
+   .ad-lead: phones only, after the lead paragraph (≥40px from the text and the first figure / contents box);
+   the in-content slot sits between the article and the FAQ on every screen size. ── */
+.ad-slot { background: #f1f5f9; border: 1px solid var(--border-soft); border-radius: 12px; padding: 6px 4px 8px; margin: 26px auto 0; text-align: center; overflow: hidden; max-width: 318px; min-height: 286px; }
+.ad-slot.ad-lead { margin-top: 40px; margin-bottom: 40px; }
+/* phones: a 300×250 needs 318px; centre it on the column even where the column is narrower (360px phones, inside the article card) */
+@media (max-width: 767px) { .ad-slot { width: 318px; max-width: none; margin-left: calc(50% - 159px); margin-right: 0; } }
+@media (min-width: 768px) { .ad-slot { max-width: 746px; min-height: 126px; } .ad-slot.ad-lead { display: none; } }
 .ad-slot-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #64748b; display: block; margin-bottom: 4px; }
 .ad-slot-body { display: flex; align-items: center; justify-content: center; }
 .ad-slot iframe { border: 0; display: block; max-width: 100%; }

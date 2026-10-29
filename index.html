@@ -537,6 +537,9 @@ select.inp {
   body[data-step="3"] .dl-actions > button { flex: 1; }
   body[data-step="3"] .dl-actions { transition: transform .2s ease, opacity .2s ease; }
   body[data-step="3"].dl-clear .dl-actions { transform: translateY(110%); opacity: 0; pointer-events: none; }
+  /* Steps 1–2: the sticky Next bar does the same while an ad scrolls past under it (keepAdsClearOfBar) */
+  .step-actions { transition: transform .2s ease, opacity .2s ease; }
+  body.bar-clear .step-actions { transform: translateY(110%); opacity: 0; pointer-events: none; }
   .preview-bar .meta { width: 100%; justify-content: space-between; }
   .preview-bar select.inp { flex: 1; }
 }
@@ -715,15 +718,22 @@ select.inp {
 .ad-slot-label { font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#64748b; display:block; margin-bottom:4px; }
 .ad-slot-body { display:flex; align-items:center; justify-content:center; }
 .ad-slot iframe { border:0; display:block; max-width:100%; }
-/* reserved heights = creative + label/padding (≈30px); sizes follow the ADS script's SIZES */
-.ad-slot[data-ad="inline"] { min-height:80px; max-width:338px; }
-.ad-slot[data-ad="leaderboard"], .ad-slot[data-ad="responsive"] { min-height:280px; max-width:318px; }
-.ad-slot[data-ad="300x250"] { min-height:280px; max-width:318px; }
-.ad-slot[data-ad="native"] { min-height:150px; }
+/* reserved heights = creative + label/padding/border (36px), so mounting never shifts the page; sizes follow the ADS script's SIZES */
+.ad-slot[data-ad="inline"], .ad-slot[data-ad="form-m"], .ad-slot[data-ad="picker-m"] { min-height:86px; max-width:338px; }
+.ad-slot[data-ad="leaderboard"], .ad-slot[data-ad="responsive"] { min-height:286px; max-width:318px; }
+.ad-slot[data-ad="300x250"] { min-height:286px; max-width:318px; }
+.ad-slot[data-ad="native"] { min-height:156px; }
 @media (min-width:768px) {
-  .ad-slot[data-ad="inline"] { min-height:90px; max-width:486px; }
-  .ad-slot[data-ad="leaderboard"], .ad-slot[data-ad="responsive"] { min-height:120px; max-width:746px; }
+  .ad-slot[data-ad="inline"] { min-height:96px; max-width:486px; }
+  .ad-slot[data-ad="leaderboard"], .ad-slot[data-ad="responsive"] { min-height:126px; max-width:746px; }
 }
+/* Phone-only slots (<768px): display:none above that, so they never mount on tablets or desktops.
+   form-m: step 1, after Personal information (≥40px from the inputs on both sides).
+   picker-m: top of step 2, above the heading (≥40px from the header's stepper and the filter chips). */
+.ad-m { width:100%; }
+.ad-slot[data-ad="form-m"] { margin:28px auto 32px; }
+.ad-slot[data-ad="picker-m"] { margin:16px auto 24px; }
+@media (min-width:768px) { .ad-slot.ad-m { display:none; } }
 .ad-wide { width:746px; max-width:100%; }
 .ad-after { margin-top:40px !important; }
 .after-builder { padding-top:32px; }
@@ -1135,6 +1145,10 @@ body[data-step="2"] .after-builder { display:none; }
       </div>
     </article>
 
+    <!-- Ad, phones only: the first pause in the form (about 1.4 screens down), ≥40px from the inputs above and below.
+         Never between the hero and the first form card. -->
+    <aside class="ad-slot ad-m" data-ad="form-m" aria-label="Advertisement"></aside>
+
     <!-- Summary -->
     <article class="form-card" aria-labelledby="sec-summary">
       <div class="card-head">
@@ -1228,6 +1242,7 @@ body[data-step="2"] .after-builder { display:none; }
       <span class="hint">Nothing is uploaded: your details stay in this tab.</span>
       <button type="button" class="btn-blue" onclick="goStep(2)">Choose template <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
     </div>
+    <div class="bar-end" aria-hidden="true"></div>
     </div><!-- /form-col -->
 
     <!-- Live preview: desktop ≥1280px only (renderMini), so the resume is visible while typing -->
@@ -1248,6 +1263,9 @@ body[data-step="2"] .after-builder { display:none; }
 
   <!-- ────── STEP 2: TEMPLATES ────── -->
   <section id="step2" class="hidden max-w-5xl mx-auto" aria-labelledby="step2-heading" data-rail-anchor>
+    <!-- Ad, phones only: top of the step, seen on arrival; the heading and intro keep it ≥40px from the filter chips
+         and the template grid. Desktop keeps only the native block below the action bar. -->
+    <aside class="ad-slot ad-m" data-ad="picker-m" aria-label="Advertisement"></aside>
     <div class="text-center mb-6">
       <h2 id="step2-heading" class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 mb-2">Choose your resume template</h2>
       <p class="text-[15px] text-slate-600">Your details fill every template, so you can switch at any time without retyping.</p>
@@ -1341,6 +1359,7 @@ body[data-step="2"] .after-builder { display:none; }
       <span class="hint">Selected: <strong id="sel-name" class="text-slate-800">Modern</strong></span>
       <button type="button" class="btn-blue" onclick="goStep(3)">Preview &amp; download <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
     </div>
+    <div class="bar-end" aria-hidden="true"></div>
 
     <!-- Ad: below the step's action bar (≥40px gap), never between the template grid and the buttons -->
     <aside class="ad-slot ad-after" data-ad="native" aria-label="Advertisement" style="max-width:none"></aside>
@@ -1989,19 +2008,30 @@ function renderMini() {
   box.style.marginBottom=(A4H*(scale-1))+'px';
   stage.style.height=(A4H*scale+28)+'px';
 }
-// Phones, step 3: the download bar is fixed to the bottom of the screen. It slides away whenever an ad slot comes
-// within its height + 24px, so an ad never sits next to (or under) the Download buttons.
+// Phones: an ad never sits next to (or under) an action bar. Step 3's download bar is fixed to the bottom of the
+// screen; the "Choose template" / "Preview & download" bars of steps 1–2 are sticky while the form or the grid scrolls
+// under them. A bar slides away while any ad slot is within its height + 24px and comes back once the ad has passed.
+// A step 1–2 bar resting in its place at the end of the step (its .bar-end marker on screen) never hides: the next ad
+// is laid out ≥40px below it.
 let clearRaf=0;
 function keepAdsClearOfBar() {
   clearRaf=0;
-  const bar=document.querySelector('.dl-actions');
-  const on=step===3 && window.matchMedia('(max-width: 767px)').matches;
-  let hide=false;
-  if(on && bar) {
-    const zoneTop=window.innerHeight - bar.offsetHeight - 24;
-    hide=[...document.querySelectorAll('aside[data-ad]')].some(a=>{ const r=a.getBoundingClientRect(); return r.height>0 && r.bottom>zoneTop && r.top<window.innerHeight; });
+  const phone=!!(window.matchMedia && window.matchMedia('(max-width: 767px)').matches);
+  const adNear=barH=>{
+    const zoneTop=window.innerHeight - barH - 24;
+    return [...document.querySelectorAll('aside[data-ad]')].some(a=>{ const r=a.getBoundingClientRect(); return r.height>0 && r.bottom>zoneTop && r.top<window.innerHeight; });
+  };
+  let dl=false, nav=false;
+  if(phone && step===3) {
+    const bar=document.querySelector('.dl-actions');
+    dl=!!bar && adNear(bar.offsetHeight);
+  } else if(phone) {
+    const bar=document.querySelector('#step'+step+' .step-actions'), end=bar && bar.nextElementSibling;
+    const stuck=!!end && end.classList.contains('bar-end') && end.getBoundingClientRect().top > window.innerHeight + 1;
+    nav=stuck && adNear(bar.offsetHeight);
   }
-  document.body.classList.toggle('dl-clear',hide);
+  document.body.classList.toggle('dl-clear',dl);
+  document.body.classList.toggle('bar-clear',nav);
 }
 ['scroll','resize'].forEach(ev=>window.addEventListener(ev,()=>{ if(!clearRaf) clearRaf=requestAnimationFrame(keepAdsClearOfBar); },{passive:true}));
 let rsTmr=null;
@@ -2687,6 +2717,8 @@ document.addEventListener('DOMContentLoaded', function() {
     leaderboard: () => (wide() ? '728x90' : '300x250'),
     inline:      () => (wide() ? '468x60' : '320x50'),
     responsive:  () => (wide() ? '728x90' : '300x250'),
+    'form-m':    () => '320x50',   // phone-only slots (.ad-m is display:none from 768px, so they never mount there)
+    'picker-m':  () => '320x50',
   };
 
   function addScript(src, parent) {

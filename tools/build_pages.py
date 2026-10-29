@@ -152,6 +152,10 @@ GA = """<!-- Google Analytics 4 — same snippet as index.html; runs only on mak
 # never inside the text or next to a "Use this template" button). Same zone keys and srcdoc-iframe approach as
 # index.html's ADS script; mounted lazily when it comes within 300px of the viewport. No social bar, no popunder.
 AD_SLOT = '<aside class="ad-slot" data-ad="incontent" aria-label="Advertisement"></aside>'
+# Phones only (guide.css hides .ad-lead from 768px, so it never mounts there): right after the lead paragraph, about
+# 0.7–1.3 screens down, so phone readers meet an ad before the long article instead of only after it (5–10 screens).
+# 40px margins keep it clear of the lead's links and of the first figure's preview link / the contents box.
+AD_LEAD = '<aside class="ad-slot ad-lead" data-ad="lead" aria-label="Advertisement"></aside>'
 AD_SCRIPT = """<script>
 (function () {
   var HOST = 'https://bicea.org';
@@ -303,6 +307,10 @@ def render(meta, pages, by_path):
         related_html = f'<section class="related" aria-labelledby="rel-h"><h2 id="rel-h">Keep reading</h2><div class="rel-grid">{cards}</div></section>'
 
     with_ads = not noindex and meta.get("group") in ("templates", "guides")
+    if with_ads:
+        body, n = re.subn(r'(<p class="lead">.*?</p>)', lambda m: m.group(1) + "\n" + AD_LEAD, body, count=1, flags=re.S)
+        if not n:
+            sys.exit(f"{meta['src']}: a page with ads needs a <p class=\"lead\"> paragraph (the phone ad goes after it)")
     ad_html = AD_SLOT if with_ads else ""
     ad_script = AD_SCRIPT if with_ads else ""
     updated_h = meta["updated"]
