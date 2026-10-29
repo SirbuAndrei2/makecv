@@ -3,3 +3,4 @@ node_modules
 
 # cf CLI cache
 .cloudflare/
+__pycache__/

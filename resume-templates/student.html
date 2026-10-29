@@ -167,7 +167,7 @@
       <span class="free-pill">100% Free</span>
     </a>
     <nav aria-label="Main" class="main-nav"><a href="/resume-templates">Templates</a><a href="/how-to-write-a-resume">How to write</a><a href="/ats-resume">ATS guide</a><a href="/resume-vs-cv">Resume vs CV</a><a href="/resume-format">Format</a></nav>
-    <a href="/" class="btn-blue btn-sm">Build my resume</a>
+    <div class="hdr-actions"><nav class="lang-sw" aria-label="Language"><a href="/resume-templates/student" hreflang="en" lang="en" title="English" aria-current="true">EN</a><a href="/ro" hreflang="ro" lang="ro" title="Română">RO</a><a href="/ru" hreflang="ru" lang="ru" title="Русский">RU</a></nav><a href="/" class="btn-blue btn-sm">Build my resume</a></div>
   </div>
   <nav aria-label="Main (mobile)" class="mobile-nav"><a href="/resume-templates">Templates</a><a href="/how-to-write-a-resume">How to write</a><a href="/ats-resume">ATS guide</a><a href="/resume-vs-cv">Resume vs CV</a><a href="/resume-format">Format</a></nav>
 </header>
@@ -237,14 +237,14 @@
 </footer>
 <script>
 (function () {
-  var HOST = 'https://bicea.org';
+  var HOST = 'https://bicea.org', LBL = 'Advertisement';
   var Z = { '728x90': { key: '0e7f300ebc75925f1b35d2404c7f5b04', w: 728, h: 90 }, '300x250': { key: '14546d762f4609577c45abcfd23ed569', w: 300, h: 250 } };
   function mount(slot) {
     var z = Z[window.matchMedia('(min-width: 768px)').matches ? '728x90' : '300x250'];
     slot.style.maxWidth = (z.w + 18) + 'px';
-    slot.innerHTML = '<span class="ad-slot-label" aria-hidden="true">Advertisement</span>';
+    slot.innerHTML = '<span class="ad-slot-label" aria-hidden="true">' + LBL + '</span>';
     var b = document.createElement('div'); b.className = 'ad-slot-body'; b.style.minHeight = z.h + 'px';
-    var f = document.createElement('iframe'); f.title = 'Advertisement'; f.width = z.w; f.height = z.h; f.scrolling = 'no';
+    var f = document.createElement('iframe'); f.title = LBL; f.width = z.w; f.height = z.h; f.scrolling = 'no';
     f.srcdoc = '<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;background:transparent;overflow:hidden}</style></head><body>'
       + "<script>atOptions={key:'" + z.key + "',format:'iframe',height:" + z.h + ',width:' + z.w + ',params:{}}<\/script>'
       + '<script src="' + HOST + '/22/' + z.key + '"><\/script></body></html>';

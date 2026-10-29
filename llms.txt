@@ -1,0 +1,47 @@
+# MakeCV
+
+> Free online resume (CV) builder: fill in a form, pick one of 14 templates, download a PDF. No account, no watermark, no paid plan. The resume is built in the visitor's browser and never uploaded. Available in English, Romanian and Russian.
+
+Site: https://makecv.org · Contact: privacy@makecv.org
+
+## Resume builder
+- [Resume builder (English)](https://makecv.org/): three steps (details, template, download) with a live preview. `/?template=<key>` opens it with a template preselected.
+- [Creator de CV (Romanian)](https://makecv.org/ro): the same builder with a Romanian interface; the resume headings, dates and labels come out in Romanian.
+- [Конструктор резюме (Russian)](https://makecv.org/ru): the same builder with a Russian interface; the resume headings, dates and labels come out in Russian.
+
+## Facts worth citing
+- Two downloads: "Download PDF" is an A4 PDF that looks exactly like the preview but is rendered as an image (text not selectable); "ATS PDF" uses the browser's print dialog (Save as PDF) and produces a text-based PDF that applicant tracking systems can read. There is no Word/DOCX export.
+- Sections: personal details with an optional photo, summary, up to 5 jobs, 3 schools, 4 languages (CEFR levels A1–C2 or native), 3 projects, 4 certifications, and skills with three levels.
+- Nothing is stored: refreshing the page clears the form, so a resume is finished and downloaded in one session.
+- 14 templates: Professional, Harvard, Classic, Modern, Student, Compact, Minimalist, Executive, Swiss, Creative, Tech / Dark, Aurora, Bloom, Neon. Harvard, Classic, Student, Compact and Minimalist are single-column with standard headings, the safest choice for ATS (MakeCV's own assessment).
+- The templates are not the official Europass CV format. For a Europass CV, use the European Commission's editor at https://europass.europa.eu.
+- The site is free and funded by Adsterra ads (banners, a native block, a social bar, and a pop-under that opens only after a download). Ads never appear in the downloaded PDF. Google Analytics measures aggregate usage.
+
+## Templates and guides (English)
+- [All 14 resume templates](https://makecv.org/resume-templates): layout, photo, ATS safety and who each one suits, with previews.
+- Template styles: [Professional](https://makecv.org/resume-templates/professional) · [Harvard](https://makecv.org/resume-templates/harvard) · [Student](https://makecv.org/resume-templates/student) · [Simple](https://makecv.org/resume-templates/simple) · [Modern](https://makecv.org/resume-templates/modern) · [Minimalist](https://makecv.org/resume-templates/minimalist) · [Creative](https://makecv.org/resume-templates/creative) · [Executive](https://makecv.org/resume-templates/executive) · [Tech](https://makecv.org/resume-templates/tech)
+- [How to write a resume](https://makecv.org/how-to-write-a-resume): every section step by step, with before-and-after examples.
+- [ATS-friendly resume guide](https://makecv.org/ats-resume): how applicant tracking systems read resumes and how to export a text-based PDF.
+- [Resume format](https://makecv.org/resume-format): length, section order, PDF vs Word, A4 vs Letter, fonts, file names.
+- [Resume vs CV](https://makecv.org/resume-vs-cv): what each word means in the US, UK, Europe and academia.
+- [UK CV template](https://makecv.org/cv-template): UK and Irish CV conventions and the personal statement.
+- [Resume summary examples](https://makecv.org/resume-summary-examples): a formula and 20 examples by career stage and field.
+- [Skills for your resume](https://makecv.org/resume-skills): choosing and wording skills, lists for 12 fields.
+- [Resume with no experience](https://makecv.org/resume-with-no-experience): students and first jobs.
+
+## Ghiduri în română (Romanian guides)
+- [Modele CV gratuite](https://makecv.org/ro/model-cv): the 14 templates compared, in Romanian.
+- [Cum să faci un CV](https://makecv.org/ro/cum-sa-faci-un-cv): step-by-step guide, with profile examples and an ATS section.
+- [CV Europass sau CV modern](https://makecv.org/ro/cv-europass): what Europass is, when Romanian employers and public institutions ask for it, and when a 1–2 page CV is the better choice. Links to the official Europass editor.
+- [CV fără experiență](https://makecv.org/ro/cv-fara-experienta): first CV for pupils and students.
+- [Competențe pentru CV](https://makecv.org/ro/competente-cv): hard and soft skills, lists for 10 fields, languages and CEFR levels.
+
+## Статьи на русском (Russian guides)
+- [Шаблоны резюме](https://makecv.org/ru/shablon-rezyume): the 14 templates compared, in Russian.
+- [Как составить резюме](https://makecv.org/ru/kak-sostavit-rezyume): step-by-step guide, with «О себе» examples and an ATS section.
+- [Образцы резюме](https://makecv.org/ru/obrazec-rezyume): five fictional sample resumes for different jobs.
+- [Резюме без опыта работы](https://makecv.org/ru/rezyume-bez-opyta): resumes for students and graduates.
+- [Ключевые навыки для резюме](https://makecv.org/ru/navyki-dlya-rezyume): choosing skills for a vacancy, lists for 10 professions.
+
+## About
+- [About MakeCV](https://makecv.org/about) · [Privacy policy](https://makecv.org/privacy) · [Sitemap](https://makecv.org/sitemap.xml)

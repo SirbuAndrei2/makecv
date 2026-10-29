@@ -11,6 +11,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="MakeCV">
 <link rel="canonical" href="https://makecv.org/">
+<!-- Language versions: /ro and /ru are generated from this file by tools/build_i18n.py (CLAUDE.md → Languages) -->
+<link rel="alternate" hreflang="en" href="https://makecv.org/">
+<link rel="alternate" hreflang="ro" href="https://makecv.org/ro">
+<link rel="alternate" hreflang="ru" href="https://makecv.org/ru">
+<link rel="alternate" hreflang="x-default" href="https://makecv.org/">
 
 <!-- Favicon -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -48,7 +53,7 @@
       "url": "https://makecv.org/",
       "name": "MakeCV",
       "alternateName": "MakeCV Free Resume Builder",
-      "inLanguage": "en",
+      "inLanguage": ["en", "ro", "ru"],
       "publisher": { "@id": "https://makecv.org/#organization" }
     },
     {
@@ -327,6 +332,12 @@ button, [role="button"], select, label[for], .tpl-card { cursor: pointer; }
 .header-meta a { color: var(--fg-2); text-decoration: none; font-weight: 600; }
 .header-meta a:hover { color: var(--brand); }
 @media (min-width: 1100px) { .header-meta { display: flex; } }
+/* Language switcher (EN / RO / RU), every width; same markup and look on the content pages (guide.css) */
+.lang-sw { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+.lang-sw a { min-width: 34px; min-height: 44px; padding: 0 4px; display: inline-flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 12.5px; font-weight: 700; color: var(--muted-fg); text-decoration: none; }
+.lang-sw a:hover { color: var(--brand-700); background: var(--brand-50); }
+.lang-sw a[aria-current] { color: var(--brand-700); text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 639px) { .lang-sw a { min-width: 30px; padding: 0 2px; } }
 .free-pill { font-size: 11.5px; font-weight: 700; color: var(--ok); background: var(--ok-50); border: 1px solid var(--ok-200); padding: 2px 8px; border-radius: 999px; }
 
 /* ── Hero ── */
@@ -1063,6 +1074,9 @@ body[data-step="2"] .after-builder { display:none; }
       <span><i class="fa-solid fa-lock mr-1" aria-hidden="true"></i>No sign-up</span>
       <a href="/resume-templates">Templates</a>
     </div>
+    <!--i18n:block lang-sw-->
+    <nav class="lang-sw" aria-label="Language"><a href="/" hreflang="en" lang="en" title="English" aria-current="true">EN</a><a href="/ro" hreflang="ro" lang="ro" title="Română">RO</a><a href="/ru" hreflang="ru" lang="ru" title="Русский">RU</a></nav>
+    <!--/i18n:block-->
   </div>
 </header>
 
@@ -1073,10 +1087,12 @@ body[data-step="2"] .after-builder { display:none; }
   <section id="step1" aria-labelledby="step1-heading">
     <!-- Visible H1 — critical for SEO keyword signal and E-E-A-T -->
     <div class="hero">
+      <!--i18n:block hero-badge-->
       <div class="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold px-3.5 py-1.5 rounded-full mb-4">
         <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
         <span><span id="cv-counter">0</span> resumes created this month — free, forever</span>
       </div>
+      <!--/i18n:block-->
       <h1 id="step1-heading">Build a Professional Resume<br class="hidden sm:block"> in 5 Minutes — 100% Free</h1>
       <p class="sub">No sign-up. No watermark. No cost. Pick from <strong class="text-slate-800">14 templates</strong>, fill in your details, and download a perfectly formatted A4 PDF instantly.</p>
       <div class="flex flex-wrap justify-center gap-2">
@@ -1503,6 +1519,7 @@ body[data-step="2"] .after-builder { display:none; }
 </div>
 
 <!-- ══════════════ FAQ SECTION (SEO) ══════════════ -->
+<!--i18n:block faq-->
 <section class="max-w-3xl mx-auto px-4 py-12" aria-labelledby="faq-heading">
   <h2 id="faq-heading" class="sec-h2 mb-6">Frequently Asked Questions</h2>
   <dl class="space-y-3">
@@ -1544,9 +1561,11 @@ body[data-step="2"] .after-builder { display:none; }
     </div>
   </dl>
 </section>
+<!--/i18n:block-->
 
 
 <!-- ══════════════ TEMPLATES & GUIDES (crawlable links to the content pages) ══════════════ -->
+<!--i18n:block guides-->
 <section class="max-w-3xl mx-auto px-4 pb-12" aria-labelledby="guides-heading">
   <h2 id="guides-heading" class="sec-h2">Resume Templates &amp; Guides</h2>
   <p class="sec-sub" style="margin-bottom:24px">Practical help for every section of your resume, plus a side-by-side look at all 14 templates.</p>
@@ -1600,8 +1619,10 @@ body[data-step="2"] .after-builder { display:none; }
     <a href="/resume-templates/tech" class="underline hover:text-blue-600">Tech</a>
   </p>
 </section>
+<!--/i18n:block-->
 
 <!-- ══════════════ TESTIMONIALS ══════════════ -->
+<!--i18n:block reviews-->
 <section class="max-w-3xl mx-auto px-4 pb-14" aria-labelledby="reviews-heading">
   <h2 id="reviews-heading" class="text-2xl font-bold text-slate-800 mb-2 text-center">What People Are Saying</h2>
   <p class="text-sm text-slate-500 text-center mb-8">Real feedback from job seekers who used MakeCV to land interviews.</p>
@@ -1665,6 +1686,7 @@ body[data-step="2"] .after-builder { display:none; }
     </div>
   </div>
 </section>
+<!--/i18n:block-->
 
 <!-- ══════════════ FOOTER ══════════════ -->
 <footer class="site-footer" role="contentinfo">
@@ -1673,6 +1695,7 @@ body[data-step="2"] .after-builder { display:none; }
       <a href="/" class="logo" onclick="goStep(1);window.scrollTo({top:0});return false;"><span class="logo-mark" aria-hidden="true"><i class="fa-solid fa-file-lines"></i></span><span class="font-extrabold text-slate-800">MakeCV</span></a>
       <p>Build a professional resume for free — no sign-up, no watermark, instant PDF download. Your resume never leaves your browser.</p>
     </div>
+    <!--i18n:block footer-nav-->
     <nav aria-label="Resume templates"><div class="foot-title">Templates</div><ul>
       <li><a href="/resume-templates">Resume Templates</a></li>
       <li><a href="/resume-templates/professional">Professional</a></li>
@@ -1704,6 +1727,7 @@ body[data-step="2"] .after-builder { display:none; }
       <li><a href="/privacy" onclick="openPrivacy();return false;">Privacy Policy</a></li>
       <li><button type="button" onclick="document.getElementById('cookie-banner').classList.remove('hidden')">Cookie Settings</button></li>
     </ul></nav>
+    <!--/i18n:block-->
   </div>
   <div class="foot-bottom"><span>© 2026 MakeCV · Free Resume Builder Online</span><span>No sign-up · No watermark · Data stays in your browser</span></div>
 </footer>
@@ -1718,6 +1742,175 @@ const cv = {
   experience:[],education:[],skills:[],languages:[],projects:[],certifications:[],
   selectedTemplate:'modern'
 };
+
+// Every user-facing string of this script and the ADS script below. tools/build_i18n.py swaps the JSON between the
+// markers for tools/i18n/<lang>.json → "js" when it generates /ro and /ru (CLAUDE.md → Languages). Strict JSON only.
+// Plural forms follow Intl.PluralRules(L.lang) categories ({n} = the number); see pl().
+const L = /*i18n:js*/{
+ "lang": "en",
+ "months": [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec"
+ ],
+ "month": "Month",
+ "year": "Year",
+ "present": "Present",
+ "remove": "Remove",
+ "entry": {
+  "experience": "Experience",
+  "education": "Education",
+  "project": "Project",
+  "certification": "Certification"
+ },
+ "f": {
+  "jobTitle": "Job title",
+  "jobTitlePh": "Senior Frontend Developer",
+  "company": "Company",
+  "companyPh": "Google LLC",
+  "startDate": "Start date",
+  "startMonth": "Start month",
+  "startYear": "Start year",
+  "endDate": "End date",
+  "endMonth": "End month",
+  "endYear": "End year",
+  "currentJob": "I currently work here",
+  "location": "Location",
+  "locationPh": "San Francisco, CA",
+  "desc": "Responsibilities &amp; achievements",
+  "descPh": "Led the redesign of the checkout, raising conversion by 12%&#10;Mentored 3 junior developers&#10;Cut page load time from 4s to 1.5s",
+  "descHelp": "One achievement per line. Start with a verb and add a number where you can.",
+  "degree": "Degree / major",
+  "degreePh": "B.Sc. Computer Science",
+  "school": "School / university",
+  "schoolPh": "MIT",
+  "eduStart": "Start year",
+  "eduEnd": "End year (or expected)",
+  "currentStudy": "I study here now",
+  "notes": "Honors, GPA or coursework (optional)",
+  "notesPh": "GPA 3.9 / 4.0, Magna Cum Laude",
+  "language": "Language",
+  "languagePh": "English",
+  "level": "Level",
+  "native": "Native",
+  "projName": "Project name",
+  "projNamePh": "Resume Builder App",
+  "link": "Link (optional)",
+  "linkPh": "github.com/user/repo",
+  "projDesc": "What it does and your role",
+  "projDescPh": "What the project does and your role in it...",
+  "tech": "Tools / technologies",
+  "techPh": "React, Node.js, PostgreSQL",
+  "certName": "Certification name",
+  "certNamePh": "AWS Certified Developer",
+  "org": "Issuing organization",
+  "orgPh": "Amazon Web Services",
+  "certYear": "Year",
+  "certYearPh": "2024",
+  "certUrl": "Certificate link (optional)",
+  "certUrlPh": "credly.com/badges/..."
+ },
+ "levels": [
+  "Beginner",
+  "Intermediate",
+  "Advanced"
+ ],
+ "levelFor": "Level for {s}",
+ "removeSkill": "Remove {s}",
+ "chars": {
+  "one": "{n} characters",
+  "other": "{n} characters"
+ },
+ "charsShort": " · a bit short",
+ "charsLong": " · try to trim",
+ "tplNames": {
+  "professional": "Professional",
+  "harvard": "Harvard",
+  "clasic": "Classic",
+  "modern": "Modern",
+  "student": "Student",
+  "compact": "Compact",
+  "minimalist": "Minimalist",
+  "executive": "Executive",
+  "swiss": "Swiss",
+  "creativ": "Creative",
+  "tech": "Tech / Dark",
+  "aurora": "Aurora",
+  "bloom": "Bloom",
+  "neon": "Neon"
+ },
+ "missing": {
+  "name": "your full name",
+  "email": "an email address",
+  "entry": "at least one job or school"
+ },
+ "toDownload": "To download, add ",
+ "listSep": ", ",
+ "listEnd": ".",
+ "sum": {
+  "noName": "No name yet",
+  "noEmail": "No email yet",
+  "jobs": {
+   "one": "{n} job",
+   "other": "{n} jobs"
+  },
+  "schools": {
+   "one": "{n} school",
+   "other": "{n} schools"
+  },
+  "skills": {
+   "one": "{n} skill",
+   "other": "{n} skills"
+  },
+  "template": "Template: "
+ },
+ "fitsOne": "Fits on 1 page",
+ "pages": {
+  "one": "{n} pages",
+  "other": "{n} pages"
+ },
+ "yourName": "Your Name",
+ "h": {
+  "summaryPro": "Professional Summary",
+  "workExp": "Work Experience",
+  "experience": "Experience",
+  "proExp": "Professional Experience",
+  "education": "Education",
+  "projects": "Projects",
+  "project": "Project",
+  "notableProjects": "Notable Projects",
+  "skills": "Skills",
+  "competencies": "Core Competencies",
+  "skillsInterests": "Skills &amp; Interests",
+  "languages": "Languages",
+  "certs": "Certifications",
+  "contact": "Contact",
+  "profile": "Profile",
+  "execProfile": "Executive Profile",
+  "about": "About",
+  "aboutMe": "About Me",
+  "summary": "Summary"
+ },
+ "generating": "Generating...",
+ "download": "Download PDF",
+ "pdfFail": "PDF generation failed. Please try again.",
+ "pdfFile": "Resume_{name}_2026.pdf",
+ "pdfFileUnicode": false,
+ "atsFile": "Resume",
+ "reset": "Are you sure you want to start over? Your data will be lost.",
+ "ad": "Advertisement"
+}/*/i18n:js*/;
+const PR = new Intl.PluralRules(L.lang);
+const pl = (forms, n) => (forms[PR.select(n)] || forms.other).replace('{n}', n);
 
 let step = 1;
 let renderTmr = null;
@@ -1810,18 +2003,18 @@ function removePhoto() {
 function charCount(el) {
   const n=el.value.length;
   const s=document.getElementById('char-cnt');
-  s.textContent=n+' characters'+(n && n<300?' · a bit short':n>500?' · try to trim':'');
+  s.textContent=pl(L.chars,n)+(n && n<300?L.charsShort:n>500?L.charsLong:'');
   s.className='text-xs font-semibold '+(n===0?'text-slate-500':n<300?'text-amber-700':n<=500?'text-emerald-700':'text-red-600');
 }
 
 // ════════════════════════════════
 //  MONTHS / YEARS
 // ════════════════════════════════
-const MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MO=L.months;
 const YEARS=Array.from({length:45},(_,i)=>2030-i);
 // Options keep the entry's current value selected, so re-rendering a list (add/remove, "Present") never wipes dates.
-const moOpts = v => '<option value="">Month</option>'+MO.map((m,i)=>`<option value="${i+1}" ${String(v)===String(i+1)?'selected':''}>${m}</option>`).join('');
-const yrOpts = v => '<option value="">Year</option>'+YEARS.map(y=>`<option value="${y}" ${String(v)===String(y)?'selected':''}>${y}</option>`).join('');
+const moOpts = v => '<option value="">'+L.month+'</option>'+MO.map((m,i)=>`<option value="${i+1}" ${String(v)===String(i+1)?'selected':''}>${m}</option>`).join('');
+const yrOpts = v => '<option value="">'+L.year+'</option>'+YEARS.map(y=>`<option value="${y}" ${String(v)===String(y)?'selected':''}>${y}</option>`).join('');
 
 // ════════════════════════════════
 //  REPEATABLE ENTRIES
@@ -1873,52 +2066,53 @@ function renderList(type) {
 
 function entryForm(type,idx,item) {
   const id=f=>`x-${type}-${idx}-${f}`;
-  const rm=`<button type="button" class="btn-del" onclick="removeEntry('${type}',${idx})"><i class="fa-solid fa-trash-can" aria-hidden="true"></i>Remove</button>`;
+  const rm=`<button type="button" class="btn-del" onclick="removeEntry('${type}',${idx})"><i class="fa-solid fa-trash-can" aria-hidden="true"></i>${L.remove}</button>`;
   const head=label=>`<div class="entry-head"><span class="entry-num">${label} ${idx+1}</span>${rm}</div>`;
   const inp=(f,label,ph,extra='')=>`<div class="field"><label class="lbl" for="${id(f)}">${label}</label><input class="inp" id="${id(f)}" type="text" value="${e(item[f])}" placeholder="${ph}" oninput="updEntry('${type}',${idx},'${f}',this.value)" ${extra}></div>`;
-  if(type==='experience') return head('Experience')+`
+  const t=L.f;
+  if(type==='experience') return head(L.entry.experience)+`
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
-      ${inp('title','Job title','Senior Frontend Developer')}
-      ${inp('company','Company','Google LLC')}
-      <div class="field"><span class="lbl" id="${id('start')}">Start date</span><div class="flex gap-2" role="group" aria-labelledby="${id('start')}"><select class="inp" aria-label="Start month" onchange="updEntry('experience',${idx},'startMonth',this.value)">${moOpts(item.startMonth)}</select><select class="inp" aria-label="Start year" onchange="updEntry('experience',${idx},'startYear',this.value)">${yrOpts(item.startYear)}</select></div></div>
-      <div class="field"><span class="lbl" id="${id('end')}">End date</span><div class="flex gap-2" role="group" aria-labelledby="${id('end')}"><select class="inp" aria-label="End month" onchange="updEntry('experience',${idx},'endMonth',this.value)" ${item.current?'disabled':''}>${moOpts(item.endMonth)}</select><select class="inp" aria-label="End year" onchange="updEntry('experience',${idx},'endYear',this.value)" ${item.current?'disabled':''}>${yrOpts(item.endYear)}</select></div><label class="check mt-1"><input type="checkbox" ${item.current?'checked':''} onchange="updEntry('experience',${idx},'current',this.checked.toString());renderList('experience')"> I currently work here</label></div>
-      ${inp('location','Location','San Francisco, CA')}
-      <div class="field sm:col-span-2"><label class="lbl" for="${id('description')}">Responsibilities &amp; achievements</label><textarea class="inp" id="${id('description')}" rows="4" placeholder="Led the redesign of the checkout, raising conversion by 12%&#10;Mentored 3 junior developers&#10;Cut page load time from 4s to 1.5s" oninput="updEntry('experience',${idx},'description',this.value)" aria-describedby="${id('dhelp')}">${e(item.description)}</textarea><p class="field-help" id="${id('dhelp')}">One achievement per line. Start with a verb and add a number where you can.</p></div>
+      ${inp('title',t.jobTitle,t.jobTitlePh)}
+      ${inp('company',t.company,t.companyPh)}
+      <div class="field"><span class="lbl" id="${id('start')}">${t.startDate}</span><div class="flex gap-2" role="group" aria-labelledby="${id('start')}"><select class="inp" aria-label="${t.startMonth}" onchange="updEntry('experience',${idx},'startMonth',this.value)">${moOpts(item.startMonth)}</select><select class="inp" aria-label="${t.startYear}" onchange="updEntry('experience',${idx},'startYear',this.value)">${yrOpts(item.startYear)}</select></div></div>
+      <div class="field"><span class="lbl" id="${id('end')}">${t.endDate}</span><div class="flex gap-2" role="group" aria-labelledby="${id('end')}"><select class="inp" aria-label="${t.endMonth}" onchange="updEntry('experience',${idx},'endMonth',this.value)" ${item.current?'disabled':''}>${moOpts(item.endMonth)}</select><select class="inp" aria-label="${t.endYear}" onchange="updEntry('experience',${idx},'endYear',this.value)" ${item.current?'disabled':''}>${yrOpts(item.endYear)}</select></div><label class="check mt-1"><input type="checkbox" ${item.current?'checked':''} onchange="updEntry('experience',${idx},'current',this.checked.toString());renderList('experience')"> ${t.currentJob}</label></div>
+      ${inp('location',t.location,t.locationPh)}
+      <div class="field sm:col-span-2"><label class="lbl" for="${id('description')}">${t.desc}</label><textarea class="inp" id="${id('description')}" rows="4" placeholder="${t.descPh}" oninput="updEntry('experience',${idx},'description',this.value)" aria-describedby="${id('dhelp')}">${e(item.description)}</textarea><p class="field-help" id="${id('dhelp')}">${t.descHelp}</p></div>
     </div>`;
-  if(type==='education') return head('Education')+`
+  if(type==='education') return head(L.entry.education)+`
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
-      ${inp('degree','Degree / major','B.Sc. Computer Science')}
-      ${inp('institution','School / university','MIT')}
-      <div class="field"><label class="lbl" for="${id('startYear')}">Start year</label><select class="inp" id="${id('startYear')}" onchange="updEntry('education',${idx},'startYear',this.value)">${yrOpts(item.startYear)}</select></div>
-      <div class="field"><label class="lbl" for="${id('endYear')}">End year (or expected)</label><select class="inp" id="${id('endYear')}" onchange="updEntry('education',${idx},'endYear',this.value)" ${item.current?'disabled':''}>${yrOpts(item.endYear)}</select><label class="check mt-1"><input type="checkbox" ${item.current?'checked':''} onchange="updEntry('education',${idx},'current',this.checked.toString());renderList('education')"> I study here now</label></div>
-      <div class="sm:col-span-2">${inp('notes','Honors, GPA or coursework (optional)','GPA 3.9 / 4.0, Magna Cum Laude')}</div>
+      ${inp('degree',t.degree,t.degreePh)}
+      ${inp('institution',t.school,t.schoolPh)}
+      <div class="field"><label class="lbl" for="${id('startYear')}">${t.eduStart}</label><select class="inp" id="${id('startYear')}" onchange="updEntry('education',${idx},'startYear',this.value)">${yrOpts(item.startYear)}</select></div>
+      <div class="field"><label class="lbl" for="${id('endYear')}">${t.eduEnd}</label><select class="inp" id="${id('endYear')}" onchange="updEntry('education',${idx},'endYear',this.value)" ${item.current?'disabled':''}>${yrOpts(item.endYear)}</select><label class="check mt-1"><input type="checkbox" ${item.current?'checked':''} onchange="updEntry('education',${idx},'current',this.checked.toString());renderList('education')"> ${t.currentStudy}</label></div>
+      <div class="sm:col-span-2">${inp('notes',t.notes,t.notesPh)}</div>
     </div>`;
   if(type==='languages') return `
     <div class="flex gap-3 items-end flex-wrap sm:flex-nowrap">
-      <div class="flex-1 min-w-[140px]">${inp('name','Language','English')}</div>
-      <div style="width:130px"><label class="lbl" for="${id('level')}">Level</label><select class="inp" id="${id('level')}" onchange="updEntry('languages',${idx},'level',this.value)">${['A1','A2','B1','B2','C1','C2','Native'].map(l=>`<option value="${l}" ${item.level===l?'selected':''}>${l}</option>`).join('')}</select></div>
+      <div class="flex-1 min-w-[140px]">${inp('name',t.language,t.languagePh)}</div>
+      <div style="width:130px"><label class="lbl" for="${id('level')}">${t.level}</label><select class="inp" id="${id('level')}" onchange="updEntry('languages',${idx},'level',this.value)">${['A1','A2','B1','B2','C1','C2','Native'].map(l=>`<option value="${l}" ${item.level===l?'selected':''}>${l==='Native'?t.native:l}</option>`).join('')}</select></div>
       <div>${rm}</div>
     </div>`;
-  if(type==='projects') return head('Project')+`
+  if(type==='projects') return head(L.entry.project)+`
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
-      ${inp('name','Project name','Resume Builder App')}
-      ${inp('url','Link (optional)','github.com/user/repo','inputmode="url"')}
-      <div class="field sm:col-span-2"><label class="lbl" for="${id('description')}">What it does and your role</label><textarea class="inp" id="${id('description')}" rows="2" placeholder="What the project does and your role in it..." oninput="updEntry('projects',${idx},'description',this.value)">${e(item.description)}</textarea></div>
-      <div class="sm:col-span-2">${inp('tech','Tools / technologies','React, Node.js, PostgreSQL')}</div>
+      ${inp('name',t.projName,t.projNamePh)}
+      ${inp('url',t.link,t.linkPh,'inputmode="url"')}
+      <div class="field sm:col-span-2"><label class="lbl" for="${id('description')}">${t.projDesc}</label><textarea class="inp" id="${id('description')}" rows="2" placeholder="${t.projDescPh}" oninput="updEntry('projects',${idx},'description',this.value)">${e(item.description)}</textarea></div>
+      <div class="sm:col-span-2">${inp('tech',t.tech,t.techPh)}</div>
     </div>`;
-  if(type==='certifications') return head('Certification')+`
+  if(type==='certifications') return head(L.entry.certification)+`
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
-      ${inp('name','Certification name','AWS Certified Developer')}
-      ${inp('org','Issuing organization','Amazon Web Services')}
-      ${inp('year','Year','2024','inputmode="numeric" maxlength="4"')}
-      ${inp('url','Certificate link (optional)','credly.com/badges/...','inputmode="url"')}
+      ${inp('name',t.certName,t.certNamePh)}
+      ${inp('org',t.org,t.orgPh)}
+      ${inp('year',t.certYear,t.certYearPh,'inputmode="numeric" maxlength="4"')}
+      ${inp('url',t.certUrl,t.certUrlPh,'inputmode="url"')}
     </div>`;
 }
 
 // ════════════════════════════════
 //  SKILLS  (levels are stored as 'Începător' | 'Mediu' | 'Avansat' — barW() depends on these exact strings)
 // ════════════════════════════════
-const LEVELS=[['Începător','Beginner'],['Mediu','Intermediate'],['Avansat','Advanced']];
+const LEVELS=[['Începător',L.levels[0]],['Mediu',L.levels[1]],['Avansat',L.levels[2]]];
 function addSkill(raw) {
   const v=String(raw||'').replace(/,/g,'').trim();
   if(v && !cv.skills.find(s=>s.name.toLowerCase()===v.toLowerCase())) {
@@ -1947,17 +2141,17 @@ function renderSkills() {
   document.getElementById('skills-wrap').innerHTML=cv.skills.map((s,i)=>`
     <div class="skill-pill" role="listitem">
       <span>${e(s.name)}</span>
-      <select aria-label="Level for ${e(s.name)}" onchange="cv.skills[${i}].level=this.value;queueRender()">
+      <select aria-label="${L.levelFor.replace('{s}',e(s.name))}" onchange="cv.skills[${i}].level=this.value;queueRender()">
         ${LEVELS.map(([v,l])=>`<option value="${v}" ${s.level===v?'selected':''}>${l}</option>`).join('')}
       </select>
-      <button type="button" onclick="removeSkill(${i})" aria-label="Remove ${e(s.name)}">×</button>
+      <button type="button" onclick="removeSkill(${i})" aria-label="${L.removeSkill.replace('{s}',e(s.name))}">×</button>
     </div>`).join('');
 }
 
 // ════════════════════════════════
 //  TEMPLATE SELECTION
 // ════════════════════════════════
-const tplNames={professional:'Professional',harvard:'Harvard',clasic:'Classic',modern:'Modern',student:'Student',compact:'Compact',minimalist:'Minimalist',executive:'Executive',swiss:'Swiss',creativ:'Creative',tech:'Tech / Dark',aurora:'Aurora',bloom:'Bloom',neon:'Neon'};
+const tplNames=L.tplNames;
 
 function filterTpl(f) {
   document.querySelectorAll('.f-chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.f===f?'true':'false'));
@@ -2054,9 +2248,9 @@ function mobileTab(tab) {
 // ════════════════════════════════
 function missing() {
   const m=[];
-  if(!(cv.personal.name.trim().length>2)) m.push(['f-name','your full name']);
-  if(!cv.personal.email.includes('@')) m.push(['f-email','an email address']);
-  if(!(cv.experience.length>0 || cv.education.length>0)) m.push(['btn-exp','at least one job or school']);
+  if(!(cv.personal.name.trim().length>2)) m.push(['f-name',L.missing.name]);
+  if(!cv.personal.email.includes('@')) m.push(['f-email',L.missing.email]);
+  if(!(cv.experience.length>0 || cv.education.length>0)) m.push(['btn-exp',L.missing.entry]);
   return m;
 }
 function isValid() { return missing().length===0; }
@@ -2070,7 +2264,7 @@ function updateDlBtn() {
   document.getElementById('ats-btn').disabled=!v;
   const box=document.getElementById('valid-msg');
   box.classList.toggle('show',!v);
-  box.innerHTML=v?'':'<i class="fa-solid fa-circle-info mr-1" aria-hidden="true"></i>To download, add '+m.map(([id,t])=>`<button type="button" onclick="fixField('${id}')">${t}</button>`).join(', ')+'.';
+  box.innerHTML=v?'':'<i class="fa-solid fa-circle-info mr-1" aria-hidden="true"></i>'+L.toDownload+m.map(([id,t])=>`<button type="button" onclick="fixField('${id}')">${t}</button>`).join(L.listSep)+L.listEnd;
 }
 
 // ════════════════════════════════
@@ -2082,11 +2276,11 @@ function updateSummary() {
   const p=cv.personal;
   const row=(ic,txt,ok)=>`<div class="flex items-center gap-2"><i class="fa-solid ${ok?'fa-circle-check text-emerald-600':'fa-circle text-slate-300'} w-4" aria-hidden="true"></i><span>${txt}</span></div>`;
   el.innerHTML=
-    row('',`<b class="text-slate-800">${e(p.name)||'No name yet'}</b>${p.title?' · '+e(p.title):''}`,!!p.name)+
-    row('',e(p.email)||'No email yet',!!p.email)+
-    row('',`${cv.experience.length} job${cv.experience.length===1?'':'s'} · ${cv.education.length} school${cv.education.length===1?'':'s'}`,cv.experience.length+cv.education.length>0)+
-    row('',`${cv.skills.length} skill${cv.skills.length===1?'':'s'}`,cv.skills.length>0)+
-    row('',`Template: <b class="text-slate-800">${tplNames[cv.selectedTemplate]}</b>`,true);
+    row('',`<b class="text-slate-800">${e(p.name)||L.sum.noName}</b>${p.title?' · '+e(p.title):''}`,!!p.name)+
+    row('',e(p.email)||L.sum.noEmail,!!p.email)+
+    row('',`${pl(L.sum.jobs,cv.experience.length)} · ${pl(L.sum.schools,cv.education.length)}`,cv.experience.length+cv.education.length>0)+
+    row('',pl(L.sum.skills,cv.skills.length),cv.skills.length>0)+
+    row('',`${L.sum.template}<b class="text-slate-800">${tplNames[cv.selectedTemplate]}</b>`,true);
 }
 
 // ════════════════════════════════
@@ -2098,7 +2292,7 @@ function e(s) {
 }
 function period(sm,sy,em,ey,cur) {
   const s=[sm?MO[sm-1]:'',sy].filter(Boolean).join(' ');
-  const end=cur?'Present':[em?MO[em-1]:'',ey].filter(Boolean).join(' ');
+  const end=cur?L.present:[em?MO[em-1]:'',ey].filter(Boolean).join(' ');
   return [s,end].filter(Boolean).join(' – ');
 }
 function barW(lvl) { return lvl==='Avansat'?92:lvl==='Mediu'?62:32; }
@@ -2113,7 +2307,7 @@ function renderCV() {
   // page count: content taller than one A4 page spills onto a second page in both PDFs
   const pages=Math.max(1, Math.ceil((p.scrollHeight-4)/A4H));
   const b=document.getElementById('pages-badge');
-  b.textContent=pages===1?'Fits on 1 page':pages+' pages';
+  b.textContent=pages===1?L.fitsOne:pl(L.pages,pages);
   b.classList.toggle('multi',pages>1);
   applyScale();
 }
@@ -2147,13 +2341,15 @@ function bullets(t) {
   return `<ul class="e-desc bul">${lines.map(l=>`<li>${e(l)}</li>`).join('')}</ul>`;
 }
 const xpDates=x=>period(x.startMonth,x.startYear,x.endMonth,x.endYear,x.current);
-const eduYears=x=>[x.startYear,x.current?'Present':x.endYear].filter(Boolean).join(' – ');
+const eduYears=x=>[x.startYear,x.current?L.present:x.endYear].filter(Boolean).join(' – ');
 const projLink=x=>x.url?`<a class="p-link" href="${e(href('website',x.url))}">${e(String(x.url).replace(/^https?:\/\//i,''))}</a>`:'';
 const certLine=c=>[e(c.org),e(c.year)].filter(Boolean).join(' · ');
 // 1–3 filled dots, derived from barW() so every template reads the same three levels
 function dots(s) { const n=Math.round(barW(s.level)/30); return `<span class="dots" aria-hidden="true">${[1,2,3].map(i=>`<i class="${i<=n?'on':''}"></i>`).join('')}</span>`; }
 const sec=(title,body,cls='sec',tcls='sec-title')=>body?`<div class="${cls}"><div class="${tcls}">${title}</div>${body}</div>`:'';
-const nm=p=>e(p.name)||'Your Name';
+const nm=p=>e(p.name)||L.yourName;
+// Language level as shown on the resume: stored as A1–C2 or 'Native'
+const lvl=l=>l.level==='Native'?L.f.native:l.level;
 
 const TPLS = {
 
@@ -2169,13 +2365,13 @@ const TPLS = {
           ${C.length?`<div class="contacts">${C.map(c=>ico(c)).join('')}</div>`:''}
         </div>
       </div>
-      ${d.summary?sec('Professional Summary',`<div class="summary-text">${e(d.summary)}</div>`):''}
-      ${sec('Work Experience',d.experience.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.title)}</div><div class="e-date">${xpDates(x)}</div></div><div class="e-sub">${e(x.company)}${x.location?' · '+e(x.location):''}</div>${bullets(x.description)}</div>`).join(''))}
-      ${sec('Education',d.education.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.degree)}</div><div class="e-date">${eduYears(x)}</div></div><div class="e-sub">${e(x.institution)}</div>${x.notes?`<div class="e-desc">${e(x.notes)}</div>`:''}</div>`).join(''))}
-      ${sec('Projects',d.projects.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.name)}</div>${projLink(x)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}</div>`).join(''))}
-      ${d.skills.length?sec('Skills',`<div class="skills-wrap">${d.skills.map(s=>`<span class="skill-tag">${e(s.name)}</span>`).join('')}</div>`):''}
-      ${sec('Languages',d.languages.map(l=>`<div class="lang-row"><span>${e(l.name)}</span><span class="lang-level">${e(l.level)}</span></div>`).join(''))}
-      ${sec('Certifications',d.certifications.map(c=>`<div class="entry"><div class="e-head"><div class="e-title">${e(c.name)}</div><div class="e-date">${e(c.year)}</div></div><div class="e-sub">${e(c.org)}</div></div>`).join(''))}
+      ${d.summary?sec(L.h.summaryPro,`<div class="summary-text">${e(d.summary)}</div>`):''}
+      ${sec(L.h.workExp,d.experience.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.title)}</div><div class="e-date">${xpDates(x)}</div></div><div class="e-sub">${e(x.company)}${x.location?' · '+e(x.location):''}</div>${bullets(x.description)}</div>`).join(''))}
+      ${sec(L.h.education,d.education.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.degree)}</div><div class="e-date">${eduYears(x)}</div></div><div class="e-sub">${e(x.institution)}</div>${x.notes?`<div class="e-desc">${e(x.notes)}</div>`:''}</div>`).join(''))}
+      ${sec(L.h.projects,d.projects.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.name)}</div>${projLink(x)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}</div>`).join(''))}
+      ${d.skills.length?sec(L.h.skills,`<div class="skills-wrap">${d.skills.map(s=>`<span class="skill-tag">${e(s.name)}</span>`).join('')}</div>`):''}
+      ${sec(L.h.languages,d.languages.map(l=>`<div class="lang-row"><span>${e(l.name)}</span><span class="lang-level">${e(lvl(l))}</span></div>`).join(''))}
+      ${sec(L.h.certs,d.certifications.map(c=>`<div class="entry"><div class="e-head"><div class="e-title">${e(c.name)}</div><div class="e-date">${e(c.year)}</div></div><div class="e-sub">${e(c.org)}</div></div>`).join(''))}
     </div>`;
   },
 
@@ -2187,16 +2383,16 @@ const TPLS = {
         ${photo(p,'s-photo')}
         <div class="s-name">${nm(p)}</div>
         ${p.title?`<div class="s-title">${e(p.title)}</div>`:''}
-        ${C.length?`<div><div class="s-sec-title">Contact</div>${C.map(c=>`<div class="s-contact"><i class="${c.icon}"></i><span>${c.a}</span></div>`).join('')}</div>`:''}
-        ${d.skills.length?`<div><div class="s-sec-title">Skills</div>${d.skills.map(s=>`<div class="bar-wrap"><div class="bar-name">${e(s.name)}</div><div class="bar-bg"><div class="bar-fill" style="width:${barW(s.level)}%"></div></div></div>`).join('')}</div>`:''}
-        ${d.languages.length?`<div><div class="s-sec-title">Languages</div>${d.languages.map(l=>`<div class="lang-item"><span>${e(l.name)}</span><span class="lang-level">${e(l.level)}</span></div>`).join('')}</div>`:''}
-        ${d.certifications.length?`<div><div class="s-sec-title">Certifications</div>${d.certifications.map(c=>`<div class="s-cert"><div class="s-cert-name">${e(c.name)}</div><div>${certLine(c)}</div></div>`).join('')}</div>`:''}
+        ${C.length?`<div><div class="s-sec-title">${L.h.contact}</div>${C.map(c=>`<div class="s-contact"><i class="${c.icon}"></i><span>${c.a}</span></div>`).join('')}</div>`:''}
+        ${d.skills.length?`<div><div class="s-sec-title">${L.h.skills}</div>${d.skills.map(s=>`<div class="bar-wrap"><div class="bar-name">${e(s.name)}</div><div class="bar-bg"><div class="bar-fill" style="width:${barW(s.level)}%"></div></div></div>`).join('')}</div>`:''}
+        ${d.languages.length?`<div><div class="s-sec-title">${L.h.languages}</div>${d.languages.map(l=>`<div class="lang-item"><span>${e(l.name)}</span><span class="lang-level">${e(lvl(l))}</span></div>`).join('')}</div>`:''}
+        ${d.certifications.length?`<div><div class="s-sec-title">${L.h.certs}</div>${d.certifications.map(c=>`<div class="s-cert"><div class="s-cert-name">${e(c.name)}</div><div>${certLine(c)}</div></div>`).join('')}</div>`:''}
       </div>
       <div class="main">
-        ${d.summary?sec('Profile',`<div class="summary-text">${e(d.summary)}</div>`,'m-sec','m-sec-title'):''}
-        ${sec('Work Experience',d.experience.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.title)}</div><div class="e-date">${xpDates(x)}</div></div><div class="e-sub">${e(x.company)}${x.location?' · '+e(x.location):''}</div>${bullets(x.description)}</div>`).join(''),'m-sec','m-sec-title')}
-        ${sec('Education',d.education.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.degree)}</div><div class="e-date">${eduYears(x)}</div></div><div class="e-sub">${e(x.institution)}</div>${x.notes?`<div class="e-desc">${e(x.notes)}</div>`:''}</div>`).join(''),'m-sec','m-sec-title')}
-        ${sec('Projects',d.projects.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.name)}</div>${projLink(x)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}</div>`).join(''),'m-sec','m-sec-title')}
+        ${d.summary?sec(L.h.profile,`<div class="summary-text">${e(d.summary)}</div>`,'m-sec','m-sec-title'):''}
+        ${sec(L.h.workExp,d.experience.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.title)}</div><div class="e-date">${xpDates(x)}</div></div><div class="e-sub">${e(x.company)}${x.location?' · '+e(x.location):''}</div>${bullets(x.description)}</div>`).join(''),'m-sec','m-sec-title')}
+        ${sec(L.h.education,d.education.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.degree)}</div><div class="e-date">${eduYears(x)}</div></div><div class="e-sub">${e(x.institution)}</div>${x.notes?`<div class="e-desc">${e(x.notes)}</div>`:''}</div>`).join(''),'m-sec','m-sec-title')}
+        ${sec(L.h.projects,d.projects.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.name)}</div>${projLink(x)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}</div>`).join(''),'m-sec','m-sec-title')}
       </div>
     </div>`;
   },
@@ -2209,13 +2405,13 @@ const TPLS = {
       ${p.title?`<div class="jobtitle">${e(p.title)}</div>`:''}
       <div class="divider"></div>
       ${C.length?`<div class="contacts">${C.map(c=>`<span>${c.a}</span>`).join('')}</div>`:''}
-      ${d.summary?sec('Profile',`<div class="summary-text">${e(d.summary)}</div>`):''}
-      ${sec('Experience',d.experience.map(x=>`<div class="entry"><div class="date-col">${xpDates(x)}</div><div class="e-content"><div class="e-title">${e(x.title)}</div><div class="e-sub">${e(x.company)}${x.location?', '+e(x.location):''}</div>${bullets(x.description)}</div></div>`).join(''))}
-      ${sec('Education',d.education.map(x=>`<div class="entry"><div class="date-col">${eduYears(x)}</div><div class="e-content"><div class="e-title">${e(x.degree)}</div><div class="e-sub">${e(x.institution)}${x.notes?' — '+e(x.notes):''}</div></div></div>`).join(''))}
-      ${sec('Projects',d.projects.map(x=>`<div class="entry"><div class="date-col">${projLink(x)}</div><div class="e-content"><div class="e-title">${e(x.name)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}</div></div>`).join(''))}
-      ${d.skills.length?sec('Skills',`<div class="skills-inline">${d.skills.map(s=>`<span class="skill-i">${e(s.name)}</span>`).join('')}</div>`):''}
-      ${d.languages.length?sec('Languages',`<div class="langs-inline">${d.languages.map(l=>`<span>${e(l.name)} <em>(${e(l.level)})</em></span>`).join('')}</div>`):''}
-      ${sec('Certifications',d.certifications.map(c=>`<div class="entry"><div class="date-col">${e(c.year)}</div><div class="e-content"><div class="e-title">${e(c.name)}</div><div class="e-sub">${e(c.org)}</div></div></div>`).join(''))}
+      ${d.summary?sec(L.h.profile,`<div class="summary-text">${e(d.summary)}</div>`):''}
+      ${sec(L.h.experience,d.experience.map(x=>`<div class="entry"><div class="date-col">${xpDates(x)}</div><div class="e-content"><div class="e-title">${e(x.title)}</div><div class="e-sub">${e(x.company)}${x.location?', '+e(x.location):''}</div>${bullets(x.description)}</div></div>`).join(''))}
+      ${sec(L.h.education,d.education.map(x=>`<div class="entry"><div class="date-col">${eduYears(x)}</div><div class="e-content"><div class="e-title">${e(x.degree)}</div><div class="e-sub">${e(x.institution)}${x.notes?' — '+e(x.notes):''}</div></div></div>`).join(''))}
+      ${sec(L.h.projects,d.projects.map(x=>`<div class="entry"><div class="date-col">${projLink(x)}</div><div class="e-content"><div class="e-title">${e(x.name)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}</div></div>`).join(''))}
+      ${d.skills.length?sec(L.h.skills,`<div class="skills-inline">${d.skills.map(s=>`<span class="skill-i">${e(s.name)}</span>`).join('')}</div>`):''}
+      ${d.languages.length?sec(L.h.languages,`<div class="langs-inline">${d.languages.map(l=>`<span>${e(l.name)} <em>(${e(lvl(l))})</em></span>`).join('')}</div>`):''}
+      ${sec(L.h.certs,d.certifications.map(c=>`<div class="entry"><div class="date-col">${e(c.year)}</div><div class="e-content"><div class="e-title">${e(c.name)}</div><div class="e-sub">${e(c.org)}</div></div></div>`).join(''))}
     </div>`;
   },
 
@@ -2234,13 +2430,13 @@ const TPLS = {
         ${C.length?`<div class="contacts">${C.map(c=>`<span class="c-item"><i class="${c.icon}"></i>${c.a}</span>`).join('')}</div>`:''}
       </div>
       <div class="body">
-        ${d.summary?sec('Profile',`<div class="summary-text">${e(d.summary)}</div>`,'sec full'):''}
-        ${sec('Work Experience',d.experience.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.title)}</div><div class="e-date">${xpDates(x)}</div></div><div class="e-sub">${e(x.company)}${x.location?' · '+e(x.location):''}</div>${bullets(x.description)}</div>`).join(''),'sec full')}
-        ${sec('Education',d.education.map(x=>`<div class="entry"><div class="e-title">${e(x.degree)}</div><div class="e-sub">${e(x.institution)}</div><div class="e-date">${eduYears(x)}${x.notes?' · '+e(x.notes):''}</div></div>`).join(''))}
-        ${d.skills.length?sec('Skills',`<div class="skills-wrap">${d.skills.map(s=>`<span class="skill-tag">${e(s.name)}</span>`).join('')}</div>`):''}
-        ${sec('Languages',d.languages.map(l=>`<div class="lang-item"><span>${e(l.name)}</span><span class="lang-level">${e(l.level)}</span></div>`).join(''))}
-        ${sec('Projects',d.projects.map(x=>`<div class="entry"><div class="e-title">${e(x.name)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}${projLink(x)}</div>`).join(''))}
-        ${sec('Certifications',d.certifications.map(c=>`<div class="entry"><div class="e-title">${e(c.name)}</div><div class="e-sub">${certLine(c)}</div></div>`).join(''))}
+        ${d.summary?sec(L.h.profile,`<div class="summary-text">${e(d.summary)}</div>`,'sec full'):''}
+        ${sec(L.h.workExp,d.experience.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.title)}</div><div class="e-date">${xpDates(x)}</div></div><div class="e-sub">${e(x.company)}${x.location?' · '+e(x.location):''}</div>${bullets(x.description)}</div>`).join(''),'sec full')}
+        ${sec(L.h.education,d.education.map(x=>`<div class="entry"><div class="e-title">${e(x.degree)}</div><div class="e-sub">${e(x.institution)}</div><div class="e-date">${eduYears(x)}${x.notes?' · '+e(x.notes):''}</div></div>`).join(''))}
+        ${d.skills.length?sec(L.h.skills,`<div class="skills-wrap">${d.skills.map(s=>`<span class="skill-tag">${e(s.name)}</span>`).join('')}</div>`):''}
+        ${sec(L.h.languages,d.languages.map(l=>`<div class="lang-item"><span>${e(l.name)}</span><span class="lang-level">${e(lvl(l))}</span></div>`).join(''))}
+        ${sec(L.h.projects,d.projects.map(x=>`<div class="entry"><div class="e-title">${e(x.name)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}${projLink(x)}</div>`).join(''))}
+        ${sec(L.h.certs,d.certifications.map(c=>`<div class="entry"><div class="e-title">${e(c.name)}</div><div class="e-sub">${certLine(c)}</div></div>`).join(''))}
       </div>
     </div>`;
   },
@@ -2258,15 +2454,15 @@ const TPLS = {
       ${C.length?`<div class="contacts">${C.map(c=>`<span>${c.a}</span>`).join('')}</div>`:''}
       <div class="grid-2">
         <div>
-          ${d.summary?sec('Executive Profile',`<div class="summary-text">${e(d.summary)}</div>`):''}
-          ${sec('Professional Experience',d.experience.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.title)}</div><div class="e-date">${xpDates(x)}</div></div><div class="e-sub">${e(x.company)}${x.location?', '+e(x.location):''}</div>${bullets(x.description)}</div>`).join(''))}
-          ${sec('Education',d.education.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.degree)}</div><div class="e-date">${eduYears(x)}</div></div><div class="e-sub">${e(x.institution)}${x.notes?' · '+e(x.notes):''}</div></div>`).join(''))}
-          ${sec('Notable Projects',d.projects.map(x=>`<div class="entry"><div class="e-title">${e(x.name)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}</div>`).join(''))}
+          ${d.summary?sec(L.h.execProfile,`<div class="summary-text">${e(d.summary)}</div>`):''}
+          ${sec(L.h.proExp,d.experience.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.title)}</div><div class="e-date">${xpDates(x)}</div></div><div class="e-sub">${e(x.company)}${x.location?', '+e(x.location):''}</div>${bullets(x.description)}</div>`).join(''))}
+          ${sec(L.h.education,d.education.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.degree)}</div><div class="e-date">${eduYears(x)}</div></div><div class="e-sub">${e(x.institution)}${x.notes?' · '+e(x.notes):''}</div></div>`).join(''))}
+          ${sec(L.h.notableProjects,d.projects.map(x=>`<div class="entry"><div class="e-title">${e(x.name)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}</div>`).join(''))}
         </div>
         <div>
-          ${d.skills.length?sec('Core Competencies',`<ul class="skill-list">${d.skills.map(s=>`<li>${e(s.name)}</li>`).join('')}</ul>`):''}
-          ${sec('Languages',d.languages.map(l=>`<div class="lang-row"><span>${e(l.name)}</span><span class="lang-level">${e(l.level)}</span></div>`).join(''))}
-          ${sec('Certifications',d.certifications.map(c=>`<div class="entry"><div class="e-title" style="font-size:9.5pt">${e(c.name)}</div><div class="e-sub">${certLine(c)}</div></div>`).join(''))}
+          ${d.skills.length?sec(L.h.competencies,`<ul class="skill-list">${d.skills.map(s=>`<li>${e(s.name)}</li>`).join('')}</ul>`):''}
+          ${sec(L.h.languages,d.languages.map(l=>`<div class="lang-row"><span>${e(l.name)}</span><span class="lang-level">${e(lvl(l))}</span></div>`).join(''))}
+          ${sec(L.h.certs,d.certifications.map(c=>`<div class="entry"><div class="e-title" style="font-size:9.5pt">${e(c.name)}</div><div class="e-sub">${certLine(c)}</div></div>`).join(''))}
         </div>
       </div>
     </div>`;
@@ -2286,15 +2482,15 @@ const TPLS = {
       </div>
       <div class="body">
         <div class="main">
-          ${d.summary?sec('About',`<div class="summary-text">${e(d.summary)}</div>`):''}
-          ${sec('Experience',d.experience.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.title)}</div><div class="e-date">${xpDates(x)}</div></div><div class="e-sub">${e(x.company)}${x.location?' · '+e(x.location):''}</div>${bullets(x.description)}</div>`).join(''))}
-          ${sec('Education',d.education.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.degree)}</div><div class="e-date">${eduYears(x)}</div></div><div class="e-sub">${e(x.institution)}</div>${x.notes?`<div class="e-desc">${e(x.notes)}</div>`:''}</div>`).join(''))}
-          ${sec('Projects',d.projects.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.name)}</div>${projLink(x)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}</div>`).join(''))}
+          ${d.summary?sec(L.h.about,`<div class="summary-text">${e(d.summary)}</div>`):''}
+          ${sec(L.h.experience,d.experience.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.title)}</div><div class="e-date">${xpDates(x)}</div></div><div class="e-sub">${e(x.company)}${x.location?' · '+e(x.location):''}</div>${bullets(x.description)}</div>`).join(''))}
+          ${sec(L.h.education,d.education.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.degree)}</div><div class="e-date">${eduYears(x)}</div></div><div class="e-sub">${e(x.institution)}</div>${x.notes?`<div class="e-desc">${e(x.notes)}</div>`:''}</div>`).join(''))}
+          ${sec(L.h.projects,d.projects.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.name)}</div>${projLink(x)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}</div>`).join(''))}
         </div>
         <div class="aside">
-          ${d.skills.length?sec('Skills',`<div>${d.skills.map(s=>`<span class="skill-tag">${e(s.name)}</span>`).join('')}</div>`,'sec','a-sec-title'):''}
-          ${sec('Languages',d.languages.map(l=>`<div class="lang-row"><span>${e(l.name)}</span><span class="lang-level">${e(l.level)}</span></div>`).join(''),'sec','a-sec-title')}
-          ${sec('Certifications',d.certifications.map(c=>`<div class="cert-item"><div class="cert-name">${e(c.name)}</div><div>${certLine(c)}</div></div>`).join(''),'sec','a-sec-title')}
+          ${d.skills.length?sec(L.h.skills,`<div>${d.skills.map(s=>`<span class="skill-tag">${e(s.name)}</span>`).join('')}</div>`,'sec','a-sec-title'):''}
+          ${sec(L.h.languages,d.languages.map(l=>`<div class="lang-row"><span>${e(l.name)}</span><span class="lang-level">${e(lvl(l))}</span></div>`).join(''),'sec','a-sec-title')}
+          ${sec(L.h.certs,d.certifications.map(c=>`<div class="cert-item"><div class="cert-name">${e(c.name)}</div><div>${certLine(c)}</div></div>`).join(''),'sec','a-sec-title')}
         </div>
       </div>
     </div>`;
@@ -2315,15 +2511,15 @@ const TPLS = {
       </div>
       <div class="grid-2">
         <div>
-          ${d.summary?sec('<span class="emoji">✨</span> About Me <div class="tline"></div>',`<div class="summary-text">${e(d.summary)}</div>`):''}
-          ${sec('<span class="emoji">💼</span> Experience <div class="tline"></div>',d.experience.map(x=>`<div class="entry"><div class="e-title">${e(x.title)}</div><div class="e-sub">${e(x.company)}${x.location?' · '+e(x.location):''}</div><div class="e-date">${xpDates(x)}</div>${bullets(x.description)}</div>`).join(''))}
-          ${sec('<span class="emoji">🎓</span> Education <div class="tline"></div>',d.education.map(x=>`<div class="entry"><div class="e-title">${e(x.degree)}</div><div class="e-sub">${e(x.institution)}</div><div class="e-date">${eduYears(x)}${x.notes?' · '+e(x.notes):''}</div></div>`).join(''))}
-          ${sec('<span class="emoji">🚀</span> Projects <div class="tline"></div>',d.projects.map(x=>`<div class="entry"><div class="e-title">${e(x.name)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}</div>`).join(''))}
+          ${d.summary?sec('<span class="emoji">✨</span> '+L.h.aboutMe+' <div class="tline"></div>',`<div class="summary-text">${e(d.summary)}</div>`):''}
+          ${sec('<span class="emoji">💼</span> '+L.h.experience+' <div class="tline"></div>',d.experience.map(x=>`<div class="entry"><div class="e-title">${e(x.title)}</div><div class="e-sub">${e(x.company)}${x.location?' · '+e(x.location):''}</div><div class="e-date">${xpDates(x)}</div>${bullets(x.description)}</div>`).join(''))}
+          ${sec('<span class="emoji">🎓</span> '+L.h.education+' <div class="tline"></div>',d.education.map(x=>`<div class="entry"><div class="e-title">${e(x.degree)}</div><div class="e-sub">${e(x.institution)}</div><div class="e-date">${eduYears(x)}${x.notes?' · '+e(x.notes):''}</div></div>`).join(''))}
+          ${sec('<span class="emoji">🚀</span> '+L.h.projects+' <div class="tline"></div>',d.projects.map(x=>`<div class="entry"><div class="e-title">${e(x.name)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}</div>`).join(''))}
         </div>
         <div>
-          ${d.skills.length?sec('<span class="emoji">⚡</span> Skills <div class="tline"></div>',`<div class="skills-wrap">${d.skills.map(s=>`<span class="skill-tag">${e(s.name)}</span>`).join('')}</div>`):''}
-          ${sec('<span class="emoji">🌍</span> Languages <div class="tline"></div>',d.languages.map(l=>`<div class="lang-row"><span>${e(l.name)}</span><span class="lang-level">${e(l.level)}</span></div>`).join(''))}
-          ${sec('<span class="emoji">🏆</span> Certifications <div class="tline"></div>',d.certifications.map(c=>`<div class="cert-item"><div class="cert-name">${e(c.name)}</div><div>${certLine(c)}</div></div>`).join(''))}
+          ${d.skills.length?sec('<span class="emoji">⚡</span> '+L.h.skills+' <div class="tline"></div>',`<div class="skills-wrap">${d.skills.map(s=>`<span class="skill-tag">${e(s.name)}</span>`).join('')}</div>`):''}
+          ${sec('<span class="emoji">🌍</span> '+L.h.languages+' <div class="tline"></div>',d.languages.map(l=>`<div class="lang-row"><span>${e(l.name)}</span><span class="lang-level">${e(lvl(l))}</span></div>`).join(''))}
+          ${sec('<span class="emoji">🏆</span> '+L.h.certs+' <div class="tline"></div>',d.certifications.map(c=>`<div class="cert-item"><div class="cert-name">${e(c.name)}</div><div>${certLine(c)}</div></div>`).join(''))}
         </div>
       </div>
     </div>`;
@@ -2345,15 +2541,15 @@ const TPLS = {
       </div>
       <div class="body">
         <div class="main">
-          ${d.summary?sec('About',`<div class="summary-text">${e(d.summary)}</div>`):''}
-          ${sec('Experience',d.experience.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.title)}</div><div class="e-date">${xpDates(x)}</div></div><div class="e-sub">${e(x.company)}${x.location?' · '+e(x.location):''}</div>${bullets(x.description)}</div>`).join(''))}
-          ${sec('Education',d.education.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.degree)}</div><div class="e-date">${eduYears(x)}</div></div><div class="e-sub">${e(x.institution)}</div>${x.notes?`<div class="e-desc">${e(x.notes)}</div>`:''}</div>`).join(''))}
-          ${sec('Projects',d.projects.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.name)}</div>${projLink(x)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}</div>`).join(''))}
+          ${d.summary?sec(L.h.about,`<div class="summary-text">${e(d.summary)}</div>`):''}
+          ${sec(L.h.experience,d.experience.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.title)}</div><div class="e-date">${xpDates(x)}</div></div><div class="e-sub">${e(x.company)}${x.location?' · '+e(x.location):''}</div>${bullets(x.description)}</div>`).join(''))}
+          ${sec(L.h.education,d.education.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.degree)}</div><div class="e-date">${eduYears(x)}</div></div><div class="e-sub">${e(x.institution)}</div>${x.notes?`<div class="e-desc">${e(x.notes)}</div>`:''}</div>`).join(''))}
+          ${sec(L.h.projects,d.projects.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.name)}</div>${projLink(x)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}</div>`).join(''))}
         </div>
         <div class="aside">
-          ${d.skills.length?sec('Skills',`<div>${d.skills.map(s=>`<div class="bar-wrap"><div class="bar-name">${e(s.name)}</div><div class="bar-bg"><div class="bar-fill" style="width:${barW(s.level)}%"></div></div></div>`).join('')}</div>`,'sec','a-title'):''}
-          ${sec('Languages',d.languages.map(l=>`<div class="lang-row"><span>${e(l.name)}</span><span class="lang-level">${e(l.level)}</span></div>`).join(''),'sec','a-title')}
-          ${sec('Certifications',d.certifications.map(c=>`<div class="cert-item"><div class="cert-name">${e(c.name)}</div><div>${certLine(c)}</div></div>`).join(''),'sec','a-title')}
+          ${d.skills.length?sec(L.h.skills,`<div>${d.skills.map(s=>`<div class="bar-wrap"><div class="bar-name">${e(s.name)}</div><div class="bar-bg"><div class="bar-fill" style="width:${barW(s.level)}%"></div></div></div>`).join('')}</div>`,'sec','a-title'):''}
+          ${sec(L.h.languages,d.languages.map(l=>`<div class="lang-row"><span>${e(l.name)}</span><span class="lang-level">${e(lvl(l))}</span></div>`).join(''),'sec','a-title')}
+          ${sec(L.h.certs,d.certifications.map(c=>`<div class="cert-item"><div class="cert-name">${e(c.name)}</div><div>${certLine(c)}</div></div>`).join(''),'sec','a-title')}
         </div>
       </div>
     </div>`;
@@ -2376,17 +2572,17 @@ const TPLS = {
             </div>
           </div>
         </div>
-        ${d.summary?sec('Profile',`<div class="summary-text">${e(d.summary)}</div>`,'sec','sec-title c1'):''}
+        ${d.summary?sec(L.h.profile,`<div class="summary-text">${e(d.summary)}</div>`,'sec','sec-title c1'):''}
         <div class="grid-2">
           <div>
-            ${sec('Experience',d.experience.map(x=>`<div class="entry"><div class="e-title">${e(x.title)}</div><div class="e-sub">${e(x.company)}${x.location?' · '+e(x.location):''}</div><div class="e-date">${xpDates(x)}</div>${bullets(x.description)}</div>`).join(''),'sec','sec-title c1')}
-            ${sec('Education',d.education.map(x=>`<div class="entry"><div class="e-title">${e(x.degree)}</div><div class="e-sub">${e(x.institution)}</div><div class="e-date">${eduYears(x)}${x.notes?' · '+e(x.notes):''}</div></div>`).join(''),'sec','sec-title c2')}
-            ${sec('Projects',d.projects.map(x=>`<div class="entry"><div class="e-title">${e(x.name)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}</div>`).join(''),'sec','sec-title c3')}
+            ${sec(L.h.experience,d.experience.map(x=>`<div class="entry"><div class="e-title">${e(x.title)}</div><div class="e-sub">${e(x.company)}${x.location?' · '+e(x.location):''}</div><div class="e-date">${xpDates(x)}</div>${bullets(x.description)}</div>`).join(''),'sec','sec-title c1')}
+            ${sec(L.h.education,d.education.map(x=>`<div class="entry"><div class="e-title">${e(x.degree)}</div><div class="e-sub">${e(x.institution)}</div><div class="e-date">${eduYears(x)}${x.notes?' · '+e(x.notes):''}</div></div>`).join(''),'sec','sec-title c2')}
+            ${sec(L.h.projects,d.projects.map(x=>`<div class="entry"><div class="e-title">${e(x.name)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}</div>`).join(''),'sec','sec-title c3')}
           </div>
           <div>
-            ${d.skills.length?sec('Skills',`<div class="skills-wrap">${d.skills.map(s=>`<span class="skill-tag">${e(s.name)}</span>`).join('')}</div>`,'sec','sec-title c3'):''}
-            ${sec('Languages',d.languages.map(l=>`<div class="lang-row"><span>${e(l.name)}</span><span class="lang-level">${e(l.level)}</span></div>`).join(''),'sec','sec-title c4')}
-            ${sec('Certifications',d.certifications.map(c=>`<div class="cert-item"><div class="cert-name">${e(c.name)}</div><div>${certLine(c)}</div></div>`).join(''),'sec','sec-title c5')}
+            ${d.skills.length?sec(L.h.skills,`<div class="skills-wrap">${d.skills.map(s=>`<span class="skill-tag">${e(s.name)}</span>`).join('')}</div>`,'sec','sec-title c3'):''}
+            ${sec(L.h.languages,d.languages.map(l=>`<div class="lang-row"><span>${e(l.name)}</span><span class="lang-level">${e(lvl(l))}</span></div>`).join(''),'sec','sec-title c4')}
+            ${sec(L.h.certs,d.certifications.map(c=>`<div class="cert-item"><div class="cert-name">${e(c.name)}</div><div>${certLine(c)}</div></div>`).join(''),'sec','sec-title c5')}
           </div>
         </div>
       </div>
@@ -2411,15 +2607,15 @@ const TPLS = {
       </div>
       <div class="body">
         <div>
-          ${d.summary?sec('Profile',`<div class="summary-text">${e(d.summary)}</div>`):''}
-          ${sec('Experience',d.experience.map(x=>`<div class="entry"><div class="e-date-col">${xpDates(x)}</div><div class="e-content"><div class="e-title">${e(x.title)}</div><div class="e-sub">${e(x.company)}${x.location?', '+e(x.location):''}</div>${bullets(x.description)}</div></div>`).join(''))}
-          ${sec('Education',d.education.map(x=>`<div class="entry"><div class="e-date-col">${eduYears(x)}</div><div class="e-content"><div class="e-title">${e(x.degree)}</div><div class="e-sub">${e(x.institution)}${x.notes?' — '+e(x.notes):''}</div></div></div>`).join(''))}
-          ${sec('Projects',d.projects.map(x=>`<div class="entry"><div class="e-date-col">Project</div><div class="e-content"><div class="e-title">${e(x.name)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}</div></div>`).join(''))}
+          ${d.summary?sec(L.h.profile,`<div class="summary-text">${e(d.summary)}</div>`):''}
+          ${sec(L.h.experience,d.experience.map(x=>`<div class="entry"><div class="e-date-col">${xpDates(x)}</div><div class="e-content"><div class="e-title">${e(x.title)}</div><div class="e-sub">${e(x.company)}${x.location?', '+e(x.location):''}</div>${bullets(x.description)}</div></div>`).join(''))}
+          ${sec(L.h.education,d.education.map(x=>`<div class="entry"><div class="e-date-col">${eduYears(x)}</div><div class="e-content"><div class="e-title">${e(x.degree)}</div><div class="e-sub">${e(x.institution)}${x.notes?' — '+e(x.notes):''}</div></div></div>`).join(''))}
+          ${sec(L.h.projects,d.projects.map(x=>`<div class="entry"><div class="e-date-col">${L.h.project}</div><div class="e-content"><div class="e-title">${e(x.name)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}</div></div>`).join(''))}
         </div>
         <div>
-          ${d.skills.length?sec('Skills',`<div class="skills-wrap">${d.skills.map(s=>`<span class="skill-tag">${e(s.name)}</span>`).join('')}</div>`,'sec','a-sec-title'):''}
-          ${sec('Languages',d.languages.map(l=>`<div class="lang-row"><span>${e(l.name)}</span><span class="lang-level">${e(l.level)}</span></div>`).join(''),'sec','a-sec-title')}
-          ${sec('Certifications',d.certifications.map(c=>`<div class="cert-item"><div class="cert-name">${e(c.name)}</div><div>${certLine(c)}</div></div>`).join(''),'sec','a-sec-title')}
+          ${d.skills.length?sec(L.h.skills,`<div class="skills-wrap">${d.skills.map(s=>`<span class="skill-tag">${e(s.name)}</span>`).join('')}</div>`,'sec','a-sec-title'):''}
+          ${sec(L.h.languages,d.languages.map(l=>`<div class="lang-row"><span>${e(l.name)}</span><span class="lang-level">${e(lvl(l))}</span></div>`).join(''),'sec','a-sec-title')}
+          ${sec(L.h.certs,d.certifications.map(c=>`<div class="cert-item"><div class="cert-name">${e(c.name)}</div><div>${certLine(c)}</div></div>`).join(''),'sec','a-sec-title')}
         </div>
       </div>
     </div>`;
@@ -2438,16 +2634,16 @@ const TPLS = {
       </div>
       <div class="body">
         <div class="main">
-          ${d.summary?sec('Profile',`<div class="summary-text">${e(d.summary)}</div>`):''}
-          ${sec('Experience',d.experience.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.title)}</div><div class="e-date">${xpDates(x)}</div></div><div class="e-sub">${e(x.company)}${x.location?` <span class="loc">· ${e(x.location)}</span>`:''}</div>${bullets(x.description)}</div>`).join(''))}
-          ${sec('Education',d.education.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.degree)}</div><div class="e-date">${eduYears(x)}</div></div><div class="e-sub">${e(x.institution)}</div>${x.notes?`<div class="e-desc">${e(x.notes)}</div>`:''}</div>`).join(''))}
-          ${sec('Projects',d.projects.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.name)}</div>${projLink(x)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}</div>`).join(''))}
+          ${d.summary?sec(L.h.profile,`<div class="summary-text">${e(d.summary)}</div>`):''}
+          ${sec(L.h.experience,d.experience.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.title)}</div><div class="e-date">${xpDates(x)}</div></div><div class="e-sub">${e(x.company)}${x.location?` <span class="loc">· ${e(x.location)}</span>`:''}</div>${bullets(x.description)}</div>`).join(''))}
+          ${sec(L.h.education,d.education.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.degree)}</div><div class="e-date">${eduYears(x)}</div></div><div class="e-sub">${e(x.institution)}</div>${x.notes?`<div class="e-desc">${e(x.notes)}</div>`:''}</div>`).join(''))}
+          ${sec(L.h.projects,d.projects.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.name)}</div>${projLink(x)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}</div>`).join(''))}
         </div>
         <div class="side">
-          ${sec('Contact',C.map(c=>`<div class="c-item"><i class="${c.icon}"></i><span>${c.a}</span></div>`).join(''))}
-          ${d.skills.length?sec('Skills',d.skills.map(s=>`<div class="skill"><span>${e(s.name)}</span>${dots(s)}</div>`).join('')):''}
-          ${sec('Languages',d.languages.map(l=>`<div class="skill"><span>${e(l.name)}</span><span class="lvl">${e(l.level)}</span></div>`).join(''))}
-          ${sec('Certifications',d.certifications.map(c=>`<div class="cert"><div class="cert-name">${e(c.name)}</div><div class="cert-org">${certLine(c)}</div></div>`).join(''))}
+          ${sec(L.h.contact,C.map(c=>`<div class="c-item"><i class="${c.icon}"></i><span>${c.a}</span></div>`).join(''))}
+          ${d.skills.length?sec(L.h.skills,d.skills.map(s=>`<div class="skill"><span>${e(s.name)}</span>${dots(s)}</div>`).join('')):''}
+          ${sec(L.h.languages,d.languages.map(l=>`<div class="skill"><span>${e(l.name)}</span><span class="lvl">${e(lvl(l))}</span></div>`).join(''))}
+          ${sec(L.h.certs,d.certifications.map(c=>`<div class="cert"><div class="cert-name">${e(c.name)}</div><div class="cert-org">${certLine(c)}</div></div>`).join(''))}
         </div>
       </div>
     </div>`;
@@ -2460,25 +2656,25 @@ const TPLS = {
     const ed=d.education.map(x=>`<div class="entry"><div class="row"><span class="org">${e(x.institution)}</span><span class="when">${eduYears(x)}</span></div><div class="row"><span class="role">${e(x.degree)}</span></div>${x.notes?`<div class="e-desc">${e(x.notes)}</div>`:''}</div>`).join('');
     const pr=d.projects.map(x=>`<div class="entry"><div class="row"><span class="org">${e(x.name)}</span>${projLink(x)}</div>${x.tech?`<div class="row"><span class="role">${e(x.tech)}</span></div>`:''}${bullets(x.description)}</div>`).join('');
     const lines=[
-      d.skills.length?`<div class="line"><b>Skills:</b> ${d.skills.map(s=>e(s.name)).join(', ')}</div>`:'',
-      d.languages.length?`<div class="line"><b>Languages:</b> ${d.languages.map(l=>`${e(l.name)} (${e(l.level)})`).join(', ')}</div>`:'',
-      d.certifications.length?`<div class="line"><b>Certifications:</b> ${d.certifications.map(c=>[e(c.name),certLine(c)].filter(Boolean).join(', ')).join('; ')}</div>`:''
+      d.skills.length?`<div class="line"><b>${L.h.skills}:</b> ${d.skills.map(s=>e(s.name)).join(', ')}</div>`:'',
+      d.languages.length?`<div class="line"><b>${L.h.languages}:</b> ${d.languages.map(l=>`${e(l.name)} (${e(lvl(l))})`).join(', ')}</div>`:'',
+      d.certifications.length?`<div class="line"><b>${L.h.certs}:</b> ${d.certifications.map(c=>[e(c.name),certLine(c)].filter(Boolean).join(', ')).join('; ')}</div>`:''
     ].join('');
     return `<div class="tpl-harvard cvt">
       <div class="name">${nm(p)}</div>
       ${C.length?`<div class="contacts">${C.map(c=>`<span>${c.a}</span>`).join('')}</div>`:''}
-      ${d.summary?sec('Summary',`<div class="summary-text">${e(d.summary)}</div>`):''}
-      ${sec('Education',ed)}
-      ${sec('Experience',xp)}
-      ${sec('Projects',pr)}
-      ${sec('Skills &amp; Interests',lines)}
+      ${d.summary?sec(L.h.summary,`<div class="summary-text">${e(d.summary)}</div>`):''}
+      ${sec(L.h.education,ed)}
+      ${sec(L.h.experience,xp)}
+      ${sec(L.h.projects,pr)}
+      ${sec(L.h.skillsInterests,lines)}
     </div>`;
   },
 
   /* ── 13. STUDENT — entry-level, Education and Projects first ── */
   student: d => {
     const p=d.personal, C=contactList(p);
-    const lang=d.languages.map(l=>`<div class="kv"><span>${e(l.name)}</span><span class="lvl">${e(l.level)}</span></div>`).join('');
+    const lang=d.languages.map(l=>`<div class="kv"><span>${e(l.name)}</span><span class="lvl">${e(lvl(l))}</span></div>`).join('');
     const cert=d.certifications.map(c=>`<div class="kv"><span><b>${e(c.name)}</b>${c.org?' · '+e(c.org):''}</span><span class="lvl">${e(c.year)}</span></div>`).join('');
     return `<div class="tpl-student cvt">
       <div class="hd">
@@ -2489,12 +2685,12 @@ const TPLS = {
           ${C.length?`<div class="contacts">${C.map(c=>ico(c)).join('')}</div>`:''}
         </div>
       </div>
-      ${d.summary?sec('Profile',`<div class="summary-text">${e(d.summary)}</div>`):''}
-      ${sec('Education',d.education.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.degree)}</div><div class="e-date">${eduYears(x)}</div></div><div class="e-sub">${e(x.institution)}</div>${x.notes?`<div class="e-desc">${e(x.notes)}</div>`:''}</div>`).join(''))}
-      ${sec('Projects',d.projects.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.name)}</div>${projLink(x)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}</div>`).join(''))}
-      ${sec('Experience',d.experience.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.title)}</div><div class="e-date">${xpDates(x)}</div></div><div class="e-sub">${e(x.company)}${x.location?' · '+e(x.location):''}</div>${bullets(x.description)}</div>`).join(''))}
-      ${d.skills.length?sec('Skills',`<div class="skills-wrap">${d.skills.map(s=>`<span class="skill-tag">${e(s.name)}</span>`).join('')}</div>`):''}
-      ${(lang||cert)?`<div class="two">${sec('Languages',lang)}${sec('Certifications',cert)}</div>`:''}
+      ${d.summary?sec(L.h.profile,`<div class="summary-text">${e(d.summary)}</div>`):''}
+      ${sec(L.h.education,d.education.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.degree)}</div><div class="e-date">${eduYears(x)}</div></div><div class="e-sub">${e(x.institution)}</div>${x.notes?`<div class="e-desc">${e(x.notes)}</div>`:''}</div>`).join(''))}
+      ${sec(L.h.projects,d.projects.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.name)}</div>${projLink(x)}</div>${x.tech?`<div class="e-sub">${e(x.tech)}</div>`:''}${bullets(x.description)}</div>`).join(''))}
+      ${sec(L.h.experience,d.experience.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.title)}</div><div class="e-date">${xpDates(x)}</div></div><div class="e-sub">${e(x.company)}${x.location?' · '+e(x.location):''}</div>${bullets(x.description)}</div>`).join(''))}
+      ${d.skills.length?sec(L.h.skills,`<div class="skills-wrap">${d.skills.map(s=>`<span class="skill-tag">${e(s.name)}</span>`).join('')}</div>`):''}
+      ${(lang||cert)?`<div class="two">${sec(L.h.languages,lang)}${sec(L.h.certs,cert)}</div>`:''}
     </div>`;
   },
 
@@ -2510,13 +2706,13 @@ const TPLS = {
         </div>
         ${C.length?`<div class="contacts">${C.map(c=>`<span>${c.a}</span>`).join('')}</div>`:''}
       </div>
-      ${d.summary?row('Summary',`<div class="summary-text">${e(d.summary)}</div>`):''}
-      ${row('Experience',d.experience.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.title)}${x.company?` <span class="at">· ${e(x.company)}${x.location?', '+e(x.location):''}</span>`:''}</div><div class="e-date">${xpDates(x)}</div></div>${bullets(x.description)}</div>`).join(''))}
-      ${row('Education',d.education.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.degree)}${x.institution?` <span class="at">· ${e(x.institution)}</span>`:''}</div><div class="e-date">${eduYears(x)}</div></div>${x.notes?`<div class="e-desc">${e(x.notes)}</div>`:''}</div>`).join(''))}
-      ${row('Projects',d.projects.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.name)}${x.tech?` <span class="at">· ${e(x.tech)}</span>`:''}</div>${projLink(x)}</div>${bullets(x.description)}</div>`).join(''))}
-      ${d.skills.length?row('Skills',`<div class="inline">${d.skills.map(s=>`<span>${e(s.name)}</span>`).join('')}</div>`):''}
-      ${d.languages.length?row('Languages',`<div class="inline">${d.languages.map(l=>`<span>${e(l.name)} (${e(l.level)})</span>`).join('')}</div>`):''}
-      ${row('Certifications',d.certifications.map(c=>`<div class="entry"><div class="e-head"><div class="e-title">${e(c.name)}${c.org?` <span class="at">· ${e(c.org)}</span>`:''}</div><div class="e-date">${e(c.year)}</div></div></div>`).join(''))}
+      ${d.summary?row(L.h.summary,`<div class="summary-text">${e(d.summary)}</div>`):''}
+      ${row(L.h.experience,d.experience.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.title)}${x.company?` <span class="at">· ${e(x.company)}${x.location?', '+e(x.location):''}</span>`:''}</div><div class="e-date">${xpDates(x)}</div></div>${bullets(x.description)}</div>`).join(''))}
+      ${row(L.h.education,d.education.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.degree)}${x.institution?` <span class="at">· ${e(x.institution)}</span>`:''}</div><div class="e-date">${eduYears(x)}</div></div>${x.notes?`<div class="e-desc">${e(x.notes)}</div>`:''}</div>`).join(''))}
+      ${row(L.h.projects,d.projects.map(x=>`<div class="entry"><div class="e-head"><div class="e-title">${e(x.name)}${x.tech?` <span class="at">· ${e(x.tech)}</span>`:''}</div>${projLink(x)}</div>${bullets(x.description)}</div>`).join(''))}
+      ${d.skills.length?row(L.h.skills,`<div class="inline">${d.skills.map(s=>`<span>${e(s.name)}</span>`).join('')}</div>`):''}
+      ${d.languages.length?row(L.h.languages,`<div class="inline">${d.languages.map(l=>`<span>${e(l.name)} (${e(lvl(l))})</span>`).join('')}</div>`):''}
+      ${row(L.h.certs,d.certifications.map(c=>`<div class="entry"><div class="e-head"><div class="e-title">${e(c.name)}${c.org?` <span class="at">· ${e(c.org)}</span>`:''}</div><div class="e-date">${e(c.year)}</div></div></div>`).join(''))}
     </div>`;
   }
 };
@@ -2544,7 +2740,7 @@ async function downloadPDF() {
   const ico=document.getElementById('dl-ico');
   const spin=document.getElementById('dl-spin');
   const txt=document.getElementById('dl-txt');
-  btn.disabled=true; ico.classList.add('hidden'); spin.classList.remove('hidden'); txt.textContent='Generating...';
+  btn.disabled=true; ico.classList.add('hidden'); spin.classList.remove('hidden'); txt.textContent=L.generating;
 
   const preview=document.getElementById('cv-preview');
   const origT=preview.style.transform;
@@ -2554,7 +2750,7 @@ async function downloadPDF() {
   preview.style.marginBottom='0';
   preview.classList.add('pdf-capture');
 
-  const safeName=(cv.personal.name||'CV').replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
+  const safeName=(cv.personal.name||'CV').replace(/\s+/g,'_').replace(L.pdfFileUnicode?/[^\p{L}\p{N}_]/gu:/[^a-zA-Z0-9_]/g,'');
   try {
     await loadHtml2pdf();
     if(document.fonts && document.fonts.ready) await document.fonts.ready;
@@ -2562,7 +2758,7 @@ async function downloadPDF() {
     // 'css' page breaks honour break-inside:avoid on entries, so a job is never cut in half between pages.
     await html2pdf().set({
       margin:0,
-      filename:`Resume_${safeName}_2026.pdf`,
+      filename:L.pdfFile.replace('{name}',safeName),
       image:{type:'jpeg',quality:0.98},
       html2canvas:{scale:2,useCORS:true,logging:false},
       jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
@@ -2571,14 +2767,14 @@ async function downloadPDF() {
     }).from(preview).save();
     window.dispatchEvent(new Event('makecv:downloaded'));
   } catch(err) {
-    alert('PDF generation failed. Please try again.');
+    alert(L.pdfFail);
   }
 
   preview.classList.remove('pdf-capture');
   preview.style.transform=origT;
   preview.style.transformOrigin='top center';
   preview.style.marginBottom=origM;
-  btn.disabled=false; ico.classList.remove('hidden'); spin.classList.add('hidden'); txt.textContent='Download PDF';
+  btn.disabled=false; ico.classList.remove('hidden'); spin.classList.add('hidden'); txt.textContent=L.download;
   updateDlBtn();
 }
 
@@ -2594,7 +2790,7 @@ function printATS() {
   // "Save as PDF" names the file after document.title: suggest Firstname-Lastname-Resume.pdf instead of the page title
   const pageTitle = document.title;
   const base = (cv.personal.name||'').trim().replace(/\s+/g,'-').replace(/[^\p{L}\p{N}-]/gu,'');
-  document.title = base ? base+'-Resume' : 'Resume';
+  document.title = base ? base+'-'+L.atsFile : L.atsFile;
   window.print();
   setTimeout(()=>{ layer.innerHTML=''; document.title = pageTitle; }, 1000);
   window.dispatchEvent(new Event('makecv:downloaded'));
@@ -2604,7 +2800,7 @@ function printATS() {
 //  RESET
 // ════════════════════════════════
 function resetCV() {
-  if(!confirm('Are you sure you want to start over? Your data will be lost.')) return;
+  if(!confirm(L.reset)) return;
   Object.assign(cv.personal,{name:'',title:'',email:'',phone:'',city:'',linkedin:'',website:'',photo:null});
   cv.summary=''; cv.experience=[]; cv.education=[]; cv.skills=[]; cv.languages=[]; cv.projects=[]; cv.certifications=[];
   cv.selectedTemplate='modern';
@@ -2728,7 +2924,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function body(slot, minHeight) {
-    slot.innerHTML = '<span class="ad-slot-label" aria-hidden="true">Advertisement</span>';
+    slot.innerHTML = '<span class="ad-slot-label" aria-hidden="true">' + L.ad + '</span>';
     const b = document.createElement('div');
     b.className = 'ad-slot-body';
     b.style.minHeight = minHeight + 'px';
@@ -2740,7 +2936,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const z = BANNERS[size];
     slot.style.maxWidth = (z.w + 18) + 'px';
     const f = document.createElement('iframe');
-    f.title = 'Advertisement';
+    f.title = L.ad;
     f.width = z.w; f.height = z.h; f.scrolling = 'no';
     f.srcdoc = '<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;background:transparent;overflow:hidden}</style></head><body>'
       + "<script>atOptions={key:'" + z.key + "',format:'iframe',height:" + z.h + ',width:' + z.w + ',params:{}}<\/script>'

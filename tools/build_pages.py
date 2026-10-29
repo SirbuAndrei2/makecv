@@ -23,6 +23,12 @@ Output path follows Cloudflare's html_handling "drop-trailing-slash": the page f
 /resume-templates/modern is written to resume-templates/modern.html. Canonicals and
 sitemap URLs use the served form (no .html, no trailing slash).
 
+Languages: fragments in tools/pages/ro/ and tools/pages/ru/ are Romanian and Russian pages (their path must start
+with /ro/ or /ru/). Their header, footer, breadcrumbs, template figures, CTA and ad label come from "pages" and
+"templates" in tools/i18n/<lang>.json; HREFLANG pairs equivalent pages across languages (hreflang links + the
+EN / RO / RU switcher). After the pages, build_i18n.py generates the /ro and /ru builders from index.html
+(skip that with --pages-only).
+
 Python 3 standard library only. No network access.
 """
 import html
@@ -34,7 +40,21 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 PAGES = ROOT / "tools" / "pages"
 SITE = "https://makecv.org"
-HOME_LASTMOD = "2026-10-27"  # bump when index.html content changes
+HOME_LASTMOD = "2026-10-29"  # bump when index.html content changes (also the lastmod of /ro and /ru)
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import build_i18n  # noqa: E402
+LANGS = ["en"] + build_i18n.LANGS
+OG_LOCALE = {"en": "en_US", "ro": "ro_RO", "ru": "ru_RU"}
+
+# Equivalent pages across languages: each group gets reciprocal hreflang links (+ x-default → English) and the
+# header's language switcher points at them. Pages outside a group switch to the other language's builder.
+HREFLANG = [
+    {"en": "/resume-templates", "ro": "/ro/model-cv", "ru": "/ru/shablon-rezyume"},
+    {"en": "/how-to-write-a-resume", "ro": "/ro/cum-sa-faci-un-cv", "ru": "/ru/kak-sostavit-rezyume"},
+    {"en": "/resume-with-no-experience", "ro": "/ro/cv-fara-experienta", "ru": "/ru/rezyume-bez-opyta"},
+    {"en": "/resume-skills", "ro": "/ro/competente-cv", "ru": "/ru/navyki-dlya-rezyume"},
+]
+HOME = {"en": "/", "ro": "/ro", "ru": "/ru"}
 
 # ── Templates shown on the content pages (keys match TPLS in index.html) ──
 TEMPLATES = {
@@ -88,7 +108,9 @@ def esc(s):
     return html.escape(s, quote=True)
 
 
-def tpl_figure(slug, eager=False):
+def tpl_figure(slug, eager=False, lang="en"):
+    if lang != "en":
+        return tpl_figure_i18n(slug, eager, lang)
     t = TEMPLATES[slug]
     load = 'fetchpriority="high"' if eager else 'loading="lazy" decoding="async"'
     return f'''<figure class="tpl-figure">
@@ -101,7 +123,9 @@ def tpl_figure(slug, eager=False):
 </figure>'''
 
 
-def tpl_card(slug):
+def tpl_card(slug, lang="en"):
+    if lang != "en":
+        return tpl_card_i18n(slug, lang)
     t = TEMPLATES[slug]
     return f'''<div class="tpl-card-sm">
   <img src="/img/templates/{slug}.jpg" width="{TPL_W}" height="{TPL_H}" loading="lazy" decoding="async" alt="{esc(t['name'])} resume template preview with sample data">
@@ -109,6 +133,49 @@ def tpl_card(slug):
   <p>{esc(t['columns'])}. {esc(t['look'])}.</p>
   <a href="/?template={t['key']}">Use {esc(t['name'])} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div>
 </div>'''
+
+
+def tr_tpl(slug, lang):
+    """Template facts in `lang`: tools/i18n/<lang>.json → "templates"[slug] + "ats" labels."""
+    d = I18N[lang]
+    t = dict(TEMPLATES[slug], **d["templates"][slug])
+    t["ats_label"] = d["ats"][TEMPLATES[slug]["ats"]]
+    return t
+
+
+def tpl_figure_i18n(slug, eager, lang):
+    t, c = tr_tpl(slug, lang), I18N[lang]["pages"]["tpl"]
+    load = 'fetchpriority="high"' if eager else 'loading="lazy" decoding="async"'
+    use = f"{HOME[lang]}?template={t['key']}"
+    return f'''<figure class="tpl-figure">
+  <a href="{use}" class="tpl-shot"><img src="/img/templates/{slug}.jpg" width="{TPL_W}" height="{TPL_H}" {load} alt="{esc(c['alt_fig'].format(name=t['name']))}"></a>
+  <figcaption>
+    <div class="tpl-name">{esc(t['name'])} <span class="ats ats-{TEMPLATES[slug]['ats'].lower()}">ATS: {esc(t['ats_label'])}</span></div>
+    <ul class="tpl-facts"><li><strong>{esc(c['layout'])}:</strong> {esc(t['columns'])}</li><li><strong>{esc(c['photo'])}:</strong> {esc(t['photo'])}</li><li><strong>{esc(c['look'])}:</strong> {esc(t['look'])}</li><li><strong>{esc(c['suits'])}:</strong> {esc(t['best'])}</li></ul>
+    <a class="btn-blue" href="{use}">{esc(c['use'].format(name=t['name']))} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+  </figcaption>
+</figure>'''
+
+
+def tpl_card_i18n(slug, lang):
+    t, c = tr_tpl(slug, lang), I18N[lang]["pages"]["tpl"]
+    return f'''<div class="tpl-card-sm">
+  <img src="/img/templates/{slug}.jpg" width="{TPL_W}" height="{TPL_H}" loading="lazy" decoding="async" alt="{esc(c['alt_card'].format(name=t['name']))}">
+  <div class="tpl-card-body"><div class="tpl-name">{esc(t['name'])} <span class="ats ats-{TEMPLATES[slug]['ats'].lower()}">ATS: {esc(t['ats_label'])}</span></div>
+  <p>{esc(t['columns'])}. {esc(t['look'])}.</p>
+  <a href="{HOME[lang]}?template={t['key']}">{esc(c['use_short'].format(name=t['name']))} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div>
+</div>'''
+
+
+def cta(lang):
+    if lang == "en":
+        return CTA
+    c = I18N[lang]["pages"]["cta"]
+    return f'''<aside class="cta-box">
+  <div><div class="cta-title">{esc(c['title'])}</div>
+  <p>{esc(c['text'])}</p></div>
+  <a class="btn-blue" href="{HOME[lang]}">{esc(c['btn'])} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+</aside>'''
 
 
 # style page for each template (the hub links each template to the style page that covers it)
@@ -158,14 +225,14 @@ AD_SLOT = '<aside class="ad-slot" data-ad="incontent" aria-label="Advertisement"
 AD_LEAD = '<aside class="ad-slot ad-lead" data-ad="lead" aria-label="Advertisement"></aside>'
 AD_SCRIPT = """<script>
 (function () {
-  var HOST = 'https://bicea.org';
+  var HOST = 'https://bicea.org', LBL = '@@AD_LABEL@@';
   var Z = { '728x90': { key: '0e7f300ebc75925f1b35d2404c7f5b04', w: 728, h: 90 }, '300x250': { key: '14546d762f4609577c45abcfd23ed569', w: 300, h: 250 } };
   function mount(slot) {
     var z = Z[window.matchMedia('(min-width: 768px)').matches ? '728x90' : '300x250'];
     slot.style.maxWidth = (z.w + 18) + 'px';
-    slot.innerHTML = '<span class="ad-slot-label" aria-hidden="true">Advertisement</span>';
+    slot.innerHTML = '<span class="ad-slot-label" aria-hidden="true">' + LBL + '</span>';
     var b = document.createElement('div'); b.className = 'ad-slot-body'; b.style.minHeight = z.h + 'px';
-    var f = document.createElement('iframe'); f.title = 'Advertisement'; f.width = z.w; f.height = z.h; f.scrolling = 'no';
+    var f = document.createElement('iframe'); f.title = LBL; f.width = z.w; f.height = z.h; f.scrolling = 'no';
     f.srcdoc = '<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;background:transparent;overflow:hidden}</style></head><body>'
       + "<script>atOptions={key:'" + z.key + "',format:'iframe',height:" + z.h + ',width:' + z.w + ',params:{}}<\\/script>'
       + '<script src="' + HOST + '/22/' + z.key + '"><\\/script></body></html>';
@@ -181,8 +248,21 @@ AD_SCRIPT = """<script>
 ORG = {"@type": "Organization", "@id": f"{SITE}/#organization", "name": "MakeCV", "url": f"{SITE}/",
        "logo": {"@type": "ImageObject", "url": f"{SITE}/logo.png", "width": 512, "height": 512}}
 
+I18N = {}  # lang → tools/i18n/<lang>.json, loaded in main()
+# Content-page chrome. English stays in code (exact current output); ro/ru come from tools/i18n/<lang>.json → "pages".
+CHROME_EN = {"skip": "Skip to content", "logo_aria": "MakeCV — Free Resume Builder", "free_pill": "100% Free",
+             "build_btn": "Build my resume", "nav_aria": "Main", "nav_aria_m": "Main (mobile)", "lang_aria": "Language",
+             "home": "Home", "breadcrumb_aria": "Breadcrumb", "faq_h": "Frequently asked questions",
+             "related_h": "Keep reading", "ad": "Advertisement",
+             "byline": "By the MakeCV team · Updated {date}"}
+CHROME_KEYS = set(CHROME_EN) | {"nav", "foot_text", "foot_cols", "foot_site", "foot_bottom", "months", "date_fmt", "tpl", "cta"}
+
 NAV = [("/resume-templates", "Templates"), ("/how-to-write-a-resume", "How to write"),
        ("/ats-resume", "ATS guide"), ("/resume-vs-cv", "Resume vs CV"), ("/resume-format", "Format")]
+
+
+def chrome(lang):
+    return CHROME_EN if lang == "en" else I18N[lang]["pages"]
 
 
 def parse(fragment):
@@ -192,7 +272,10 @@ def parse(fragment):
         sys.exit(f"{fragment}: missing <!--meta {{...}} --> header")
     meta = json.loads(m.group(1))
     meta["body"] = text[m.end():]
-    meta["src"] = fragment.name
+    meta["src"] = str(fragment.relative_to(PAGES))
+    meta["lang"] = fragment.parent.name if fragment.parent != PAGES else "en"
+    if meta["lang"] != "en" and not meta["path"].startswith(f"/{meta['lang']}/"):
+        sys.exit(f"{fragment}: a {meta['lang']} page's path must start with /{meta['lang']}/")
     for k in ("path", "title", "description", "h1", "nav_label", "blurb", "updated"):
         if k not in meta:
             sys.exit(f"{fragment}: meta is missing '{k}'")
@@ -203,25 +286,65 @@ def out_file(path):
     return ROOT / (path.strip("/") + ".html")
 
 
-def header():
-    links = "".join(f'<a href="{p}">{l}</a>' for p, l in NAV)
-    mlinks = "".join(f'<a href="{p}">{l}</a>' for p, l in NAV)
-    return f'''<a href="#content" class="skip-link">Skip to content</a>
+def alternates(path):
+    """{lang: path} of the pages equivalent to `path` (only pages that exist), or {} if it has none."""
+    for g in HREFLANG:
+        if path in g.values():
+            alt = {l: p for l, p in g.items() if p in BUILT}
+            return alt if len(alt) > 1 else {}
+    return {}
+
+
+def header(meta):
+    lang = meta["lang"]
+    c = chrome(lang)
+    nav = NAV if lang == "en" else c["nav"]
+    links = "".join(f'<a href="{p}">{esc(l)}</a>' for p, l in nav)
+    targets = {**HOME, **alternates(meta["path"]), lang: meta["path"]}
+    switch = build_i18n.lang_switcher(lang, targets, c["lang_aria"])
+    home = HOME[lang]
+    return f'''<a href="#content" class="skip-link">{esc(c["skip"])}</a>
 <header class="site-header">
   <div class="bar">
-    <a href="/" class="logo" aria-label="MakeCV — Free Resume Builder">
+    <a href="{home}" class="logo" aria-label="{esc(c["logo_aria"])}">
       <span class="logo-mark" aria-hidden="true"><i class="fa-solid fa-file-lines"></i></span>
       <span class="logo-text">MakeCV</span>
-      <span class="free-pill">100% Free</span>
+      <span class="free-pill">{esc(c["free_pill"])}</span>
     </a>
-    <nav aria-label="Main" class="main-nav">{links}</nav>
-    <a href="/" class="btn-blue btn-sm">Build my resume</a>
+    <nav aria-label="{esc(c["nav_aria"])}" class="main-nav">{links}</nav>
+    <div class="hdr-actions">{switch}<a href="{home}" class="btn-blue btn-sm">{esc(c["build_btn"])}</a></div>
   </div>
-  <nav aria-label="Main (mobile)" class="mobile-nav">{mlinks}</nav>
+  <nav aria-label="{esc(c["nav_aria_m"])}" class="mobile-nav">{links}</nav>
 </header>'''
 
 
-def footer(pages):
+def footer_i18n(pages, lang):
+    c = chrome(lang)
+
+    def col(title, items):
+        lis = "".join(f'<li><a href="{p}">{esc(l)}</a></li>' for p, l in items)
+        return f'<nav aria-label="{esc(title)}"><div class="foot-title">{esc(title)}</div><ul>{lis}</ul></nav>' if items else ""
+    mine = [p for p in pages if p["lang"] == lang]
+    tpl = [(p["path"], p["nav_label"]) for p in mine if p.get("group") == "templates"]
+    guides = [(p["path"], p["nav_label"]) for p in mine if p.get("group") == "guides"]
+    return f'''<footer class="site-footer">
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <a href="{HOME[lang]}" class="logo"><span class="logo-mark" aria-hidden="true"><i class="fa-solid fa-file-lines"></i></span><span class="logo-text">MakeCV</span></a>
+      <p>{esc(c["foot_text"])}</p>
+    </div>
+    {col(c["foot_cols"]["templates"], tpl)}
+    {col(c["foot_cols"]["guides"], guides)}
+    {col(c["foot_cols"]["site"], [tuple(x) for x in c["foot_site"]])}
+  </div>
+  <div class="foot-bottom"><span>{esc(c["foot_bottom"][0])}</span><span>{esc(c["foot_bottom"][1])}</span></div>
+</footer>'''
+
+
+def footer(pages, lang="en"):
+    if lang != "en":
+        return footer_i18n(pages, lang)
+    pages = [p for p in pages if p["lang"] == "en"]
     def col(title, items):
         lis = "".join(f'<li><a href="{p}">{esc(l)}</a></li>' for p, l in items)
         return f'<nav aria-label="{title}"><div class="foot-title">{title}</div><ul>{lis}</ul></nav>'
@@ -243,14 +366,15 @@ def footer(pages):
 
 
 def breadcrumbs(meta):
-    crumbs = meta.get("crumbs") or [["Home", "/"], [meta["nav_label"], meta["path"]]]
+    c = chrome(meta["lang"])
+    crumbs = meta.get("crumbs") or [[c["home"], HOME[meta["lang"]]], [meta["nav_label"], meta["path"]]]
     items = []
     for i, (name, path) in enumerate(crumbs):
         if i == len(crumbs) - 1:
             items.append(f'<li aria-current="page">{esc(name)}</li>')
         else:
             items.append(f'<li><a href="{path}">{esc(name)}</a></li>')
-    visible = f'<nav aria-label="Breadcrumb" class="crumbs"><ol>{"".join(items)}</ol></nav>'
+    visible = f'<nav aria-label="{esc(c["breadcrumb_aria"])}" class="crumbs"><ol>{"".join(items)}</ol></nav>'
     ld = {"@type": "BreadcrumbList", "itemListElement": [
         {"@type": "ListItem", "position": i + 1, "name": name, "item": SITE + (path if path != "/" else "/")}
         for i, (name, path) in enumerate(crumbs)]}
@@ -263,11 +387,13 @@ def strip_tags(s):
 
 def render(meta, pages, by_path):
     url = SITE + meta["path"]
+    lang = meta["lang"]
+    c = chrome(lang)
     body = meta["body"]
-    body = re.sub(r"\{\{tpl:(\w+)\}\}", lambda m: tpl_figure(m.group(1)), body)
-    body = re.sub(r"\{\{tplfirst:(\w+)\}\}", lambda m: tpl_figure(m.group(1), eager=True), body)
-    body = re.sub(r"\{\{tplcard:(\w+)\}\}", lambda m: tpl_card(m.group(1)), body)
-    body = body.replace("{{cta}}", CTA)
+    body = re.sub(r"\{\{tpl:(\w+)\}\}", lambda m: tpl_figure(m.group(1), lang=lang), body)
+    body = re.sub(r"\{\{tplfirst:(\w+)\}\}", lambda m: tpl_figure(m.group(1), eager=True, lang=lang), body)
+    body = re.sub(r"\{\{tplcard:(\w+)\}\}", lambda m: tpl_card(m.group(1), lang=lang), body)
+    body = body.replace("{{cta}}", cta(lang))
     crumbs_html, crumbs_ld = breadcrumbs(meta)
     noindex = meta.get("noindex", False)
 
@@ -277,7 +403,7 @@ def render(meta, pages, by_path):
         graph.append(crumbs_ld)
         kind = meta.get("schema", "Article")
         main = {"@type": kind, "@id": url + "#main", "url": url, "name": meta["h1"],
-                "description": meta["description"], "inLanguage": "en",
+                "description": meta["description"], "inLanguage": lang,
                 "isPartOf": {"@type": "WebSite", "@id": f"{SITE}/#website", "name": "MakeCV", "url": f"{SITE}/"},
                 "dateModified": meta["updated"], "primaryImageOfPage": {"@type": "ImageObject", "url": image}}
         if kind == "Article":
@@ -298,13 +424,13 @@ def render(meta, pages, by_path):
     faq_html = ""
     if meta.get("faq"):
         items = "".join(f'<div class="faq-item"><dt>{esc(q)}</dt><dd>{a}</dd></div>' for q, a in meta["faq"])
-        faq_html = f'<section class="faq" aria-labelledby="faq-h"><h2 id="faq-h">Frequently asked questions</h2><dl>{items}</dl></section>'
+        faq_html = f'<section class="faq" aria-labelledby="faq-h"><h2 id="faq-h">{esc(c["faq_h"])}</h2><dl>{items}</dl></section>'
 
     related_html = ""
     rel = [by_path[p] for p in meta.get("related", []) if p in by_path]
     if rel:
         cards = "".join(f'<a class="rel-card" href="{r["path"]}"><span class="rel-title">{esc(r["nav_label"])}</span><span class="rel-blurb">{esc(r["blurb"])}</span></a>' for r in rel)
-        related_html = f'<section class="related" aria-labelledby="rel-h"><h2 id="rel-h">Keep reading</h2><div class="rel-grid">{cards}</div></section>'
+        related_html = f'<section class="related" aria-labelledby="rel-h"><h2 id="rel-h">{esc(c["related_h"])}</h2><div class="rel-grid">{cards}</div></section>'
 
     with_ads = not noindex and meta.get("group") in ("templates", "guides")
     if with_ads:
@@ -312,22 +438,27 @@ def render(meta, pages, by_path):
         if not n:
             sys.exit(f"{meta['src']}: a page with ads needs a <p class=\"lead\"> paragraph (the phone ad goes after it)")
     ad_html = AD_SLOT if with_ads else ""
-    ad_script = AD_SCRIPT if with_ads else ""
+    ad_script = AD_SCRIPT.replace("@@AD_LABEL@@", c["ad"].replace("'", "\\'")) if with_ads else ""
     updated_h = meta["updated"]
     robots = "noindex, follow" if noindex else "index, follow, max-image-preview:large, max-snippet:-1"
     canonical = "" if noindex else f'<link rel="canonical" href="{url}">\n'
     og_type = "article" if meta.get("schema", "Article") == "Article" else "website"
-    byline = "" if meta.get("no_byline") else f'<p class="byline">By the MakeCV team · Updated <time datetime="{updated_h}">{pretty_date(updated_h)}</time></p>'
+    byline = "" if meta.get("no_byline") else '<p class="byline">' + esc(c["byline"]).replace(
+        "{date}", f'<time datetime="{updated_h}">{pretty_date(updated_h, lang)}</time>') + '</p>'
+    alt = alternates(meta["path"]) if not noindex else {}
+    hreflang = "".join(f'<link rel="alternate" hreflang="{l}" href="{SITE}{alt[l]}">\n' for l in LANGS if l in alt)
+    if "en" in alt:
+        hreflang += f'<link rel="alternate" hreflang="x-default" href="{SITE}{alt["en"]}">\n'
 
     return f'''<!DOCTYPE html>
-<html lang="en">
+<html lang="{lang}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{esc(meta["title"])}</title>
 <meta name="description" content="{esc(meta["description"])}">
 <meta name="robots" content="{robots}">
-{canonical}<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+{canonical}{hreflang}<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="apple-touch-icon" href="/logo.png">
 <meta name="theme-color" content="#2563eb">
 <meta property="og:type" content="{og_type}">
@@ -336,7 +467,7 @@ def render(meta, pages, by_path):
 <meta property="og:description" content="{esc(meta["description"])}">
 <meta property="og:image" content="{image}">
 <meta property="og:site_name" content="MakeCV">
-<meta property="og:locale" content="en_US">
+<meta property="og:locale" content="{OG_LOCALE[lang]}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{esc(meta["title"])}">
 <meta name="twitter:description" content="{esc(meta["description"])}">
@@ -354,7 +485,7 @@ def render(meta, pages, by_path):
 </head>
 <body>
 <!-- Generated by tools/build_pages.py from tools/pages/{meta["src"]} — edit the fragment, not this file. -->
-{header()}
+{header(meta)}
 <main class="guide" id="content">
 {crumbs_html}
 <article>
@@ -366,22 +497,25 @@ def render(meta, pages, by_path):
 {faq_html}
 {related_html if not noindex else ""}
 </main>
-{footer(pages)}
+{footer(pages, lang)}
 {ad_script}
 </body>
 </html>
 '''
 
 
-def pretty_date(iso):
+def pretty_date(iso, lang="en"):
     y, m, d = iso.split("-")
+    if lang != "en":
+        c = chrome(lang)
+        return c["date_fmt"].format(d=int(d), m=c["months"][int(m) - 1], y=y)
     months = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
               "October", "November", "December"]
     return f"{months[int(m) - 1]} {int(d)}, {y}"
 
 
 def sitemap(pages):
-    rows = [f"  <url>\n    <loc>{SITE}/</loc>\n    <lastmod>{HOME_LASTMOD}</lastmod>\n  </url>"]
+    rows = [f"  <url>\n    <loc>{SITE}{HOME[l] if l != 'en' else '/'}</loc>\n    <lastmod>{HOME_LASTMOD}</lastmod>\n  </url>" for l in LANGS]
     for p in pages:
         if p.get("noindex"):
             continue
@@ -390,8 +524,20 @@ def sitemap(pages):
             + "\n".join(rows) + "\n</urlset>\n")
 
 
-def main():
-    pages = [parse(f) for f in sorted(PAGES.glob("*.html"))]
+BUILT = set()
+
+
+def main(argv):
+    for lang in build_i18n.LANGS:
+        I18N[lang] = build_i18n.load(lang)
+        miss = CHROME_KEYS - set(I18N[lang].get("pages", {}))
+        if miss:
+            sys.exit(f"tools/i18n/{lang}.json: \"pages\" is missing {sorted(miss)}")
+        miss = [s for s in TEMPLATES if s not in I18N[lang].get("templates", {})]
+        if miss or set(I18N[lang].get("ats", {})) != {"Best", "Good", "Fair"}:
+            sys.exit(f"tools/i18n/{lang}.json: \"templates\" needs every slug ({miss}) and \"ats\" Best/Good/Fair")
+    pages = [parse(f) for f in sorted(PAGES.rglob("*.html"))]
+    BUILT.update(p["path"] for p in pages)
     order = {"templates": 0, "guides": 1, "site": 2}
     pages.sort(key=lambda p: (order.get(p.get("group"), 3), p.get("order", 50), p["path"]))
     by_path = {p["path"]: p for p in pages}
@@ -404,14 +550,20 @@ def main():
         for r in p.get("related", []):
             if r not in by_path:
                 sys.exit(f"{p['path']}: related link to unknown page {r}")
+    for g in HREFLANG:
+        gone = [p for p in g.values() if p not in BUILT]
+        if gone:
+            print(f"note: HREFLANG lists pages that do not exist yet: {gone}")
     for p in pages:
         f = out_file(p["path"])
         f.parent.mkdir(parents=True, exist_ok=True)
         f.write_text(render(p, pages, by_path), encoding="utf-8")
         print(f"wrote {f.relative_to(ROOT)}  ({p['path']})")
     (ROOT / "sitemap.xml").write_text(sitemap(pages), encoding="utf-8")
-    print(f"wrote sitemap.xml ({1 + sum(1 for p in pages if not p.get('noindex'))} URLs)")
+    print(f"wrote sitemap.xml ({len(LANGS) + sum(1 for p in pages if not p.get('noindex'))} URLs)")
+    if "--pages-only" not in argv:
+        build_i18n.main([])
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])
