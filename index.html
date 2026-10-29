@@ -515,12 +515,12 @@ select.inp {
 .guide-card:hover { border-color: #93c5fd; box-shadow: var(--sh); }
 .guide-card i { color: var(--brand); margin-top: 3px; }
 
-/* ── Testimonials ── */
-.review-card { background:#fff; border-radius:16px; padding:22px; box-shadow:0 1px 4px rgba(0,0,0,.07); display:flex; flex-direction:column; gap:12px; }
-.review-stars { color:#f59e0b; font-size:13px; letter-spacing:1px; }
-.review-text { font-size:13.5px; color:#475569; line-height:1.65; flex:1; }
-.review-author { display:flex; align-items:center; gap:10px; }
-.review-avatar { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+/* ── Free facts (replaces the old testimonials: facts only) ── */
+.fact-card { background:#fff; border-radius:16px; padding:18px 12px; box-shadow:0 1px 4px rgba(0,0,0,.07); }
+.fact-num { font-size:24px; font-weight:800; color:var(--brand-700, #1D4ED8); line-height:1.1; }
+.fact-lbl { font-size:12.5px; color:#64748B; margin-top:4px; }
+.fact-point { display:flex; gap:10px; align-items:flex-start; background:#fff; border-radius:14px; padding:14px 16px; box-shadow:0 1px 4px rgba(0,0,0,.05); }
+.fact-point i { color:#15803D; margin-top:3px; }
 
 /* ── Footer ── */
 .site-footer { background: var(--surface); border-top: 1px solid var(--border-soft); margin-top: 24px; }
@@ -1090,7 +1090,7 @@ body[data-step="2"] .after-builder { display:none; }
       <!--i18n:block hero-badge-->
       <div class="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold px-3.5 py-1.5 rounded-full mb-4">
         <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-        <span><span id="cv-counter">0</span> resumes created this month — free, forever</span>
+        <span>Free forever: no sign-up, no watermark</span>
       </div>
       <!--/i18n:block-->
       <h1 id="step1-heading">Build a Professional Resume<br class="hidden sm:block"> in 5 Minutes — 100% Free</h1>
@@ -1621,70 +1621,22 @@ body[data-step="2"] .after-builder { display:none; }
 </section>
 <!--/i18n:block-->
 
-<!-- ══════════════ TESTIMONIALS ══════════════ -->
+<!-- ══════════════ WHY IT'S FREE (facts only: no invented reviews or usage numbers) ══════════════ -->
 <!--i18n:block reviews-->
-<section class="max-w-3xl mx-auto px-4 pb-14" aria-labelledby="reviews-heading">
-  <h2 id="reviews-heading" class="text-2xl font-bold text-slate-800 mb-2 text-center">What People Are Saying</h2>
-  <p class="text-sm text-slate-500 text-center mb-8">Real feedback from job seekers who used MakeCV to land interviews.</p>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-
-    <div class="review-card">
-      <div class="review-stars">★★★★★</div>
-      <p class="review-text">"I needed a CV fast for a job application deadline. MakeCV took me under 10 minutes — no sign-up, no fuss. Downloaded a clean PDF and got called for an interview the next day!"</p>
-      <div class="review-author">
-        <div class="review-avatar" style="background:#dbeafe;">👩‍💼</div>
-        <div>
-          <div class="text-sm font-semibold text-slate-800">Sarah M.</div>
-          <div class="text-xs text-slate-400">Marketing Manager, London</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="review-card">
-      <div class="review-stars">★★★★★</div>
-      <p class="review-text">"The Tech / Dark template is exactly what I was looking for as a developer. Every other free builder either adds watermarks or forces you to pay. This one is genuinely free."</p>
-      <div class="review-author">
-        <div class="review-avatar" style="background:#dcfce7;">👨‍💻</div>
-        <div>
-          <div class="text-sm font-semibold text-slate-800">Daniel K.</div>
-          <div class="text-xs text-slate-400">Frontend Developer, Berlin</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="review-card">
-      <div class="review-stars">★★★★★</div>
-      <p class="review-text">"I used the Classic template for my first job application. Super easy to fill in, the PDF looks very professional. My friends asked me which designer made it — I said 'I did it myself in 5 minutes!'"</p>
-      <div class="review-author">
-        <div class="review-avatar" style="background:#fef9c3;">👩‍🎓</div>
-        <div>
-          <div class="text-sm font-semibold text-slate-800">Ana P.</div>
-          <div class="text-xs text-slate-400">Recent Graduate, Bucharest</div>
-        </div>
-      </div>
-    </div>
-
+<section class="max-w-3xl mx-auto px-4 pb-14" aria-labelledby="free-heading">
+  <h2 id="free-heading" class="text-2xl font-bold text-slate-800 mb-2 text-center">Free, with no catch</h2>
+  <p class="text-sm text-slate-500 text-center mb-8">No trial and no paywall at the download step. The ads on this page keep MakeCV free.</p>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+    <div class="fact-card"><div class="fact-num">Free</div><div class="fact-lbl">Every template, every download</div></div>
+    <div class="fact-card"><div class="fact-num">14</div><div class="fact-lbl">Resume templates</div></div>
+    <div class="fact-card"><div class="fact-num">0</div><div class="fact-lbl">Watermarks or sign-ups</div></div>
+    <div class="fact-card"><div class="fact-num">2</div><div class="fact-lbl">PDFs: designed and ATS text</div></div>
   </div>
-
-  <!-- Stats bar -->
-  <div class="mt-10 bg-white rounded-2xl border border-slate-100 px-6 py-5 flex flex-wrap justify-around gap-4 text-center" style="box-shadow:0 1px 4px rgba(0,0,0,.07)">
-    <div>
-      <div class="text-2xl font-bold text-blue-600" id="stat-resumes">12,000+</div>
-      <div class="text-xs text-slate-500 mt-0.5">Resumes created</div>
-    </div>
-    <div>
-      <div class="text-2xl font-bold text-blue-600">10</div>
-      <div class="text-xs text-slate-500 mt-0.5">Expert templates</div>
-    </div>
-    <div>
-      <div class="text-2xl font-bold text-blue-600">0</div>
-      <div class="text-xs text-slate-500 mt-0.5">Watermarks, ever</div>
-    </div>
-    <div>
-      <div class="text-2xl font-bold text-blue-600">Free</div>
-      <div class="text-xs text-slate-500 mt-0.5">No hidden fees</div>
-    </div>
-  </div>
+  <ul class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-slate-600">
+    <li class="fact-point"><i class="fa-solid fa-lock" aria-hidden="true"></i><span><b class="text-slate-800">Private.</b> Your details stay in your browser: nothing is uploaded or stored on a server.</span></li>
+    <li class="fact-point"><i class="fa-solid fa-bolt" aria-hidden="true"></i><span><b class="text-slate-800">No account.</b> Open the page and start typing. Close it and your data is gone.</span></li>
+    <li class="fact-point"><i class="fa-solid fa-file-lines" aria-hidden="true"></i><span><b class="text-slate-800">ATS-ready.</b> The ATS PDF has real, selectable text that applicant tracking systems can read.</span></li>
+  </ul>
 </section>
 <!--/i18n:block-->
 
@@ -2829,19 +2781,6 @@ if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{ if(st
     const t=new URLSearchParams(location.search).get('template');
     if(t && Object.prototype.hasOwnProperty.call(TPLS,t)) selTpl(t);
   } catch(err) {}
-})();
-
-// Animate CV counter
-(function(){
-  const el=document.getElementById('cv-counter');
-  if(!el) return;
-  const target=8241; let cur=0;
-  const step=Math.ceil(target/60);
-  const t=setInterval(()=>{
-    cur=Math.min(cur+step,target);
-    el.textContent=cur.toLocaleString();
-    if(cur>=target) clearInterval(t);
-  },16);
 })();
 
 // ════════════════════════════════

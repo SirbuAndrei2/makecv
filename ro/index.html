@@ -526,12 +526,12 @@ select.inp {
 .guide-card:hover { border-color: #93c5fd; box-shadow: var(--sh); }
 .guide-card i { color: var(--brand); margin-top: 3px; }
 
-/* ── Testimonials ── */
-.review-card { background:#fff; border-radius:16px; padding:22px; box-shadow:0 1px 4px rgba(0,0,0,.07); display:flex; flex-direction:column; gap:12px; }
-.review-stars { color:#f59e0b; font-size:13px; letter-spacing:1px; }
-.review-text { font-size:13.5px; color:#475569; line-height:1.65; flex:1; }
-.review-author { display:flex; align-items:center; gap:10px; }
-.review-avatar { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+/* ── Free facts (replaces the old testimonials: facts only) ── */
+.fact-card { background:#fff; border-radius:16px; padding:18px 12px; box-shadow:0 1px 4px rgba(0,0,0,.07); }
+.fact-num { font-size:24px; font-weight:800; color:var(--brand-700, #1D4ED8); line-height:1.1; }
+.fact-lbl { font-size:12.5px; color:#64748B; margin-top:4px; }
+.fact-point { display:flex; gap:10px; align-items:flex-start; background:#fff; border-radius:14px; padding:14px 16px; box-shadow:0 1px 4px rgba(0,0,0,.05); }
+.fact-point i { color:#15803D; margin-top:3px; }
 
 /* ── Footer ── */
 .site-footer { background: var(--surface); border-top: 1px solid var(--border-soft); margin-top: 24px; }
@@ -1096,7 +1096,10 @@ body[data-step="2"] .after-builder { display:none; }
   <section id="step1" aria-labelledby="step1-heading">
     <!-- Visible H1 — critical for SEO keyword signal and E-E-A-T -->
     <div class="hero">
-      
+            <div class="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold px-3.5 py-1.5 rounded-full mb-4">
+        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+        <span>Gratuit pentru totdeauna: fără cont, fără watermark</span>
+      </div>
       <h1 id="step1-heading">Fă-ți un CV profesionist<br class="hidden sm:block"> în 5 minute — 100% gratuit</h1>
       <p class="sub">Fără cont. Fără filigran. Fără costuri. Alegi dintre <strong class="text-slate-800">14 modele</strong>, îți completezi datele și descarci pe loc un PDF A4 bine formatat.</p>
       <div class="flex flex-wrap justify-center gap-2">
@@ -1599,8 +1602,22 @@ body[data-step="2"] .after-builder { display:none; }
   </p>
 </section>
 
-<!-- ══════════════ TESTIMONIALS ══════════════ -->
-
+<!-- ══════════════ WHY IT'S FREE (facts only: no invented reviews or usage numbers) ══════════════ -->
+<section class="max-w-3xl mx-auto px-4 pb-14" aria-labelledby="free-heading">
+  <h2 id="free-heading" class="text-2xl font-bold text-slate-800 mb-2 text-center">Gratuit, fără capcane</h2>
+  <p class="text-sm text-slate-500 text-center mb-8">Fără perioadă de probă și fără plată la descărcare. Reclamele de pe pagină țin MakeCV gratuit.</p>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+    <div class="fact-card"><div class="fact-num">Gratuit</div><div class="fact-lbl">Toate șabloanele, toate descărcările</div></div>
+    <div class="fact-card"><div class="fact-num">14</div><div class="fact-lbl">Șabloane de CV</div></div>
+    <div class="fact-card"><div class="fact-num">0</div><div class="fact-lbl">Watermark-uri sau conturi</div></div>
+    <div class="fact-card"><div class="fact-num">2</div><div class="fact-lbl">PDF-uri: cu design și ATS (text)</div></div>
+  </div>
+  <ul class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-slate-600">
+    <li class="fact-point"><i class="fa-solid fa-lock" aria-hidden="true"></i><span><b class="text-slate-800">Privat.</b> Datele tale rămân în browser: nimic nu e încărcat sau salvat pe un server.</span></li>
+    <li class="fact-point"><i class="fa-solid fa-bolt" aria-hidden="true"></i><span><b class="text-slate-800">Fără cont.</b> Deschizi pagina și începi să scrii. Când o închizi, datele dispar.</span></li>
+    <li class="fact-point"><i class="fa-solid fa-file-lines" aria-hidden="true"></i><span><b class="text-slate-800">Pregătit pentru ATS.</b> PDF-ul ATS are text real, selectabil, pe care sistemele de recrutare îl pot citi.</span></li>
+  </ul>
+</section>
 
 <!-- ══════════════ FOOTER ══════════════ -->
 <footer class="site-footer" role="contentinfo">
@@ -2734,19 +2751,6 @@ if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{ if(st
     const t=new URLSearchParams(location.search).get('template');
     if(t && Object.prototype.hasOwnProperty.call(TPLS,t)) selTpl(t);
   } catch(err) {}
-})();
-
-// Animate CV counter
-(function(){
-  const el=document.getElementById('cv-counter');
-  if(!el) return;
-  const target=8241; let cur=0;
-  const step=Math.ceil(target/60);
-  const t=setInterval(()=>{
-    cur=Math.min(cur+step,target);
-    el.textContent=cur.toLocaleString();
-    if(cur>=target) clearInterval(t);
-  },16);
 })();
 
 // ════════════════════════════════
