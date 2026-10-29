@@ -9,3 +9,9 @@ wrangler.jsonc
 www-redirect
 .cloudflare
 tools
+
+# dev-only test setup
+package.json
+package-lock.json
+vitest.config.js
+tests

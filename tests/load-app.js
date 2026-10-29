@@ -1,0 +1,46 @@
+import { readFileSync } from 'node:fs'
+import { JSDOM } from 'jsdom'
+
+// Loads the real builder (index.html) into jsdom with only the app <script> kept: GA, Tailwind, the ADS script
+// and every CDN script are dropped, so nothing leaves the process. Inline handlers (oninput, onblur, onclick)
+// run for real, so tests drive the form the way a visitor does.
+const HTML = readFileSync(new URL('../index.html', import.meta.url), 'utf8')
+  .replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, s => (s.includes('const cv = {') ? s : ''))
+
+export function loadApp({ wide = false } = {}) {
+  const timers = new Set()
+  const dom = new JSDOM(HTML, {
+    url: 'https://makecv.org/',
+    runScripts: 'dangerously',
+    pretendToBeVisual: true,
+    beforeParse(w) {
+      // The page's timers go through Node's, so vi.useFakeTimers() controls the 250 ms render debounce.
+      // close() clears the ones still pending: they would otherwise fire into a closed window.
+      w.setTimeout = (fn, ms) => { const id = setTimeout(() => { timers.delete(id); fn() }, ms); timers.add(id); return id }
+      w.clearTimeout = id => { timers.delete(id); clearTimeout(id) }
+      w.setInterval = (fn, ms) => { const id = setInterval(fn, ms); timers.add(id); return id }
+      w.clearInterval = id => { timers.delete(id); clearInterval(id) }
+      // jsdom has no layout: the step-1 live preview only renders from 1280px.
+      w.matchMedia = q => ({ matches: wide && q.includes('min-width: 1280px'), media: q, addEventListener() {}, removeEventListener() {} })
+      w.scrollTo = () => {}
+      w.HTMLElement.prototype.scrollIntoView = () => {}
+    },
+  })
+  const w = dom.window
+  const $ = id => w.document.getElementById(id)
+  const fire = (el, type, init) => el.dispatchEvent(new w.Event(type, { bubbles: true, ...init }))
+
+  return {
+    window: w,
+    $,
+    // `cv` is a top-level const in a classic script: reachable from page code, not as window.cv.
+    state: () => w.eval('cv'),
+    type(el, value) { el = typeof el === 'string' ? $(el) : el; el.value = value; fire(el, 'input') },
+    blur(el) { el = typeof el === 'string' ? $(el) : el; fire(el, 'blur') },
+    choose(el, value) { el.value = value; fire(el, 'change') },
+    check(el, on) { el.checked = on; fire(el, 'change') },
+    key(el, key) { el = typeof el === 'string' ? $(el) : el; el.dispatchEvent(new w.KeyboardEvent('keydown', { key, bubbles: true, cancelable: true })) },
+    click(el) { (typeof el === 'string' ? $(el) : el).click() },
+    close() { timers.forEach(id => clearTimeout(id)); w.close() },
+  }
+}

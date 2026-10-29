@@ -1,0 +1,13 @@
+{
+  "name": "makecv",
+  "private": true,
+  "type": "module",
+  "description": "Dev-only: unit tests for the builder in index.html. The site itself has no build and no runtime dependencies.",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "jsdom": "29.1.1",
+    "vitest": "5.0.5"
+  }
+}
